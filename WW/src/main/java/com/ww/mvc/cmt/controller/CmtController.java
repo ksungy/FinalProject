@@ -17,5 +17,9 @@ public class CmtController {
 		return "/cmt/dashBoard";
 	}
 
-	
+	@GetMapping("/modify")
+	public String cmtModify() {
+		
+		return "/cmt/modify";
+	}
 }
