@@ -3,10 +3,8 @@
 <%@ page session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<c:set var="path" value="${ pageContext.request.contextPath }" /><%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
-
-<c:set var="path" value="${ pageContext.request.contextPath }" />
 
 <!DOCTYPE html>
 <html lang="ko">
@@ -41,7 +39,7 @@
         <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html">
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="home.jsp">
                 <div class="sidebar-brand-icon rotate-n-15">
                     <i class="fas fa-laugh-wink"></i>
                 </div>
@@ -52,7 +50,7 @@
             <hr class="sidebar-divider my-0">
 
             <!-- Nav Item - Dashboard -->
-            <li style="text-align: center; color: white; height: 200px; padding: 20px; width: 90%;">
+            <li style="text-align: center; color: white; height: 200px; padding: 20px; width: 100%;">
                 <li style="vertical-align: bottom; text-align: center; color: white; margin-bottom: 5px;">김이영님</li>
                 <li style="text-align: center; margin-bottom: 10px; font-size: 0.7em;">로그아웃</li>
             </li>
