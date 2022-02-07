@@ -29,7 +29,6 @@
     <link href="${ path }/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
 </head>
-
 <body id="page-top">
 
     <!-- Page Wrapper -->
@@ -367,62 +366,10 @@
                 <div class="container-fluid">
 
                     <!-- Page Heading -->
-                    <h1 class="h3 mb-1 text-gray-800">근태관리</h1>
-                    <p class="mb-4">근무 시간 확인</p>
-
-                    <!-- Content Row -->
-                    <div class="row">
-                        <div class="col-lg-2">
-                            <!-- Overflow Hidden -->
-
-                            <div class="card mb-4" style="height: 665px;">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">Today</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div style="margin-top: 10px; margin-bottom: 30px;">2022년 2월 3일</div>
-                                    <div style="margin-bottom: 40px;">
-                                        출근 시간
-                                        <div style="font-size: 1.5em; font-weight: bold;">09:00</div>
-                                    </div>
-                                    <div style="margin-bottom: 40px;">
-                                        퇴근 시간
-                                        <div style="font-size: 1.5em; font-weight: bold;">18:00</div>
-                                    </div>
-                                    <div>근무 시간
-                                        <div style="font-size: 1.5em; font-weight: bold;">9h</div>
-                                    </div>
-                                </div>
-                            </div>                            
-
-                        </div>
-                        <div class="col-lg-9">
-
-
-
-
-                            <!-- 월 근무 시간 -->
-                            <div class="card mb-4">
-                                <div class="card-header py-3">
-                                    <h6 class="m-0 font-weight-bold text-primary">총 근무 시간</h6>
-                                </div>
-                                <div class="card-body">
-                                    <div class="mb-1 small">당월 근무 누적시간</div>
-                                    <div class="progress mb-4">
-                                        <div class="progress-bar" role="progressbar" style="width: 35%"
-                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <div class="mb-1 small">초과 근무</div>
-                                    <div class="progress progress-sm mb-2">
-                                        <div class="progress-bar" role="progressbar" style="width: 0    %"
-                                            aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
-                                    </div>
-                                    <!--
-                                    Use the <code>.progress-sm</code> class along with <code>.progress</code>
-                                    -->
-                                </div>
-                            </div>
-
+                    <h1 class="h3 mb-1 text-gray-800">근태 수정</h1>
+                    <p class="mb-4">근무 시간 수정 요청</p>
+                    
+                    
                     <!-- 주간 근무 테이블 -->
                     <div class="card shadow mb-4">
                         <div class="card-header py-3">
@@ -473,7 +420,7 @@
                                         </tr>                        
                                     </tbody>
                                 </table>
-                                <a href="${ path }/cmt/modify">
+                                <a href="">
 	        						<div class="col-12"><input type="button"  style="color: #4e73df!important; font-weight: bold" class="btn float-right" value="근무 수정 요청"></div>
                                 </a>
                             </div>
@@ -544,5 +491,4 @@
     <!-- Custom scripts for all pages-->
     <script src="/resources/js/sb-admin-2.min.js"></script>
 </body>
-
 </html>
