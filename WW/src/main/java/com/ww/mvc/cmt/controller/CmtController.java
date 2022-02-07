@@ -22,4 +22,10 @@ public class CmtController {
 		
 		return "/cmt/modify";
 	}
+	
+	@GetMapping("/monthly")
+	public String cmtMonthly() {
+		
+		return "/cmt/monthly";
+	}
 }

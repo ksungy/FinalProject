@@ -183,7 +183,9 @@
                 <div id="cmtMenu" class="collapse" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">list 1번</a>
+                        <a class="collapse-item" href="/mvc/cmt/dashBoard">근태 확인</a>
+                        <a class="collapse-item" href="/mvc/cmt/modify">근태 수정</a>
+                        <a class="collapse-item" href="/mvc/cmt/monthly">월별 근태</a>
                     </div>
                 </div>
             </li>
