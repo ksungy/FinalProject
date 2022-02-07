@@ -2,13 +2,12 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<c:set var="path" value="${ pageContext.request.contextPath }"/>
+<%@include file="./common/header.jsp" %>
+<!-- Begin Page Content -->
+<div class="container-fluid">
 
-<html>
-<head>
-	<title>Home</title>
-</head>
-<body>
+
+
 <h1>
 	Hello world!  
 </h1>
@@ -26,11 +25,10 @@
 	<a href="${ path }/chat">
 		채팅방 접속
 	</a>
-	
-	
 
 <p>
 
 
-</body>
-</html>
+</div>
+<%@include file="./common/footer.jsp" %>
+
