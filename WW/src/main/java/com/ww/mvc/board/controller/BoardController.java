@@ -21,5 +21,22 @@ public class BoardController {
 	}
 	
 	
+	// 게시글 상세조회
+	@GetMapping("/view")
+	public String view() {
+		
+		return "/board/view";
+	}
+	
+	
+	// 게시글 작성
+	@GetMapping("/write")
+	public String write() {
+		
+		return "/board/write";
+	}
+	
+	
+	
 	
 }

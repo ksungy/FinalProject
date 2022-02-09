@@ -9,6 +9,8 @@
 <%@include file="../common/header.jsp"%>
 <link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/main.css">
 <link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/util.css">
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300&display=swap" rel="stylesheet">
+
 
 
 <!-- Begin Page Content -->
@@ -17,20 +19,25 @@
 	<!-- Page Heading -->
 	<h1 class="h3 mb-1 text-gray-800">Whereware 게시판</h1>
 	<p class="mb-4">서로 존중하는 공간입니다.</p>
-
-
-    <nav class="navbar navbar-light bg-light">
-        <div class="container-fluid">
-            <form class="d-flex">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success" type="submit">Search</button>
-            </form>
-        </div>
-    </nav>
+	
     
+    <!-- Table Wrapper -->
 	<div class="limiter">
 		<div class="container-table100">
 			<div class="wrap-table100">
+			
+				<!-- Search -->
+				<div class="input-group">
+				  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+				  <button type="button" class="btn btn-outline-primary">search</button>
+				</div>
+				
+				<!-- Write Button -->
+			  	<a href="#" style="background:#2A3D72;" class="btn btn-primary btn-circle">
+                	<i style="color:white;" class="fas fa-edit"></i>
+                </a>
+				
+				<!-- Table -->
 				<div class="table">
 
 					<div class="row header">
@@ -138,7 +145,6 @@
 
 		</div>
 	</div>
-
 
 
 

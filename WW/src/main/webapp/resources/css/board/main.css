@@ -97,9 +97,6 @@ iframe {
 
 .container-table100 {
   width: 100%;
-  min-height: 100vh;
-  background: #c4d3f6;
-
   display: -webkit-box;
   display: -webkit-flex;
   display: -moz-box;
@@ -108,7 +105,7 @@ iframe {
   align-items: center;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 33px 30px;
+  padding-bottom: 40px;
 }
 
 .wrap-table100 {
@@ -136,7 +133,7 @@ iframe {
 
 .row.header {
   color: #ffffff;
-  background: #6c7ae0;
+  background: #2A3D72;
 }
 
 @media screen and (max-width: 768px) {
@@ -279,6 +276,8 @@ iframe {
   }
 }
 
+/*//////////////////////////////////////////////////////////////////
+[ paging ]*/
 
 @media screen and (max-width: 768px) {
   .paging {
@@ -334,4 +333,21 @@ iframe {
 .wrap-table100 .paging a.num.on{
   color: white;
   background: #2A3D72;
+}
+
+
+/*//////////////////////////////////////////////////////////////////
+[ etc ]*/
+
+.wrap-table100 .input-group{
+	text-align : center;
+	margin-bottom: 20px;
+	float: right;
+	width: 300px;
+}
+
+.btn btn-primary btn-circle{
+	color: white;
+	background: #2A3D72;
+	
 }
