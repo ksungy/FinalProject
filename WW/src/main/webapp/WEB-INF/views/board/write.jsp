@@ -73,10 +73,10 @@
 
 				<div class="container-contact100-form-btn">
 					<button class="contact100-form-btn">
-						<span>
-							등록
-							<i class="zmdi zmdi-arrow-right m-l-8"></i>
-						</span>
+						취소
+					</button>
+					<button class="contact100-form-btn">
+						등록
 					</button>
 				</div>
 			</form>
