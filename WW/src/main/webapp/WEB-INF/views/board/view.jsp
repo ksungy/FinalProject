@@ -96,12 +96,39 @@
 			<div class="card-header bg-light">
 			        <i class="fa fa-comment fa">댓글</i> <span> [0] </span>
 			</div>
+
 			<div class="card-body">
-				<ul class="list-group list-group-flush">
-				    <li class="list-group-item">
-				    댓글 리스트
-				    </li>
-				</ul>
+				<div class="col-lg-12">
+					<div class="panel panel-default">
+						<div class="panel-body">
+							<ul class="chat">
+								<li class="left clearfix">
+									<div>
+										<div class="header">
+											<strong class="primary-font">작성자 이름</strong>
+											<small class="pull-right text-muted">2022-02-12 PM 12:00:00</small>
+											<button class="btn float-right btn-default btn-xs">수정</button>
+											<button class="btn float-right btn-default btn-xs">삭제</button>
+										</div>
+										<p>안녕하세요</p>
+										<hr>
+									</div>
+								</li>
+								<li class="left clearfix">
+									<div>
+										<div class="header">
+											<strong class="primary-font">작성자 이름</strong>
+											<small class="pull-right text-muted">2022-02-12 PM 12:00:00</small>
+											<button class="btn float-right btn-default btn-xs">수정</button>
+											<button class="btn float-right btn-default btn-xs">삭제</button>
+										</div>
+										<p>안녕하세요</p>
+									</div>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</div>
 			</div>
 				    
 			<div class="card-body">

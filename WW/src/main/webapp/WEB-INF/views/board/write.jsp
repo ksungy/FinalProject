@@ -56,7 +56,7 @@
 					<span class="focus-input100"></span>
 				</div>
 
-				<label class="label-input100" for="message">Message *</label>
+				<label class="label-input100" for="message">Content *</label>
 				<div class="wrap-input100 validate-input">
 					<div id="classic">
 						<p>내용을 입력하세요(4000자)</p>

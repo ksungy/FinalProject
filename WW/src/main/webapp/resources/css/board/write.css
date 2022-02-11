@@ -249,11 +249,11 @@ textarea.input100 {
   left: -1px;
   pointer-events: none;
   border: 1px solid;
-  border-color: #d867c6;
-  border-color: -webkit-linear-gradient(45deg, #c77ff2, #e8519e);
-  border-color: -o-linear-gradient(45deg, #c77ff2, #e8519e);
-  border-color: -moz-linear-gradient(45deg, #c77ff2, #e8519e);
-  border-color: linear-gradient(45deg, #c77ff2, #e8519e);
+  border-color: #2a3d72;
+  border-color: -webkit-linear-gradient(45deg, #2a3d72, #747687);
+  border-color: -o-linear-gradient(45deg, #2a3d72, #747687);
+  border-color: -moz-linear-gradient(45deg, #2a3d72, #747687);
+  border-color: linear-gradient(45deg, #2a3d72, #747687);
 
   visibility: hidden;
   opacity: 0;
