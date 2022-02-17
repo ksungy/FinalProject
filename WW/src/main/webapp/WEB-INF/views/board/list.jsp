@@ -26,17 +26,34 @@
 		<div class="container-table100">
 			<div class="wrap-table100">
 			
-				<!-- Search -->
-				<div class="input-group">
-				  <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-				  <button type="button" class="btn btn-outline-primary">search</button>
-				</div>
-				
-				<!-- Write Button -->
-			  	<a href="#" style="background:#2A3D72;" class="btn btn-primary btn-circle">
+
+				<div class=search>
+                    <!-- Topbar Search -->
+                    <form
+                        class="d-none d-sm-inline-block form-inline navbar-search">
+                        <div class="input-group">
+                        	<select class="form-control bg-light">
+							  <option selected>---</option>
+							  <option value="1">제목</option>
+							  <option value="2">작성자</option>
+							  <option value="3">내용</option>
+							</select>
+                            <input type="text" class="form-control bg-light border-0 small" placeholder="검색어를 입력하세요."
+                                aria-label="Search" >
+                            <div class="input-group-append">
+                                <button class="btn btn-primary" type="button">
+                                    <i class="fas fa-search fa-sm"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                
+                <!-- Write Button -->
+			  	<a href="${ path }/board/write" style="background:#2A3D72;" class="btn btn-primary btn-circle">
                 	<i style="color:white;" class="fas fa-edit"></i>
                 </a>
-				
+				</div>
+	
 				<!-- Table -->
 				<div class="table">
 
@@ -47,99 +64,36 @@
 						<div class="cell">작성일</div>
 						<div class="cell">조회수</div>
 					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">10</div>
-						<div class="cell" data-title="Age">안녕하세요</div>
-						<div class="cell" data-title="Job Title">이산아</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">9</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">이산아</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">8</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">이산아</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">7</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">이산아</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">6</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">이산아</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">5</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">이산아</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">4</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">이산아</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">3</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">관리자</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">2</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">관리자</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
-
-					<div class="row">
-						<div class="cell" data-title="Full Name">1</div>
-						<div class="cell" data-title="Age">안녕하세요안녕하세요</div>
-						<div class="cell" data-title="Job Title">관리자</div>
-						<div class="cell" data-title="Location">2022-02-12</div>
-						<div class="cell" data-title="hits">100</div>
-					</div>
+					<c:if test="${ !empty list }">
+						<c:forEach var="board" items="${ list }">
+							<div class="row">
+								<div class="cell">${ board.no }</div>
+								<div class="cell"><a href="${ path }/board/view?no=${ board.no }">${ board.title }</a></div>
+								<div class="cell">${ board.writer }</div>
+								<div class="cell"><fmt:formatDate type="date" value="${ board.createDate }"/></div>
+								<div class="cell">${ board.hits }</div>
+							</div>
+						</c:forEach>
+					</c:if>
+					
 
 				</div>
 
 				<div class="paging">
-					<a href="" class="num_btn">첫 페이지</a>
-					<a href="" class="num_btn">이전페이지</a>
-					<a href="" class="num on">1</a>
-					<a href="" class="num">2</a>
-					<a href="" class="num">3</a>
-					<a href="" class="num">4</a>
-					<a href="" class="num">5</a>
-					<a href="" class="num_btn">다음 페이지</a>
-					<a href="" class="num_btn">마지막 페이지</a>
+					<a href="${ path }/board/list?page=1" class="num_btn">첫 페이지</a>
+					<a href="${ path }/board/list?page=${ pageInfo.prevPage }" class="num_btn">이전페이지</a>
+					<c:forEach begin="${ pageInfo.startPage }" end="${ pageInfo.endPage }" varStatus="status">
+					<c:if test="${ status.current == pageInfo.currentPage }">				
+						<a>${ status.current }</a>
+					</c:if>
+					
+					<c:if test="${ status.current != pageInfo.currentPage }">				
+						<a href="${ path }/board/list?page=${ status.current }&count=${ pageInfo.listLimit }" class="num">${ status.current }</a>
+					</c:if>
+					</c:forEach>
+
+					<a href="${ path }/board/list?page=${ pageInfo.nextPage }" class="num_btn">다음 페이지</a>
+					<a href="${ path }/board/list?page=${ pageInfo.maxPage }" class="num_btn">마지막 페이지</a>
 				</div>
 			</div>
 

@@ -45,7 +45,7 @@
 		
 		<!-- 게시글 상세보기 -->
         <div class="container">
-           <a href="#" class="btn btn-light btn-icon-split">
+           <a href="${ path }/board/list" class="btn btn-light btn-icon-split">
                <span class="text">목록으로</span>
            </a>
            <div class="board-write-body">
@@ -107,8 +107,8 @@
 										<div class="header">
 											<strong class="primary-font">작성자 이름</strong>
 											<small class="pull-right text-muted">2022-02-12 PM 12:00:00</small>
-											<button class="btn float-right btn-default btn-xs">수정</button>
 											<button class="btn float-right btn-default btn-xs">삭제</button>
+											<button class="btn float-right btn-default btn-xs">수정</button>
 										</div>
 										<p>안녕하세요</p>
 										<hr>
@@ -119,8 +119,8 @@
 										<div class="header">
 											<strong class="primary-font">작성자 이름</strong>
 											<small class="pull-right text-muted">2022-02-12 PM 12:00:00</small>
-											<button class="btn float-right btn-default btn-xs">수정</button>
 											<button class="btn float-right btn-default btn-xs">삭제</button>
+											<button class="btn float-right btn-default btn-xs">수정</button>
 										</div>
 										<p>안녕하세요</p>
 									</div>

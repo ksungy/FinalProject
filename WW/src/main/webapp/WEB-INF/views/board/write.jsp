@@ -72,10 +72,10 @@
 				</div>
 
 				<div class="container-contact100-form-btn">
-					<button class="contact100-form-btn">
+					<button type="reset" onclick="location.href='${ pageContext.request.contextPath }/board/list'" class="contact100-form-btn">
 						취소
 					</button>
-					<button class="contact100-form-btn">
+					<button type="submit" class="contact100-form-btn">
 						등록
 					</button>
 				</div>
