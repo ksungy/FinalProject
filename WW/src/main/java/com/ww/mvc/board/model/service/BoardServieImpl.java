@@ -33,4 +33,10 @@ public class BoardServieImpl implements BoardService {
 		 
 	}
 
+	@Override
+	public Board findBoardByNo(int no) {
+		
+		return mapper.selectBoardByNo(no);
+	}
+
 }

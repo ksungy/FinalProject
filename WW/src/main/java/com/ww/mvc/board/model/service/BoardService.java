@@ -12,4 +12,6 @@ public interface BoardService {
 
 	List<Board> getBoardList(PageInfo pageInfo);
 
+	Board findBoardByNo(int no);
+
 }

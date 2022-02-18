@@ -31,6 +31,21 @@
   		<result property="hits" column="BOARD_HITS"/>
   	</resultMap>
   	
+  	<!-- ▼ Comment ResultMap -->
+	<resultMap type="Reply" id="replyResultMap">
+		<id property="no" column="COMMENT_NO"/>
+		<result property="boardNo" column="BOARD_NO"/>
+		<result property="empNo" column="EMP_NO"/>
+		<result property="writer" column="COMMENT_WRITER"/>
+		<result property="content" column="COMMENT_CONTENT"/>
+		<result property="createDate" column="B_COMMENT_CREATED"/>
+		<result property="modifyDate" column="B_COMMENT_MODIFIED"/>
+	</resultMap>
+
+	<resultMap type="Board" extends="boardListResultMap" id="boardDetailResultMap">
+		<collection property="replies" javaType="arraylist" resultMap="replyResultMap"/>
+	</resultMap>
+  	
 	<!-- 페이징 -->
 	<select id="getBoardCount" parameterType="map" resultType="_int">
 		SELECT COUNT(*)
@@ -64,4 +79,33 @@
 		</choose>
 		ORDER BY B.BOARD_NO DESC
 	</select>
+	
+	<!-- 게시글 상세조회(댓글 포함) -->
+  	<select id="selectBoardByNo" parameterType="_int" resultMap="boardDetailResultMap">
+			SELECT B.BOARD_NO AS,
+			       B.BOARD_TITLE, 
+			       B.EMP_NO, 
+			       B.BOARD_WRITER,
+			       E.EMP_ID, 
+			       B.BOARD_HITS, 
+			       B.BOARD_CONTENT,
+			       B.BOARD_CREATED, 
+			       B.BOARD_MODIFIED,
+			       C.COMMENT_NO, 
+			       C.COMMENT_WRITER,
+			       C.BOARD_NO, 
+			       C.COMMENT_CONTENT, 
+			       C.EMP_NO,
+			       E2.EMP_ID, 
+			       C.B_COMMENT_CREATED, 
+			       C.B_COMMENT_MODIFIED
+			FROM BOARD B
+			JOIN EMPLOYEE E ON(B.EMP_NO = E.EMP_NO)
+			LEFT OUTER JOIN BOARD_COMMENT C ON(B.BOARD_NO = C.BOARD_NO)
+			LEFT OUTER JOIN EMPLOYEE E2 ON(C.EMP_NO = E2.EMP_NO)
+			WHERE B.BOARD_NO = #{no}
+  	 </select>
+	
+	
+	
 </mapper>

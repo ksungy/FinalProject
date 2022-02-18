@@ -14,4 +14,6 @@ public interface BoardMapper {
 
 	List<Board> findAll(RowBounds rowBounds);
 
+	Board selectBoardByNo(int no);
+
 }

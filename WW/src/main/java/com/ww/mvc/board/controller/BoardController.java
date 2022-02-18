@@ -51,9 +51,14 @@ public class BoardController {
 	
 	// 게시글 상세조회
 	@GetMapping("/view")
-	public String view() {
+	public ModelAndView view(ModelAndView model, @RequestParam("no") int no) {
 		
-		return "/board/view";
+		Board board = service.findBoardByNo(no);
+		
+		model.addObject("board", board);
+		model.setViewName("board/view");
+		
+		return model;
 	}
 	
 	
@@ -63,6 +68,11 @@ public class BoardController {
 		
 		return "/board/write";
 	}
+	
+	
+	// 게시글 수정
+	
+	// 게시글 삭제
 	
 	
 	

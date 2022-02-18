@@ -70,7 +70,7 @@
 								<div class="cell">${ board.no }</div>
 								<div class="cell"><a href="${ path }/board/view?no=${ board.no }">${ board.title }</a></div>
 								<div class="cell">${ board.writer }</div>
-								<div class="cell"><fmt:formatDate type="date" value="${ board.createDate }"/></div>
+								<div class="cell"><fmt:formatDate type="date" value="${ board.createDate }" /></div>
 								<div class="cell">${ board.hits }</div>
 							</div>
 						</c:forEach>

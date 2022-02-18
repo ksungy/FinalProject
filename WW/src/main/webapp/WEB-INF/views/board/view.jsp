@@ -53,8 +53,8 @@
                    <table class="table table-condensed">
                        <thead>
                            <tr align="center">
-                               <th width="10%">글번호</th>
-                               <th width="60%">게시판 제목 입니다.</th>
+                               <th width="10%">${ board.no }</th>
+                               <th width="60%">${ board.title }</th>
                            </tr>
                        </thead>
                        <tbody>
@@ -63,7 +63,7 @@
                                글쓴이
                                </td>
                                <td>
-                               이산아
+                               ${ board.writer }
                                </td>
                            </tr>
                            <tr>
@@ -71,7 +71,7 @@
                                작성일
                                </td>
                                <td>
-                               2022-02-09 AM 11:00:00 <span style='float:right'>조회 : 100</span>
+                               <fmt:formatDate type="date" value="${ board.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/> <span style='float:right'>조회수 : ${ board.hits }</span>
                                </td>
                            </tr>
                            <tr>
@@ -84,7 +84,7 @@
                            </tr>
                            <tr>
                                <td colspan="2">
-                                   <div>게시글 내용이 보여집니다.</div>
+                                   <div>${ board.content }</div>
                                </td>
                            </tr>
                        </tbody>
@@ -102,29 +102,20 @@
 					<div class="panel panel-default">
 						<div class="panel-body">
 							<ul class="chat">
+								<c:forEach var="reply" items="${ board.replies }">
 								<li class="left clearfix">
 									<div>
 										<div class="header">
-											<strong class="primary-font">작성자 이름</strong>
-											<small class="pull-right text-muted">2022-02-12 PM 12:00:00</small>
+											<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
+											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>
 											<button class="btn float-right btn-default btn-xs">삭제</button>
 											<button class="btn float-right btn-default btn-xs">수정</button>
 										</div>
-										<p>안녕하세요</p>
+										<p><c:out value="${ reply.content }"/></p>
 										<hr>
 									</div>
 								</li>
-								<li class="left clearfix">
-									<div>
-										<div class="header">
-											<strong class="primary-font">작성자 이름</strong>
-											<small class="pull-right text-muted">2022-02-12 PM 12:00:00</small>
-											<button class="btn float-right btn-default btn-xs">삭제</button>
-											<button class="btn float-right btn-default btn-xs">수정</button>
-										</div>
-										<p>안녕하세요</p>
-									</div>
-								</li>
+								</c:forEach>
 							</ul>
 						</div>
 					</div>
