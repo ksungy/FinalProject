@@ -18,6 +18,26 @@
 		FROM BOARD B
 		JOIN EMPLOYEE E ON(B.BOARD_WRITER = E.EMP_ID)
 	</sql>
+	
+	<sql id="search">
+		<trim prefix="(" suffix=") AND " prefixOverrides="OR">
+			<foreach item='type' collection="typeArr">
+				<trim prefix="OR">
+					<choose>
+						<when test="type = 'title'.toString()">
+							title like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'writer'.toString()">
+							writer like '%'||#{keyword}||'%'
+						</when>
+						<when test="type == 'content'.toString()">
+							content like '%'||#{keyword}||'%'
+						</when>
+					</choose>
+				</trim>
+			</foreach>
+		</trim>
+	</sql>
 
 	<!-- ▼ Board ResultMap -->
   	<resultMap type="Board" id="boardListResultMap">
@@ -31,7 +51,7 @@
   		<result property="hits" column="BOARD_HITS"/>
   	</resultMap>
   	
-  	<!-- ▼ Comment ResultMap -->
+  	<!-- ▼ Reply ResultMap -->
 	<resultMap type="Reply" id="replyResultMap">
 		<id property="no" column="COMMENT_NO"/>
 		<result property="boardNo" column="BOARD_NO"/>
@@ -67,13 +87,13 @@
 		<include refid="boardListSql" />
 
 		<choose>
-			<when test="title != null">
+			<when test="type = title">
 				AND B.BOARD_TITLE LIKE '%' || #{title} ||'%'
 			</when>
-			<when test="writer != null">
+			<when test="type = writer">
 				AND B.BOARD_WRITER LIKE '%' || #{writer} ||'%'
 			</when>
-			<when test="content != null">
+			<when test="type = content">
 				AND B.BOARD_CONTENT LIKE '%' || #{content} ||'%'
 			</when>
 		</choose>
@@ -106,6 +126,27 @@
 			WHERE B.BOARD_NO = #{no}
   	 </select>
 	
-	
+	<!-- 게시글 작성 -->
+	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="no" keyColumn="BOARD_NO">
+		INSERT INTO BOARD(
+			BOARD_NO,
+			
+			BOARD_WRITER,
+			BOARD_TITLE,
+			BOARD_CONTENT,
+			BOARD_CREATED,
+			BOARD_MODIFIED,
+			BOARD_HITS
+		) VALUES(
+			SEQ_BOARD_NO.NEXTVAL,
+			
+			#{writer},
+			#{title},
+			#{content},
+			DEFAULT,
+			DEFAULT,
+			DEFAULT
+		)
+	</insert>
 	
 </mapper>

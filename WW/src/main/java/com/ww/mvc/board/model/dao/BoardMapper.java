@@ -16,4 +16,8 @@ public interface BoardMapper {
 
 	Board selectBoardByNo(int no);
 
+	int updateBoard(Board board);
+
+	int insertBoard(Board board);
+
 }

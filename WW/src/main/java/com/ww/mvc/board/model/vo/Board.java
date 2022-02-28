@@ -32,4 +32,14 @@ public class Board {
 	
 	private List<Reply> replies;
 	
+	private List<BoardAttach> attachList;
+	
+//	public void setNo(int no) {
+//		this.no = no; 
+//		
+//		for (BoardAttach boardAttach : attachList) {
+//			boardAttach.setBoardNo(no);
+//		}
+//	}
+	
 }

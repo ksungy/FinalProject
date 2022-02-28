@@ -29,19 +29,18 @@
 
 				<div class=search>
                     <!-- Topbar Search -->
-                    <form
-                        class="d-none d-sm-inline-block form-inline navbar-search">
+                    <form method="get" action="/board/list" class="d-none d-sm-inline-block form-inline navbar-search">
                         <div class="input-group">
-                        	<select class="form-control bg-light">
+                        	<select class="form-control bg-light" name="type">
 							  <option selected>---</option>
-							  <option value="1">제목</option>
-							  <option value="2">작성자</option>
-							  <option value="3">내용</option>
+							  <option value="title">제목</option>
+							  <option value="writer">작성자</option>
+							  <option value="content">내용</option>
 							</select>
                             <input type="text" class="form-control bg-light border-0 small" placeholder="검색어를 입력하세요."
-                                aria-label="Search" >
+                                aria-label="Search" name="keyword">
                             <div class="input-group-append">
-                                <button class="btn btn-primary" type="button">
+                                <button class="btn btn-primary" type="submit" id="searchBtn">
                                     <i class="fas fa-search fa-sm"></i>
                                 </button>
                             </div>

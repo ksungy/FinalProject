@@ -1,10 +1,17 @@
 package com.ww.mvc.board.model.service;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ww.mvc.board.model.dao.BoardMapper;
 import com.ww.mvc.board.model.vo.Board;
@@ -38,5 +45,31 @@ public class BoardServieImpl implements BoardService {
 		
 		return mapper.selectBoardByNo(no);
 	}
+
+	@Override
+	@Transactional
+	public int save(Board board) {
+	int result = 0;
+		
+		if(board.getNo() != 0) {
+			// update
+			result = mapper.updateBoard(board);
+		} else {
+			// insert
+			result = mapper.insertBoard(board);
+		}
+		
+		// Attach는 n개면 n번 insert
+//		for(BoardAttach boardAttach : upfile) {
+//			
+//		}
+		
+		return result;
+	}
+
+
+
+	
+	
 
 }
