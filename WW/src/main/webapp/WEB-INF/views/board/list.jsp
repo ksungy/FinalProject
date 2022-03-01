@@ -29,9 +29,9 @@
 
 				<div class=search>
                     <!-- Topbar Search -->
-                    <form method="get" action="/board/list" class="d-none d-sm-inline-block form-inline navbar-search">
+                    <form method="get" action="${ path }/board/search" class="d-none d-sm-inline-block form-inline navbar-search">
                         <div class="input-group">
-                        	<select class="form-control bg-light" name="type">
+                        	<select class="form-control bg-light" name="searchType">
 							  <option selected>---</option>
 							  <option value="title">제목</option>
 							  <option value="writer">작성자</option>

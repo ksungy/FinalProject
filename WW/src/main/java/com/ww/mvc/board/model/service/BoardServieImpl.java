@@ -1,20 +1,16 @@
 package com.ww.mvc.board.model.service;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ww.mvc.board.model.dao.BoardMapper;
 import com.ww.mvc.board.model.vo.Board;
+import com.ww.mvc.board.model.vo.BoardAttach;
 import com.ww.mvc.common.util.PageInfo;
 
 @Service
@@ -61,11 +57,35 @@ public class BoardServieImpl implements BoardService {
 		
 		// Attach는 n개면 n번 insert
 //		for(BoardAttach boardAttach : upfile) {
-//			
+//			mapper.insertFile(upfile.get(i));
 //		}
 		
 		return result;
 	}
+
+
+
+	@Override
+	public List<Board> boardSearch(Map<String, String> searchMap, PageInfo pageInfo) {
+		
+		int offset = (pageInfo.getCurrentPage() - 1 ) * pageInfo.getListLimit();
+		int limit = pageInfo.getListLimit();
+		RowBounds rowBounds = new RowBounds(offset, limit);
+		
+		return mapper.searchBoard(rowBounds, searchMap);
+	}
+
+	
+	@Override
+	public int getSearchCount() {
+		
+		return mapper.searchCount();
+	}
+
+
+
+
+
 
 
 

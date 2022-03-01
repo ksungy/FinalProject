@@ -79,6 +79,7 @@
 					<span class="focus-input100"></span>
 					</div>
 
+				 
 				<div class="container-contact100-form-btn">
 					<button type="reset" onclick="location.href='${ pageContext.request.contextPath }/board/list'" class="contact100-form-btn">
 						취소
@@ -144,27 +145,7 @@
 
 	
 </script>
-<!-- 
-<script>
-	
-    // CKEditor5를 위한 textarea 지정
-    ClassicEditor
-	.create( document.querySelector('#boardContent'),{
-		language: "ko",
-		 simpleUpload:
-         {
-             uploadUrl:  'http://localhost:8080/mvc/board/ckUpload',
-             withCredentials: true,
-         }
-	})
-	.then( editor => {
-        console.log( 'Editor was initialized', editor );
-    } )
-	.catch( error => {
-		console.error( error );
-	} );
-</script>
- -->
+
 
  
 <%@include file="../common/footer.jsp"%>
