@@ -1,0 +1,64 @@
+@charset "UTF-8";
+
+/* 모달 창 띄우기*/
+
+#content {
+    /* border: 2px solid; */
+    margin: auto;
+    margin-top: 30px;
+    padding: 20px;
+    padding-left: 70px;
+    /* width: auto; */
+    max-width: 450px;
+    /* text-align: center; */
+    
+}
+
+/* 이용약관 컨텐츠 부분 */
+.join_terms {
+    border: 1px solid;
+    max-width: 400px;
+    max-height: 100px;
+    overflow-x:hidden;
+    overflow-x:auto;
+    overflow-y:scroll;
+}
+
+#check_all {
+    /* border: 1px solid; */
+    /* max-width: 410px; */
+}
+
+#chk_text {
+    display: inline-block;
+    position: relative;
+    /* border: 1px solid; */
+    width: 390px;
+    top: 10px;
+}
+
+/* 버튼 */
+#btn_area {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.join_btn {
+    width: 200px;
+    height: 45px;
+    margin-left: 10px;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 500;
+    border-radius: 10px;
+    border: hidden;
+    color: #ffffff;
+}
+
+#agree_btn {
+    background-color: #2A3D72;
+}
+
+#cancle_btn {
+    background-color: #8e8e8e;
+}
