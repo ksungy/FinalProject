@@ -50,7 +50,7 @@
         .bg-base-color {background-color: #2A3D72;}
 
     </style>
-
+	<title>WhereWare</title>
 </head>
 
 <body id="page-top">
@@ -65,7 +65,7 @@
             <a class="sidebar-brand d-flex align-items-center justify-content-center" href="index.html" >
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
-                <div class="sidebar-brand-text mx-3">WherWare</div>
+                <div class="sidebar-brand-text mx-3">WhereWare</div>
             </a>
 
             <!-- Divider -->

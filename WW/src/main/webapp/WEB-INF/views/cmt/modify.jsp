@@ -36,7 +36,7 @@
 					</thead>
 					<tfoot>
 						<tr>
-							<th colspan="3">금주 근무 총 합계</th>
+							<th colspan="3">총 합계</th>
 							<th>36h</th>
 
 						</tr>
@@ -44,15 +44,15 @@
 					<tbody>
 						<tr>
 							<td>2/1</td>
-							<td>09:00</td>
-							<td>18:00</td>
+							<td class="editable">09:00</td>
+							<td class="editable">18:00</td>
 							<td>9h</td>
 						</tr>
 						<tr>
-							<td>2/2</td>
-							<td>09:00</td>
-							<td>18:00</td>
-							<td>9h</td>
+							<td id="editable">2/2</td>
+							<td id="editable">09:00</td>
+							<td id="editable">18:00</td>
+							<td id="editable">9h</td>
 						</tr>
 						<tr>
 							<td>2/3</td>
@@ -70,9 +70,8 @@
 				</table>
 				<a href="">
 					<div class="col-12">
-						<input type="button"
-							style="color: #4e73df !important; font-weight: bold"
-							class="btn float-right" value="근무 수정 요청">
+						<a class="btn float-right btn-primary btn-sm" data-target="#modal3" data-toggle="modal">수정 요청</a>
+						
 					</div>
 				</a>
 			</div>
@@ -90,17 +89,6 @@
 </div>
 <!-- End of Main Content -->
 
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-	<div class="container my-auto">
-		<div class="copyright text-center my-auto">
-			<span>Copyright &copy; Your Website 2020</span>
-		</div>
-	</div>
-</footer>
-<!-- End of Footer -->
-
-</div>
 <!-- End of Content Wrapper -->
 
 </div>
@@ -111,23 +99,18 @@
 	class="fas fa-angle-up"></i>
 </a>
 
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-				<button class="close" type="button" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-			</div>
-			<div class="modal-body">Select "Logout" below if you are ready
-				to end your current session.</div>
-			<div class="modal-footer">
-				<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-				<a class="btn btn-primary" href="login.html">Logout</a>
+<!-- 수정 요청 완료 알림 -->
+<div class="row">
+	<div class="modal" id="modal3" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					알림
+					<button class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					수정 요청이 완료되었습니다.
+				</div>
 			</div>
 		</div>
 	</div>

@@ -1,12 +1,21 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@ page session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<c:set var="path" value="${ pageContext.request.contextPath }" /><%@ taglib
-	uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
+<c:set var="path" value="${ pageContext.request.contextPath }" />
+
+<%
+	Date nowTime = new Date();
+	SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <%@include file="../common/header.jsp"%>
+
 	<!-- Begin Page Content -->
 	<div class="container-fluid">
 
@@ -24,15 +33,19 @@
 						<h6 class="m-0 font-weight-bold text-primary">Today</h6>
 					</div>
 					<div class="card-body">
-						<div style="margin-top: 10px; margin-bottom: 30px;">2022년 2월
-							3일</div>
+						<div style="margin-top: 10px; margin-bottom: 30px;"><%= sf.format(nowTime) %></div>
+						<a class="btn btn-primary btn-sm" data-target="#modal1" data-toggle="modal">출근등록</a>
+						<a class="btn btn-primary btn-sm" data-target="#modal2" data-toggle="modal">퇴근등록</a><br><br>
 						<div style="margin-bottom: 40px;">
 							출근 시간
-							<div style="font-size: 1.5em; font-weight: bold;">09:00</div>
+							<c:out value="${ cmt.cmt_srt_time }"></c:out>
 						</div>
 						<div style="margin-bottom: 40px;">
 							퇴근 시간
-							<div style="font-size: 1.5em; font-weight: bold;">18:00</div>
+							<c:if test="${ !empty cmt.cmt_end_time }">
+							<c:out value="${ cmt.cmt_end_time }"></c:out>
+							</c:if>
+							<div id="time"></div>
 						</div>
 						<div>
 							근무 시간
@@ -89,42 +102,26 @@
 								<tfoot>
 									<tr>
 										<th colspan="3">총 합계</th>
-										<th>36h</th>
+										<th>${ cmt.cmt_total_time }</th>
 
 									</tr>
 								</tfoot>
-								<tbody>
-									<tr>
-										<td>2/1</td>
-										<td>09:00</td>
-										<td>18:00</td>
-										<td>9h</td>
-									</tr>
-									<tr>
-										<td>2/2</td>
-										<td>09:00</td>
-										<td>18:00</td>
-										<td>9h</td>
-									</tr>
-									<tr>
-										<td>2/3</td>
-										<td>09:00</td>
-										<td>18:00</td>
-										<td>9h</td>
-									</tr>
-									<tr>
-										<td>2/4</td>
-										<td>09:00</td>
-										<td>18:00</td>
-										<td>9h</td>
-									</tr>
-								</tbody>
+								<c:if test="${ !empty cmt }">
+									<c:forEach var="cmt" items="${ cmt }">
+										<tr>
+											<td><fmt:formatDate type="date" value="${ cmt.cmt_date }"/></td>
+											<td>${ cmt.cmt_srt_time }</td>
+											<td>${ cmt.cmt_end_time }</td>
+											<td>${ cmt.cmt_time }</td>
+										</tr>
+									</c:forEach>
+								</c:if>
 							</table>
 							<a href="${ path }/cmt/modify">
 								<div class="col-12">
 									<input type="button"
 										style="color: #4e73df !important; font-weight: bold"
-										class="btn float-right" value="근무 수정 요청">
+										class="btn float-right" value="근무 수정">
 								</div>
 							</a>
 						</div>
@@ -142,14 +139,6 @@
 </div>
 <!-- End of Main Content -->
 
-<!-- Footer -->
-<footer class="sticky-footer bg-white">
-	<div class="container my-auto">
-		<div class="copyright text-center my-auto">
-			<span>Copyright &copy; Your Website 2020</span>
-		</div>
-	</div>
-</footer>
 <!-- End of Footer -->
 
 </div>
@@ -158,31 +147,36 @@
 </div>
 <!-- End of Page Wrapper -->
 
-<!-- Scroll to Top Button-->
-<a class="scroll-to-top rounded" href="#page-top"> <i
-	class="fas fa-angle-up"></i>
-</a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog"
-	aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-				<button class="close" type="button" data-dismiss="modal"
-					aria-label="Close">
-					<span aria-hidden="true">×</span>
-				</button>
-			</div>
-			<div class="modal-body">Select "Logout" below if you are ready
-				to end your current session.</div>
-			<div class="modal-footer">
-				<button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-				<a class="btn btn-primary" href="login.html">Logout</a>
+    <!-- 출근 등록 모달 -->
+	<div class="row">
+		<div class="modal" id="modal1" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						알림
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body">
+						출근 등록이 완료되었습니다.
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
-
-<%@include file="../common/footer.jsp" %>
+    <!-- 퇴근 등록 모달 -->
+	<div class="row">
+		<div class="modal" id="modal2" tabindex="-1">
+			<div class="modal-dialog">
+				<div class="modal-content">
+					<div class="modal-header">
+						알림
+						<button class="close" data-dismiss="modal">&times;</button>
+					</div>
+					<div class="modal-body"">
+						퇴근 등록이 완료되었습니다.
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+<%@include file="../common/footer.jsp"%>
