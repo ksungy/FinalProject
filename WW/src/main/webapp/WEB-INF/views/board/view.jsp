@@ -79,7 +79,9 @@
                                첨부파일
                                </td>
                                <td>
-                               <span> - </span>
+	                               <div class="uploadResult">
+	                              		
+	                               </div>
                                </td>
                            </tr>
                            <tr>
@@ -138,5 +140,22 @@
 			</div>
 		</div>
 </div>
+
+<script>
+	var uploadResult = $(".uploadResult div");
 	
+		function showFiles(uploadResultArr){
+			var str = "";
+			
+			$(uploadResultArr).each(function(i, obj)){
+				str += "<span>" + obj.originalFileName + "<span>";
+			});
+			
+			uploadResult.append(str);
+		};
+		
+
+</script>
+
+
 <%@include file="../common/footer.jsp"%>

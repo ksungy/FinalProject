@@ -7,6 +7,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ww.mvc.board.model.dao.BoardMapper;
 import com.ww.mvc.board.model.vo.Board;
@@ -55,10 +56,10 @@ public class BoardServieImpl implements BoardService {
 			result = mapper.insertBoard(board);
 		}
 		
-		// Attach는 n개면 n번 insert
-//		for(BoardAttach boardAttach : upfile) {
-//			mapper.insertFile(upfile.get(i));
-//		}
+//		 Attach는 n개면 n번 insert
+		for(BoardAttach boardAttach : board.getAttachList()) {
+			mapper.insertFile(boardAttach);
+		}
 		
 		return result;
 	}

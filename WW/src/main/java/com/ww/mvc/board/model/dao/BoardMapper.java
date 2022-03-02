@@ -6,8 +6,10 @@ import java.util.Map;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.ww.mvc.board.model.vo.Board;
+import com.ww.mvc.board.model.vo.BoardAttach;
 import com.ww.mvc.common.util.PageInfo;
 import com.ww.mvc.common.util.SearchInfo;
 
@@ -27,6 +29,8 @@ public interface BoardMapper {
 	List<Board> searchBoard(RowBounds rowBounds, Map<String, String> searchMap);
 
 	int searchCount();
+
+	void insertFile(BoardAttach boardAttach);
 
 
 }

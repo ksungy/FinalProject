@@ -17,10 +17,9 @@
 <div class="container-fluid">
 
 	<!-- Page Heading -->
-	<h1 class="h3 mb-1 text-gray-800">Whereware 게시판</h1>
+	<h1 class="h3 mb-1"><a href="${ path }/board/list" style="color:#2A3D72; font-weight:bold;">Whereware 게시판</a></h1>
 	<p class="mb-4">서로 존중하는 공간입니다.</p>
-	
-    
+
     <!-- Table Wrapper -->
 	<div class="limiter">
 		<div class="container-table100">
@@ -66,9 +65,9 @@
 					<c:if test="${ !empty list }">
 						<c:forEach var="board" items="${ list }">
 							<div class="row">
-								<div class="cell">${ board.no }</div>
-								<div class="cell"><a href="${ path }/board/view?no=${ board.no }">${ board.title }</a></div>
-								<div class="cell">${ board.writer }</div>
+								<div class="cell"><c:out value="${ board.no }"/></div>
+								<div class="cell"><a href="${ path }/board/view?no=${ board.no }"><c:out value="${ board.title }"/></a></div>
+								<div class="cell"><c:out value="${ board.writer }"/></div>
 								<div class="cell"><fmt:formatDate type="date" value="${ board.createDate }" /></div>
 								<div class="cell">${ board.hits }</div>
 							</div>

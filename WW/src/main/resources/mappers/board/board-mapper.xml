@@ -146,7 +146,6 @@
 	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="no" keyColumn="BOARD_NO">
 		INSERT INTO BOARD(
 			BOARD_NO,
-			
 			BOARD_WRITER,
 			BOARD_TITLE,
 			BOARD_CONTENT,
@@ -155,7 +154,6 @@
 			BOARD_HITS
 		) VALUES(
 			SEQ_BOARD_NO.NEXTVAL,
-			
 			#{writer},
 			#{title},
 			#{content},
@@ -170,7 +168,6 @@
 		INSERT INTO BOARD_ATTACH(
 			FILE_NO,
 			BOARD_NO,
-			EMP_NO,
 			ORIGINAL_FILENAME,
 			RENAMED_FILENAME,
 			FILE_UPLOADPATH,
@@ -180,13 +177,12 @@
 		) VALUES (
 			SEQ_BOARDATTACH_NO.NEXTVAL,
 			#{boardNo},
-			#{empNo},
 			#{originalFileName},
 			#{renamedFileName},
 			#{uploadPath},
 			#{fileSize},
 			#{fileType},
-			DEAFULT
+			DEFAULT
 		)
 	</insert>
 	

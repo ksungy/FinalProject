@@ -32,7 +32,6 @@ import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.board.model.vo.BoardAttach;
 import com.ww.mvc.common.util.FileProcess;
 import com.ww.mvc.common.util.PageInfo;
-import com.ww.mvc.common.util.SearchInfo;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -67,7 +66,7 @@ public class BoardController {
 
 	}
 
-	// ▼ 게시글 상세조회
+	// ▼ 게시글 1건 상세조회
 	@GetMapping("/view")
 	public ModelAndView view(ModelAndView model, @RequestParam("no") int no) {
 
@@ -107,15 +106,17 @@ public class BoardController {
 	}
 	
 
-	// ▼ 게시글 작성
+	// ▼ 게시글 작성 페이지
 	@GetMapping("/write")
 	public String write() {
 		return "/board/write";
 	}
 	
+	
+	// ▼ CKEditor 글 작성
 	@RequestMapping(value="/ckUpload", method = RequestMethod.POST) 
 	@ResponseBody public void ckUpload(HttpServletRequest req, HttpServletResponse res, 
-			@RequestParam MultipartFile upload) throws Exception{ 
+			@RequestParam(required = false) MultipartFile upload) throws Exception{ 
 		 
 //		String uploadPath = req.getSession().getServletContext().getRealPath("/").concat("resources");
 //		String uploadPath = req.getSession().getServletContext().getRealPath("/resources/ckUpload");
@@ -136,15 +137,21 @@ public class BoardController {
 			byte[] bytes = upload.getBytes(); 
 			// 업로드 경로 
 			String ckUploadPath = uploadPath + File.separator + uid + "_" + fileName; 
+			
 			out = new FileOutputStream(new File(ckUploadPath)); 
+			
 			out.write(bytes); 
+			
 			out.flush(); // out에 저장된 데이터를 전송하고 초기화 
+			
 			String callback = req.getParameter("CKEditorFuncNum"); 
+			
 			printWriter = res.getWriter(); 
-//				String fileUrl = "/ckUpload/" + uid + "_" + fileName;  
+			
 			String fileUrl = req.getContextPath()+ "/ckUpload/" + uid + "_" + fileName; 
 			
 			System.out.println(fileUrl);
+			
 			printWriter.println("<script type='text/javascript'>"
 					+ "window.parent.CKEDITOR.tools.callFunction(" 
 					+ callback+",'"+ fileUrl+"','이미지를 업로드하였습니다.')" 
@@ -172,10 +179,11 @@ public class BoardController {
 	}
 		
 
-	
+	// ▼ 첨부파일 글 작성
 	@PostMapping("/write")
 	public ModelAndView write(ModelAndView model, @ModelAttribute Board board,
 			@RequestParam("upfile") List<MultipartFile> upfile) throws Exception {
+		
 		int result = 0;
 
 		if(upfile != null && !upfile.isEmpty()) {
@@ -185,7 +193,6 @@ public class BoardController {
 			for (MultipartFile multipartFile : upfile) {
 				
 				log.info("fileName" + multipartFile.getOriginalFilename());
-				log.info(board.toString());
 				
 				String location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
 				String renamedFileName = FileProcess.save(multipartFile, location);
@@ -202,11 +209,14 @@ public class BoardController {
 				
 				attachList.add(boardAttach);
 				
+				board.setAttachList(attachList);
 			}
 		}
 		
 		
+//		board.setWriterNo(loginMember.getNo());
 		result = service.save(board);
+		log.info(board.toString());
 
 		if (result > 0) {
 			model.addObject("msg", "게시글이 정상적으로 등록되었습니다.");
@@ -216,9 +226,15 @@ public class BoardController {
 			model.addObject("location", "/board/write");
 		}
 
-		model.setViewName("/board/list");
+		
+		model.setViewName("common/msg");
 
 		return model;
 	}
+	
+	
+	
+	
+	
 
 }

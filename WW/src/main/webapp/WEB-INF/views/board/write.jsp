@@ -57,7 +57,7 @@
 					<span class="focus-input100"></span>
 				</div>
 
-				<label class="label-input100">Content *</label>
+				<label class="label-input100">Content(4000자) *</label>
 				<div class="wrap-input100 validate-input">
 					<textarea id="boardContent" name="content"></textarea>
 					<script>

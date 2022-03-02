@@ -34,12 +34,15 @@ public class Board {
 	
 	private List<BoardAttach> attachList;
 	
-//	public void setNo(int no) {
-//		this.no = no; 
-//		
-//		for (BoardAttach boardAttach : attachList) {
-//			boardAttach.setBoardNo(no);
-//		}
-//	}
+	public void setNo(int no) {
+		this.no = no; 
+		
+		if(attachList != null) {
+			for (BoardAttach boardAttach : attachList) {
+			boardAttach.setBoardNo(no);
+			}
+		}
+
+	}
 	
 }
