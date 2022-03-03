@@ -33,7 +33,7 @@
 					class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
 					aria-labelledby="dropdownMenuLink">
 					<div class="dropdown-header">게시글 옵션</div>
-					<a class="dropdown-item" href="#">게시글 수정</a>
+					<a class="dropdown-item" href="/mvc/board/edit?no=${ board.no }">게시글 수정</a>
 					<a class="dropdown-item" href="#">게시글 삭제</a>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#">게시글 스크랩</a>
