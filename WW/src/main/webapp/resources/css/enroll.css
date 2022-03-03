@@ -13,7 +13,7 @@ body {
 #logo {
     font-weight: bolder;
     color: #2A3D72;
-    width: 240px;
+    width: 300px;
     height: 44px;
     /* cursor: pointer; */
     text-align: center;
@@ -78,7 +78,7 @@ input {
 }
 
 /* 아이디, 주소 input 크기 */
-#userEdress, #userId {
+#userAddress, #userId {
     width: 80.9%;
     font-size: 15px;
 }

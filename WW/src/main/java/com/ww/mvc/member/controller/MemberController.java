@@ -25,12 +25,22 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@SessionAttributes("loginMember") 
+@RequestMapping("/member")
+@SessionAttributes("loginMember") // session 범위까지 확장!
 public class MemberController {
 	
 	@Autowired
 	@Qualifier("memberService")
 	private MemberService service;
+	
+	// 로그인 페이지 이동
+	@GetMapping("/login")
+	public String login() {
+		
+		log.info("로그인 페이지 요청");
+		
+		return "member/login";
+	};
 	
 	// 로그인 처리
 	@RequestMapping(value="/login", method = {RequestMethod.POST})
@@ -41,9 +51,8 @@ public class MemberController {
 		Member loginMember = service.login(id, password);
 		
 		if (loginMember != null) {
-			// 모델은 request scope을 가지는데 session 객체에 담아도 로그인이 유지됨
-			// why? @SessionAttributes()어노테이션을 사용해서 키값에 해당하는 Attribute를 session 범위까지 확장해서!
-			model.addObject("loginEmployee", loginMember);
+			
+			model.addObject("loginMember", loginMember);
 			model.setViewName("redirect:/");
 		} else {
 			// 로그인 실패
@@ -54,6 +63,13 @@ public class MemberController {
 		}
 			
 		return model;
+	}
+	
+	// 이용약관 페이지 열기!
+	@GetMapping("/joinTerms")
+	public String joinTerms() {
+		
+		return "member/joinTerms";
 	}
 	
 	// 로그아웃 처리
@@ -69,11 +85,18 @@ public class MemberController {
 	@GetMapping("/enroll")
 	public String enroll() {
 		
-		return "employee/enroll";
+		log.info("회원 가입 페이지 요청");
+		
+		return "member/enroll";
 	}
 	
-	@PostMapping("/employee/enroll")
+	@PostMapping("/enroll")
 	public ModelAndView enroll(ModelAndView model, @ModelAttribute Member member) {
+		
+		log.info("회원가입 으로 넘어가나?");
+		
+		log.info(member.toString());
+		
 		int result =  service.save(member); // 정수값 리턴
 		
 		if (result > 0) {
@@ -81,7 +104,7 @@ public class MemberController {
 			model.addObject("location", "/");
 		} else {
 			model.addObject("msg", "회원가입을 실패하였습니다.");
-			model.addObject("location", "/employee/enroll");
+			model.addObject("location", "/member/enroll");
 		}
 		
 		model.setViewName("common/msg");
@@ -89,7 +112,7 @@ public class MemberController {
 		return model;
 	}
 	
-	@PostMapping("employee/idCheck")
+	@PostMapping("/idCheck")
 	@ResponseBody
 	public Object idCheck(@RequestParam("userId") String userId) {
 		Map<String, Boolean> map = new HashMap<>();

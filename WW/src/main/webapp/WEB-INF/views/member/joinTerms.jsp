@@ -11,7 +11,6 @@
 <body>
 	<form id="terms_form" class="f">
 	<div id="content">
-        <div>
             <div id="terms_box">
                 <p class="input_chk">
                     <input type="checkbox" id="termService" name="termService" class="chk">
@@ -314,8 +313,6 @@
                     </label>
                 </p>
             </div>
-        </div>
-    </div>
 
     <div id="btn_area">
         <input type="button" class="join_btn" id="cancle_btn" value="취소">

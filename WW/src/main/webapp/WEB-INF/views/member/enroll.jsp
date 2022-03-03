@@ -10,42 +10,19 @@
 <head>
 <meta charset="UTF-8">
 	<link rel="stylesheet" href="${ path }/resources/css/enroll.css">
-	<link href="${ path }/resources/js/enroll.js">
-	<script src="https://code.jquery.com/jquery-latest.js"></script>
-	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
-	<script >
-			function addressOpen(){
-		        daum.postcode.load(function() {
-		            new daum.Postcode({
-		                oncomplete: function(data) {
-		                    // 팝업에서 검색 결과 항목을 클릭했을 때 실행할 코드를 작성
-		                    
-		                    // 각 주소의 노출 규칙에 따라 주소를 조합
-		                    // 내려오는 변수가 값이 없으면 공백('')을 가지르모. 이를 참고하여 분기
-		                    var addr = ''; // 주소 변수
-		
-		                    // 사용자가 선택한 주소 타입에 따라 해당 주소 값을 가져온다
-		                    if (data.userSelectedType === 'R') {
-		                        addr = data.roadAddress;
-		                    } else {
-		                        daar = data.jibunAddress;
-		                    }
-		                document.getElementById('#userEdress').value = data.address;
-		            }
-		        })
-		    }).open();
-		}
-	</script>
-
-<title>Insert title here</title>
+	
+<title>enroll</title>
 </head>
+
 <body>
 	<div id="wrapper">
 		<div id="content">
             <div class="logo">
                 <h2 id="logo">Sign Up To WhereWare</h2>
             </div>
-            <form name="employeeEnrollFrm" action="${ path }/employee/enroll" method="post" >
+            
+            <!-- 회원가입 폼 -->
+            <form name="memberEnrollFrm" action="${ path }/member/enroll" method="post" >
                 <div class="form-group">
                     <h3>
                         <label for="userId">아이디</label>
@@ -53,7 +30,7 @@
                     <span class="box_int">
                         <input type="text" id="userId" placeholder="아이디를 입력하세요"/>
                 </span>
-                <button id="idCheckBtn">확인</button>
+                <button type="button" id="idCheckBtn">확인</button>
                 <p class="error_id" ></p>
 			</div>
 			<div class="form-group">
@@ -106,7 +83,7 @@
                     <label for="userEddress">주소</label>
                 </h3>
                 <span class="box_int">
-                    <input type="text" id="userEdress" placeholder="" />
+                    <input type="text" id="userAddress" placeholder="" />
                 </span>
                 <span class="error_eddress"></span>
                 <button type="button" id="addressBtn" onclick="addressOpen();">찾기</button>
@@ -159,16 +136,21 @@
             <div id="terms_area">
                 <input type="checkbox" name="terms" id="terms" >
                 <label for="terms">WhereWare에서 제공하는 서비스 약관에 동의합니다.</label>
-                <button type="button" id="open_joinForm" onclick="location.href=''">약관보기</button>
+                <button type="button" id="open_joinForm" 
+                	onclick="window.open('joinTerms', 'window_name', 'width=500,height=700,location=no,status=no,scrollbars=yes');')">약관보기</button>
             </div>
-        </form>
             <div class="btn_area">
-                <button type="submit" id="enroll_btn">
+                <button type="submit" id="enroll_btn" >
                     <span>가입하기</span>
                 </button>
             </div>
+       </form>
 		</div>
 	</div>
+	
+	<script src="${ path }/resources/js/jquery-3.6.0.js"></script>
+	<script src="${ path }/resources/js/enroll.js"></script>
+	 
 	
 	 <script>
 	// 아이디 중복 확인
@@ -178,7 +160,7 @@
 			
 			$.ajax({
 				type: "post",
-				url: "${ pageContext.request.contextPath }/member/idCheck",
+				url: "${ path }/member/idCheck",
 				dataType: "json",
 				data: {
 					userId
@@ -200,6 +182,27 @@
 		});	
 	});
 </script>
+
+
+	<!-- 주소 찾기? 왜 안먹냐..... -->
+	<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+	<script>
+			function addressOpen(){
+		        new daum.Postcode({
+		        	oncomplete : function(data) {
+		        		var fullAddr = '';
+		        		
+		        		if(data.userSelectType === 'R') {
+		        			fullAddr = data.roddeAddress;
+		        		} else {
+		        			fullAddr = data.jibunAddress;
+		        		}
+		        		
+		        		document.getElementById('#userAddress').value = fullAddr;
+		        	}
+		        });
+		}
+	</script>
 	
 </body>
 </html>

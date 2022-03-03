@@ -1,3 +1,4 @@
+
 //아이디
 let idCheck = RegExp(/^[a-zA-Z][a-zA-Z\d]{4,11}$/);
 $('#userId').keyup(function() {

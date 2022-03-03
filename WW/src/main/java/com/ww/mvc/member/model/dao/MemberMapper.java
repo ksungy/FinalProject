@@ -16,5 +16,7 @@ public interface MemberMapper {
 	// 아이디 찾기
 	Member findMemberById(@Param("id") String id);
 
+	int updateMember(Member member);
+
 
 }
