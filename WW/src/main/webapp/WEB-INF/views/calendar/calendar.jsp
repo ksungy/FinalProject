@@ -3,6 +3,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+<%@include file="../common/header.jsp" %>
 
 <c:set var="path" value="${ pageContext.request.contextPath }"/>
 
@@ -58,16 +59,12 @@
 </script>
 <style>
 
-  body {
-    margin: 40px 10px;
-    padding: 0;
-    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
-    font-size: 14px;
-  }
 
   #calendar {
     max-width: 1100px;
     margin: 0 auto;
+    font-family: Arial, Helvetica Neue, Helvetica, sans-serif;
+    font-size: 14px;
   }
 
 </style>
@@ -78,3 +75,4 @@
 
 </body>
 </html>
+<%@include file="../common/footer.jsp"%>
