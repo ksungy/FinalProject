@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -32,6 +34,7 @@ import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.board.model.vo.BoardAttach;
 import com.ww.mvc.common.util.FileProcess;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
 
@@ -182,7 +185,7 @@ public class BoardController {
 	// ▼ 첨부파일 글 작성
 	@PostMapping("/write")
 	public ModelAndView write(ModelAndView model, @ModelAttribute Board board,
-			@RequestParam("upfile") List<MultipartFile> upfile) throws Exception {
+			@RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
 		
 		int result = 0;
 
@@ -231,6 +234,36 @@ public class BoardController {
 
 		return model;
 	}
+	
+	
+	// ▼ 게시글 수정
+//	@GetMapping("/edit")
+//	public ModelAndView edit(@SessionAttribute("loginMember") Member loginMember, ModelAndView model, @RequestParam("no") int no) {
+//		
+//		Board board = service.findBoardByNo(no);
+//		
+//		if(loginMember.getNo() == board.getEmpNo()) {
+//			model.addObject("board", board);
+//			model.setViewName("board/edit");
+//		} else {
+//			model.addObject("msg", "접근 권한이 없습니다.");
+//			model.addObject("location", "/board/list");
+//			model.setViewName("common/msg");
+//		} 
+//		
+//		return model;
+//	}
+	
+	
+	// ▼ 게시글 삭제
+	
+	
+	
+	// ▼ 댓글 작성
+	
+	// ▼ 댓글 수정
+	
+	// ▼ 댓글 삭제
 	
 	
 	
