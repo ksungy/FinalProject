@@ -28,7 +28,7 @@
                         <label for="userId">아이디</label>
                     </h3>
                     <span class="box_int">
-                        <input type="text" id="userId" placeholder="아이디를 입력하세요"/>
+                        <input type="text" id="userId" name="id" placeholder="아이디를 입력하세요"/>
                 </span>
                 <button type="button" id="idCheckBtn">확인</button>
                 <p class="error_id" ></p>
@@ -38,7 +38,7 @@
                     <label for="userPwd">비밀번호</label>
                 </h3>
                 <span class="box int_pwd">
-                    <input type="password" id="userPwd" placeholder="비밀번호를 입력하세요"/>
+                    <input type="password" id="userPwd" name="password" placeholder="비밀번호를 입력하세요"/>
                 </span>
                 <span class="error_pwd"></span>
 			</div>
@@ -56,7 +56,7 @@
                     <label for="userName">이름</label>
                 </h3>
                 <span class="box int_name">
-                    <input type="text" id="userName" placeholder=""/>
+                    <input type="text" id="userName" name="name" placeholder=""/>
                 </span>
                 <span class="error_name"></span>
 			</div>
@@ -65,7 +65,7 @@
                     <label for="userPhone">전화번호</label>
                 </h3>
                 <span class="box int_phone">
-                    <input type="text" id="userPhone" placeholder="‘-’ 를 제외한 11자리를 입력해주세요"/>
+                    <input type="text" id="userPhone" name="phone" placeholder="‘-’ 를 제외한 11자리를 입력해주세요"/>
                 </span>
                 <span class="error_phone"></span>
 			</div>
@@ -74,7 +74,7 @@
                     <label for="userEmail">이메일</label>
                 </h3>
                 <span class="box int_email">
-                    <input type="text" id="userEmail" placeholder="you@ssss.com"/>
+                    <input type="text" id="userEmail" name="email" placeholder="you@ssss.com"/>
                 </span>
                 <span class="error_email"></span>
 			</div>
@@ -83,7 +83,7 @@
                     <label for="userEddress">주소</label>
                 </h3>
                 <span class="box_int">
-                    <input type="text" id="userAddress" placeholder="" />
+                    <input type="text" id="userAddress" name="address" placeholder="" />
                 </span>
                 <span class="error_eddress"></span>
                 <button type="button" id="addressBtn" onclick="addressOpen();">찾기</button>
@@ -98,7 +98,7 @@
                     <!-- BIRTH_YY -->
                     <div id="bir_yy">
                         <span class="box">
-                            <input type="text" id="yy" class="int" maxlength="4" placeholder="년(4자)">
+                            <input type="text" id="yy" name="birth" class="int" maxlength="4" placeholder="년(4자)">
                         </span>
                     </div>
                     

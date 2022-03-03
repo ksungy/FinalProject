@@ -61,48 +61,29 @@
 	<!-- 아이디로 찾기! -->
 	<select id="findMemberById" parameterType="string" resultMap="MemberResultMap">
 		<include refid="selectMemberSql"/>
-		WHERE EMP_ID = #{id} AND END_YN = 'Y' 	
+		WHERE EMP_ID = #{id}	
 	</select>
 	
 	<!-- 회원 가입 INSERT -->
-	<insert id="insertMember" parameterType="Member"
-			useGeneratedKeys="true" keyProperty="no" keyColumn="no">
+	<insert id="insertMember" parameterType="Member" 
+			useGeneratedKeys="true" keyProperty="no" keyColumn="EMP_NO">
 		INSERT INTO EMPLOYEE (
 			EMP_NO, 
-			JOB_CODE, 
-			DEPT_CODE, 
 			EMP_ID, 
 			EMP_PWD, 
 			EMP_NAME,  
 			EMP_EMAIL,  
 			EMP_PHONE, 
 			EMP_BIRTH, 
-			SALARY, 
-			HIRE_DATE, 
-			END_DATE, 
-			END_YN, 
-			ADMIN_YN, 
-			ORIGINAL_PROFILENAME, 
-			RENAMED_PROFILENAME, 
 			EMP_ADDRESS
-		) VALUE (
-			SEQ_EMP_NO, 
-			DEFAULT,
-			DEFAULT,			
+		) VALUES (
+			SEQ_EMP_NO.NEXTVAL, 		
 			#{id},
-			#{password}, 
+			#{password},
 			#{name},
 			#{email},
 			#{phone},
 			#{birth},
-			0,
-			SYSDATE,
-			SYSDATE,
-			DEFAULT,
-			DEFAULT,
-			DEFAULT,
-			'ABCD',
-			'EFGH',
 			#{address}	
 		)
 	</insert>
@@ -114,8 +95,7 @@
 			EMP_PHONE = #{phone},
 			EMP_EMAIL = #{email},
 			EMP_BIRTH = #{birth},
-			EMP_ADDRESS = #{address},
-			MODIFY_DATE = SYSDATE 
+			EMP_ADDRESS = #{address}
 		WHERE NO = #{no}
 	</update>
 	

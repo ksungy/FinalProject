@@ -3,6 +3,8 @@ package com.ww.mvc.member.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -95,9 +97,8 @@ public class MemberController {
 		
 		log.info("회원가입 으로 넘어가나?");
 		
-		log.info(member.toString());
 		
-		int result =  service.save(member); // 정수값 리턴
+		int result = service.save(member); // 정수값 리턴
 		
 		if (result > 0) {
 			model.addObject("msg", "회원가입이 정상적으로 완료되었습니다.");
@@ -108,6 +109,8 @@ public class MemberController {
 		}
 		
 		model.setViewName("common/msg");
+		
+		log.info(member.toString());
 		
 		return model;
 	}

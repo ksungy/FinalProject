@@ -28,7 +28,7 @@ public class Member {
 	
 	private String phone;
 	
-	private String adderss;
+	private String address;
 	
 	private String birth;
 	

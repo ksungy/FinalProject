@@ -23,13 +23,13 @@
 				<form id="login_form" action="${path}/member/login" method="post">
                 <div class="form-group"> 
                     <span class="box int_id">
-                        <input type="text" id="userId" class="input" placeholder="아이디를 입력하세요"/>
+                        <input type="text" id="userId" name="id" class="input" placeholder="아이디를 입력하세요"/>
                     </span>
                 </div>
 
                 <div class="form-group">
                     <span class="box int_pwd">
-                        <input type="password" id="userPwd" class="input" placeholder="비밀번호를 입력하세요"/>
+                        <input type="password" id="userPwd" name="password" class="input" placeholder="비밀번호를 입력하세요"/>
                     </span>
                 </div>
 
