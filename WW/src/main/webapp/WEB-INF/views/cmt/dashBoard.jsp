@@ -34,8 +34,12 @@
 					</div>
 					<div class="card-body">
 						<div style="margin-top: 10px; margin-bottom: 30px;"><%= sf.format(nowTime) %></div>
-						<a class="btn btn-primary btn-sm" data-target="#modal1" data-toggle="modal">출근등록</a>
-						<a class="btn btn-primary btn-sm" data-target="#modal2" data-toggle="modal">퇴근등록</a><br><br>
+						<c:if test="${ empty cmt.cmt_srt_time }">
+							<button class="btn btn-primary btn-sm" data-target="#modal1" data-toggle="modal">출근등록</button>
+						</c:if>
+						<c:if test="${ empty cmt.cmt_srt_time }">
+							<button class="btn btn-primary btn-sm" data-target="#modal2" data-toggle="modal">퇴근등록</button>
+						</c:if>
 						<div style="margin-bottom: 40px;">
 							출근 시간
 							<c:out value="${ cmt.cmt_srt_time }"></c:out>
