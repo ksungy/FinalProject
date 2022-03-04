@@ -50,12 +50,18 @@ public class MemberController {
 			ModelAndView model,
 			@RequestParam("id") String id, @RequestParam("password") String password) {
 		
+		log.info("{}, {}", id, password);
+		
 		Member loginMember = service.login(id, password);
 		
 		if (loginMember != null) {
+			// 로그인 성공
+//			model.addObject("msg", "로그인에 성공하셨습니다.");
 			
-			model.addObject("loginMember", loginMember);
-			model.setViewName("redirect:/");
+			model.addObject("loginMember", loginMember);			
+			model.setViewName("home");
+
+			log.info("{}, {}", id, password);
 		} else {
 			// 로그인 실패
 			model.addObject("msg", "아이디나 비밀번호가 일치하지 않습니다.");
@@ -80,6 +86,8 @@ public class MemberController {
 		
 		status.setComplete();
 		
+		log.info("로그아웃 성공");
+		
 		return "redirect:/"; 
 	}
 	
@@ -96,7 +104,6 @@ public class MemberController {
 	public ModelAndView enroll(ModelAndView model, @ModelAttribute Member member) {
 		
 		log.info("회원가입 으로 넘어가나?");
-		
 		
 		int result = service.save(member); // 정수값 리턴
 		
