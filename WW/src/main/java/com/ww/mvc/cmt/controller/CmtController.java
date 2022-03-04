@@ -18,25 +18,26 @@ import lombok.extern.slf4j.Slf4j;
 @Controller
 @RequestMapping("/cmt")
 public class CmtController {
-	
-	@Autowired(required = false)
-	private CmtService service;
-	
-	@GetMapping("/dashBoard")
-	public String cmt() {
-		
-		return "/cmt/dashBoard";
-	}
+    
+    @Autowired(required = false)
+    private CmtService service;
+    
+    @GetMapping("/dashBoard")
+    public String cmt() {
+        
+        return "/cmt/dashBoard";
+    }
 
-	@GetMapping("/modify")
-	public String cmtModify() {
-		
-		return "/cmt/modify";
-	}
-	
-	@GetMapping("/monthly")
-	public String cmtMonthly() {
-		
-		return "/cmt/monthly";
-	}
+    @GetMapping("/modify")
+    public String cmtModify() {
+        
+        return "/cmt/modify";
+    }
+    
+    @GetMapping("/monthly")
+    public String cmtMonthly() {
+        
+        return "/cmt/monthly";
+    }
+    
 }

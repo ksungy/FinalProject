@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -20,7 +19,7 @@
 	<!-- 월별 근태 테이블 -->
 	<div class="card shadow mb-4">
 		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">2월</h6>
+			<h6 class="m-0 font-weight-bold text-primary">${ cmt.cmt_month }월</h6>
 		</div>
 		<div class="card-body">
 			<div class="table-responsive">
@@ -37,36 +36,29 @@
 					<tfoot>
 						<tr>
 							<th colspan="3">월 근무 총 합계</th>
-							<th>36h</th>
+							<th>${ cmt.cmt_total_time }</th>
 
 						</tr>
 					</tfoot>
 					<tbody>
-						<tr>
-							<td>2/1</td>
-							<td>09:00</td>
-							<td>18:00</td>
-							<td>9h</td>
-						</tr>
-						<tr>
-							<td>2/2</td>
-							<td>09:00</td>
-							<td>18:00</td>
-							<td>9h</td>
-						</tr>
-						<tr>
-							<td>2/3</td>
-							<td>09:00</td>
-							<td>18:00</td>
-							<td>9h</td>
-						</tr>
-						<tr>
-							<td>2/4</td>
-							<td>09:00</td>
-							<td>18:00</td>
-							<td>9h</td>
-						</tr>
-					</tbody>
+						<c:if test="${ empty list }">
+							<tr>
+								<td colspan="4">조회된 일정이 없습니다.</td>
+							</tr>
+						</c:if>
+						<c:if test="${ !empty list }">
+							<c:forEach var="board" items="${ list }">
+								<tr>
+									<td><fmt:formatDate type="date"
+											value="${ cmt.cmt_date }" /></td>
+									<td>${ cmt.cmt_srt_time }</td>
+									<td>${ cmt.cmt_end_time }</td>
+									<td>${ cmt.cmt_time }</td>
+								</tr>
+							</c:forEach>
+						</c:if>
+				</table>
+				</tbody>
 				</table>
 				<a href="${ path }/cmt/modify">
 					<div class="col-12">
@@ -81,7 +73,7 @@
 	</div>
 
 
-<div class="col-lg-10"></div>
+	<div class="col-lg-10"></div>
 
 </div>
 
