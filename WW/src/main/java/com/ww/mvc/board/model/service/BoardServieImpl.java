@@ -1,5 +1,6 @@
 package com.ww.mvc.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,12 +8,13 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ww.mvc.board.model.dao.BoardMapper;
 import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.board.model.vo.BoardAttach;
+import com.ww.mvc.board.model.vo.Reply;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.member.model.vo.Member;
 
 @Service
 public class BoardServieImpl implements BoardService {
@@ -81,6 +83,27 @@ public class BoardServieImpl implements BoardService {
 	public int getSearchCount() {
 		
 		return mapper.searchCount();
+	}
+
+	@Override
+	public int delete(int no) {
+		
+		return mapper.deleteBoard(no);
+	}
+
+	// 댓글 작성
+	@Override
+	@Transactional
+	public int saveReply(Member member, Reply reply) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("content", reply.getContent());
+		map.put("boardNo", reply.getBoardNo());
+		map.put("empNo", member.getNo());
+		map.put("writer", member.getId());
+		
+		return mapper.insertReply(map);
 	}
 
 

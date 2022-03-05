@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -10,6 +9,7 @@
 <link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/main.css">
 <link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/util.css">
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -33,8 +33,10 @@
 					class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
 					aria-labelledby="dropdownMenuLink">
 					<div class="dropdown-header">게시글 옵션</div>
+					 <c:if test="${ !empty loginMember && (loginMember.id == board.writer) }">
 					<a class="dropdown-item" href="/mvc/board/edit?no=${ board.no }">게시글 수정</a>
-					<a class="dropdown-item" href="#">게시글 삭제</a>
+					<a class="dropdown-item" onclick="boardDelete()" >게시글 삭제</a>
+					</c:if>
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#">게시글 스크랩</a>
 				</div>
@@ -80,7 +82,7 @@
                                </td>
                                <td>
 	                               <div class="uploadResult">
-	                              		
+	                              		${ boardAttach.originalFileName }
 	                               </div>
                                </td>
                            </tr>
@@ -127,14 +129,17 @@
 			<div class="card-body">
 				<ul class="list-group list-group-flush">
 				    <li class="list-group-item">
+					<form id="replyForm" name="replyForm" method="get" action="${ path }/board/reply">
+					<input type="hidden" name="no" value="${ board.no }" /> 
 					<div class="form-inline mb-2">
 						<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-						<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId">
+						<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId" name="writer" value="<c:out value="${ loginMember.id }"/>" readonly>
 						<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
 						<input type="password" class="form-control ml-2" placeholder="비밀번호 입력" id="replyPassword">
 					</div>
-					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-					<button type="button" class="btn btn-dark mt-3" style="background:#2A3D72;">댓글 작성</button>
+					<textarea class="form-control" id="exampleFormControlTextarea1" name="content" rows="3"></textarea>
+					<button type="button" onclick="checkReplyConfirm()" class="btn btn-dark mt-3" style="background:#2A3D72;">댓글 작성</button>
+					</form>
 				    </li>
 				</ul>
 			</div>
@@ -156,6 +161,74 @@
 		
 
 </script>
+<script>
+	
+	function boardDelete(){
+		
+		const swalWithBootstrapButtons = Swal.mixin({
+			  customClass: {
+			    confirmButton: 'btn btn-success',
+			    cancelButton: 'btn btn-danger'
+			  },
+			  buttonsStyling: false
+			})
 
+			swalWithBootstrapButtons.fire({
+			  title: '게시글을 삭제하시겠습니까?',
+			  text: "삭제한 게시글은 복구가 불가능합니다.",
+			  icon: 'warning',
+			  showCancelButton: true,
+			  confirmButtonText: '삭제',
+			  cancelButtonText: '취소',
+			  reverseButtons: true
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    swalWithBootstrapButtons.fire(
+			      '게시글 삭제 완료!',
+			      '게시글이 삭제 완료되었습니다. <br> 이용해주셔서 감사합니다.',
+			      'success'
+			    )
+			    window.location.href='/mvc/board/delete?no=${ board.no }';
+			  } else if (
+			    /* Read more about handling dismissals below */
+			    result.dismiss === Swal.DismissReason.cancel
+			  ) {
+			    swalWithBootstrapButtons.fire(
+			      '게시글 삭제 취소',
+			      '다시 생각해보고 삭제하세요 :)',
+			      'error'
+			    )
+			  }
+			})
+	}
+
+</script>
+
+<script>
+	function checkReplyConfirm(){
+		
+		Swal.fire({
+			  title: '댓글을 등록하시겠습니까?',
+			  text: "작성한 댓글이 게시판에 등록됩니다.",
+			  icon: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: '등록',
+			  cancelButtonText: '취소'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    Swal.fire(
+			      '댓글 등록완료!',
+			      '게시글을 확인하세요.',
+			      'success'
+			    );
+			    $('#replyForm').submit();
+			  }
+			})
+	}
+
+	
+</script>
 
 <%@include file="../common/footer.jsp"%>

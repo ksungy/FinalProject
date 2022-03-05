@@ -32,6 +32,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ww.mvc.board.model.service.BoardService;
 import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.board.model.vo.BoardAttach;
+import com.ww.mvc.board.model.vo.Reply;
 import com.ww.mvc.common.util.FileProcess;
 import com.ww.mvc.common.util.PageInfo;
 import com.ww.mvc.member.model.vo.Member;
@@ -69,7 +70,7 @@ public class BoardController {
 
 	}
 
-	// ▼ 게시글 1건 상세조회
+	// ▼ 게시글 상세조회
 	@GetMapping("/view")
 	public ModelAndView view(ModelAndView model, @RequestParam("no") int no) {
 
@@ -184,7 +185,7 @@ public class BoardController {
 
 	// ▼ 첨부파일 글 작성
 	@PostMapping("/write")
-	public ModelAndView write(ModelAndView model, @ModelAttribute Board board,
+	public ModelAndView write(ModelAndView model, @ModelAttribute Board board, @SessionAttribute(name = "loginMember") Member loginMember,
 			@RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
 		
 		int result = 0;
@@ -207,6 +208,7 @@ public class BoardController {
 					boardAttach.setRenamedFileName(renamedFileName);
 					boardAttach.setFileSize(multipartFile.getSize());
 					boardAttach.setBoardNo(board.getNo());
+					boardAttach.setEmpNo(loginMember.getNo());
 
 				}
 				
@@ -217,7 +219,7 @@ public class BoardController {
 		}
 		
 		
-//		board.setWriterNo(loginMember.getNo());
+		board.setEmpNo(loginMember.getNo());
 		result = service.save(board);
 		log.info(board.toString());
 
@@ -237,29 +239,101 @@ public class BoardController {
 	
 	
 	// ▼ 게시글 수정
-//	@GetMapping("/edit")
-//	public ModelAndView edit(@SessionAttribute("loginMember") Member loginMember, ModelAndView model, @RequestParam("no") int no) {
+	@GetMapping("/edit")
+	public ModelAndView edit(@SessionAttribute("loginMember") Member loginMember, ModelAndView model, @RequestParam("no") int no) {
+		
+		Board board = service.findBoardByNo(no);
+		
+		if(loginMember.getNo() == board.getEmpNo()) {
+			model.addObject("board", board);
+			model.setViewName("board/edit");
+		} else {
+			model.addObject("msg", "접근 권한이 없습니다.");
+			model.addObject("location", "/board/list");
+			model.setViewName("common/msg");
+		} 
+		
+		return model;
+	}
+	
+	
+//	@PostMapping("/edit")
+//	public ModelAndView edit(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member loginMember,
+//			@RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) {
 //		
-//		Board board = service.findBoardByNo(no);
+//		int result = 0;
 //		
-//		if(loginMember.getNo() == board.getEmpNo()) {
-//			model.addObject("board", board);
-//			model.setViewName("board/edit");
-//		} else {
-//			model.addObject("msg", "접근 권한이 없습니다.");
-//			model.addObject("location", "/board/list");
-//			model.setViewName("common/msg");
-//		} 
+//		if(loginMember.getId().equals(board.getWriter())) {
+//
+//			if(upfile != null && !upfile.isEmpty()) {
+//				
+//				
+//			}
+//			
+//		}
+//		
 //		
 //		return model;
 //	}
 	
 	
 	// ▼ 게시글 삭제
-	
+	@GetMapping("/delete")
+	public ModelAndView delete(ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int no) {
+		
+		Board board = service.findBoardByNo(no);
+		
+		int result = 0;
+		
+		if(loginMember.getNo() == board.getEmpNo()) {
+			result = service.delete(board.getNo());
+			
+			if(result > 0) {
+				model.addObject("msg", "게시글이 정상적으로 삭제되었습니다.");
+				model.addObject("location", "/board/list");
+			} else {
+				model.addObject("msg", "게시글 삭제가 실패했습니다.");
+				model.addObject("location", "/board/view?no=" + board.getNo());
+			}
+			
+		} else {
+			model.addObject("msg", "본인 게시글만 삭제할 수 있습니다.");
+			model.addObject("location", "/board/list");
+		}
+		
+		model.setViewName("common/msg");
+		
+		return model;
+	}
 	
 	
 	// ▼ 댓글 작성
+	@RequestMapping("/reply")
+	public ModelAndView writeReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply) {
+		
+		int result = 0;
+		
+		reply.setBoardNo(board.getNo());
+		reply.setEmpNo(member.getNo());
+		reply.setWriter(member.getId());
+		
+		int boardNo = reply.getBoardNo();
+
+		result = service.saveReply(member, reply);
+		
+		if(result > 0) {
+			model.addObject("msg", "댓글 등록 완료!");
+			model.addObject("location", "/board/view?no=" + boardNo);
+		} else {
+			model.addObject("msg", "댓글 등록 실패!");
+			model.addObject("location", "/board/view?no=" + boardNo);	
+			
+		}
+		
+		model.setViewName("/common/msg");
+		
+		return model;
+	}
 	
 	// ▼ 댓글 수정
 	

@@ -16,7 +16,7 @@
 		B.BOARD_MODIFIED,
 		B.BOARD_HITS
 		FROM BOARD B
-		JOIN EMPLOYEE E ON(B.BOARD_WRITER = E.EMP_ID)
+		JOIN EMPLOYEE E ON(B.EMP_NO = E.EMP_NO)
 	</sql>
 	
 	<!-- ▼ Board ResultMap -->
@@ -116,7 +116,8 @@
 	</select>
 	
 	
-	<!-- 게시글 상세조회(댓글 포함) -->
+	<!-- 게시글 상세조회 
+	-->
   	<select id="selectBoardByNo" parameterType="_int" resultMap="boardDetailResultMap">
 			SELECT B.BOARD_NO AS,
 			       B.BOARD_TITLE, 
@@ -142,11 +143,34 @@
 			WHERE B.BOARD_NO = #{no}
   	 </select>
 	
+	<!-- 
+	<select id="selectBoardByNo" parameterType="_int" resultMap="boardDetailResultMap">
+		<include refid="boardListsql"/>
+			WHERE B.BOARD_NO = #{no}
+	</select>
+	
+	<select id="selectRepliesByBoardNo" parameterType="_int" resultMap="replyResultMap">
+		SELECT  C.COMMENT_NO,
+				C.BOARD_NO,
+				C.COMMNET_CONTENT,
+				E.EMP_ID,
+				C.B_COMMENT_CREATED,
+				C.B_COMMENT_MODIFIED
+		FROM BOARD_COMMENT C
+		JOIN EMPLOYEE E ON(C.COMMENT_WRITER = E.EMP_ID)
+		WHERE BOARD_NO = #{no}
+		ORDER BY C.COMMENT_NO DESC
+	</select>
+	 -->
+	
+	
+	
 	<!-- 게시글 작성 -->
 	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="no" keyColumn="BOARD_NO">
 		INSERT INTO BOARD(
 			BOARD_NO,
 			BOARD_WRITER,
+			EMP_NO,
 			BOARD_TITLE,
 			BOARD_CONTENT,
 			BOARD_CREATED,
@@ -155,6 +179,7 @@
 		) VALUES(
 			SEQ_BOARD_NO.NEXTVAL,
 			#{writer},
+			#{empNo},
 			#{title},
 			#{content},
 			DEFAULT,
@@ -185,5 +210,53 @@
 			DEFAULT
 		)
 	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="Board">
+		UPDATE BOARD
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="title != null">
+				BOARD_TITLE = #{title},
+			</if>
+			<if test="content != null">
+				BOARD_CONTENT = #{content},
+			</if>
+				BOARD_MODIFIED = SYSDATE
+		</trim>
+		WHERE BOARD_NO = #{no}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard" parameterType="Board">
+		DELETE FROM BOARD WHERE BOARD_NO = #{no}
+	</delete>
+
+	<!-- 댓글 등록 -->
+	<insert id="insertReply" parameterType="map" useGeneratedKeys="true" keyProperty="no" keyColumn="COMMENT_NO">
+		INSERT INTO BOARD_COMMENT (
+			COMMENT_NO,
+			BOARD_NO,
+			EMP_NO,
+			COMMENT_WRITER,
+			COMMENT_CONTENT,
+			B_COMMENT_CREATED,
+			B_COMMENT_MODIFIED
+		) VALUES (
+			SEQ_COMMENT_NO.NEXTVAL,
+			#{boardNo},
+			#{empNo},
+			#{writer},
+			#{content},
+			SYSDATE,
+			SYSDATE
+		)
+	</insert>
+	
+	
+	<!-- 댓글 수정 -->
+	
+	<!-- 댓글 삭제 -->
+	
+	
 	
 </mapper>

@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
-<%@ page session="false"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
@@ -12,10 +11,6 @@
 <link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/write.css">
 <link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/utilwrite.css">
 
-<!-- 
-<script src="https://cdn.ckeditor.com/ckeditor5/30.0.0/classic/ckeditor.js"></script>
-<script src="https://ckeditor.com/apps/ckfinder/3.5.0/ckfinder.js"></script>
- -->
 <script src="//cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
@@ -42,12 +37,12 @@
 				
 				<label class="label-input100">Your Name *</label>
 				<div class="wrap-input100 rs1 validate-input">
-					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명">
+					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명" value="<c:out value="${ loginMember.id }"/>" readonly>
 					<span class="focus-input100"></span>
 				</div>
 		
 				<div class="wrap-input100 rs1 validate-input">
-					<input class="input100" type="text" name="deptTitle" placeholder="부서명" readonly>
+					<input class="input100" type="text" name="deptTitle" placeholder="부서명" value="<c:out value="${ loginMember.deptCode }"/>" readonly>
 					<span class="focus-input100"></span>
 				</div>
 
