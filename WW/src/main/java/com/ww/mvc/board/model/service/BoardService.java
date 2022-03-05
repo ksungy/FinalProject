@@ -5,7 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import com.ww.mvc.board.model.vo.Board;
+import com.ww.mvc.board.model.vo.Reply;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.member.model.vo.Member;
 
 public interface BoardService {
 
@@ -20,6 +22,14 @@ public interface BoardService {
 	List<Board> boardSearch(Map<String, String> searchMap, PageInfo pageInfo);
 
 	int getSearchCount();
+
+	int delete(int no);
+
+	int saveReply(Member member, Reply reply);
+
+	
+
+	
 	
 
 
