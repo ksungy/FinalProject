@@ -96,11 +96,10 @@
 				</div>
 			</div>
 
-			<!-- 댓글 -->
+			<!-- 댓글 리스트 -->
 			<div class="card-header bg-light">
 			        <i class="fa fa-comment fa">댓글</i> <span> [0] </span>
 			</div>
-
 			<div class="card-body">
 				<div class="col-lg-12">
 					<div class="panel panel-default">
@@ -112,8 +111,10 @@
 										<div class="header">
 											<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
 											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>
-											<button class="btn float-right btn-default btn-xs">삭제</button>
+											<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
+											<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
 											<button class="btn float-right btn-default btn-xs">수정</button>
+											</c:if>
 										</div>
 										<p><c:out value="${ reply.content }"/></p>
 										<hr>
@@ -125,7 +126,9 @@
 					</div>
 				</div>
 			</div>
-				    
+			
+			<!-- 댓글 작성 영역 -->
+			<c:if test="${ !empty loginMember }">
 			<div class="card-body">
 				<ul class="list-group list-group-flush">
 				    <li class="list-group-item">
@@ -143,6 +146,7 @@
 				    </li>
 				</ul>
 			</div>
+			</c:if>
 		</div>
 </div>
 

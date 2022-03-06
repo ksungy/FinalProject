@@ -27,6 +27,8 @@ public interface BoardService {
 
 	int saveReply(Member member, Reply reply);
 
+	int deleteReply(int no);
+
 	
 
 	
