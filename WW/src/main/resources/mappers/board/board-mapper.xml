@@ -143,27 +143,6 @@
 			WHERE B.BOARD_NO = #{no}
   	 </select>
 	
-	<!-- 
-	<select id="selectBoardByNo" parameterType="_int" resultMap="boardDetailResultMap">
-		<include refid="boardListsql"/>
-			WHERE B.BOARD_NO = #{no}
-	</select>
-	
-	<select id="selectRepliesByBoardNo" parameterType="_int" resultMap="replyResultMap">
-		SELECT  C.COMMENT_NO,
-				C.BOARD_NO,
-				C.COMMNET_CONTENT,
-				E.EMP_ID,
-				C.B_COMMENT_CREATED,
-				C.B_COMMENT_MODIFIED
-		FROM BOARD_COMMENT C
-		JOIN EMPLOYEE E ON(C.COMMENT_WRITER = E.EMP_ID)
-		WHERE BOARD_NO = #{no}
-		ORDER BY C.COMMENT_NO DESC
-	</select>
-	 -->
-	
-	
 	
 	<!-- 게시글 작성 -->
 	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="no" keyColumn="BOARD_NO">
@@ -256,7 +235,9 @@
 	<!-- 댓글 수정 -->
 	
 	<!-- 댓글 삭제 -->
-	
+	<delete id="deleteReply" parameterType="Reply" >
+		DELETE FROM BOARD_COMMENT WHERE COMMENT_NO = #{no}
+	</delete>
 	
 	
 </mapper>

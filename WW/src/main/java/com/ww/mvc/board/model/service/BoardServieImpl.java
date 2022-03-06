@@ -22,12 +22,14 @@ public class BoardServieImpl implements BoardService {
 	@Autowired
 	private BoardMapper mapper;
 	
+	// ▼ 게시글 전체 개수
 	@Override
 	public int getBoardCount() {
 		
 		return mapper.getBoardCount();
 	}
 
+	// ▼ 게시글 목록 조회
 	@Override
 	public List<Board> getBoardList(PageInfo pageInfo) {
 		
@@ -39,12 +41,15 @@ public class BoardServieImpl implements BoardService {
 		 
 	}
 
+	// ▼ 게시글 상세 조회
 	@Override
 	public Board findBoardByNo(int no) {
 		
 		return mapper.selectBoardByNo(no);
 	}
 
+	
+	// ▼ 게시글 수정, 게시글 작성
 	@Override
 	@Transactional
 	public int save(Board board) {
@@ -67,7 +72,7 @@ public class BoardServieImpl implements BoardService {
 	}
 
 
-
+	// ▼ 게시글 검색
 	@Override
 	public List<Board> boardSearch(Map<String, String> searchMap, PageInfo pageInfo) {
 		
@@ -79,19 +84,23 @@ public class BoardServieImpl implements BoardService {
 	}
 
 	
+	// ▼ 게시글 검색 전체 개수
 	@Override
 	public int getSearchCount() {
 		
 		return mapper.searchCount();
 	}
 
+	
+	// ▼ 게시글 삭제
 	@Override
 	public int delete(int no) {
 		
 		return mapper.deleteBoard(no);
 	}
 
-	// 댓글 작성
+	
+	// ▼ 댓글 작성
 	@Override
 	@Transactional
 	public int saveReply(Member member, Reply reply) {
@@ -106,10 +115,17 @@ public class BoardServieImpl implements BoardService {
 		return mapper.insertReply(map);
 	}
 
+	
+	// ▼ 댓글 삭제
+	@Override
+	public int deleteReply(int no) {
+		
+		return mapper.deleteReply(no);
+	}
 
 
 
-
+	
 
 
 

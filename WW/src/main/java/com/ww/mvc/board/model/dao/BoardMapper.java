@@ -32,5 +32,7 @@ public interface BoardMapper {
 
 	int insertReply(Map<Object, Object> map);
 
+	int deleteReply(int no);
+
 
 }

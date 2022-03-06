@@ -338,7 +338,25 @@ public class BoardController {
 	// ▼ 댓글 수정
 	
 	// ▼ 댓글 삭제
-	
+	@GetMapping("/replyDelete")
+	public ModelAndView deleteReply(ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int no) {
+		
+		int result = 0;
+		
+		result = service.deleteReply(no);
+		
+		if(result > 0) {
+			model.addObject("msg", "댓글 삭제 완료!");
+			model.addObject("location", "/board/list");
+		} else {
+			model.addObject("msg", "댓글 삭제 실패!");
+			model.addObject("location", "/board/list");
+		}
+		
+		model.setViewName("/common/msg");
+		
+		return model;
+	}
 	
 	
 	
