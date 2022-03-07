@@ -15,7 +15,7 @@
 <P>  The time on the server is ${serverTime}. </P>
 
 <p>
-	<a href="${ path }/calendar/calendar">
+	<a href="${ path }/calendar?method=list">
 		일정관리
 	</a>
 
