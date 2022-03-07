@@ -1,33 +1,31 @@
 package com.ww.mvc.calendar.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.servlet.ModelAndView;
 
-import com.ww.mvc.calendar.model.service.CalenService;
+import com.ww.mvc.calendar.model.service.CalendarService;
+import com.ww.mvc.calendar.model.vo.Calendar;
 
-import lombok.extern.slf4j.Slf4j;
-
-@Slf4j
 @Controller
-@RequestMapping("/calendar")
 public class CalendarController {
-	@Autowired(required = false) 
-	private CalenService service;
-	
-	@GetMapping(params="method=list")
-	public String list() {
-		log.info("11");
-		return "calendar/calendar";
-	}
 
-	@GetMapping(params="method=data")
-	public String data(Model d) {
-		d.addAttribute("list", service.calenList()); 
-		log.info("22");
-		return "pageJsonReport"; 
+	@RequestMapping(value = "/calendar", method = RequestMethod.GET)
+	public ModelAndView getCalendarList(ModelAndView mv, HttpServletRequest request) {
+		String viewpage = "calendar";
+		List<Calendar> calendar = null;
+		try {
+			calendar = CalendarService.getCalendar();
+			request.setAttribute("calendarList", calendar);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		mv.setViewName(viewpage);
+		return mv;
 	}
-	
 }

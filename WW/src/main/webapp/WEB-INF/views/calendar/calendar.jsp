@@ -4,6 +4,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 <%@include file="../common/header.jsp" %>
+<%@page import="java.util.List"%>
+<%@page import="com.ww.mvc.calendar.model.vo.Calendar"%>
 
 <c:set var="path" value="${ pageContext.request.contextPath }"/>
 
@@ -71,13 +73,17 @@ document.addEventListener('DOMContentLoaded', function() {
 			dayMaxEvents: true, 
 			// allow "more" link when too many events 
 			events: [
-				function(info, successCallback, failureCallback){
-					// ajax 처리로 데이터를 로딩 시킨다. 
-					$.ajax({
-						type:"get", 
-						url:"/mvc/calendar?method=data", 
-						dataType:"json" });
-				}
+				<%List<Calendar> calendarList = (List<Calendar>) request.getAttribute("calendarList");%>
+	            <%if (calendarList != null) {%>
+	            <%for (Calendar vo : calendarList) {%>
+	            {
+	            	title : '<%=vo.getCalendarTitle()%>',
+	                start : '<%=vo.getCalendarStart()%>',
+	                end : '<%=vo.getCalendarEnd()%>',
+	                color : '#' + Math.round(Math.random() * 0xffffff).toString(16)
+	             },
+		<%}
+	}%>
 			]
 
 			}); 

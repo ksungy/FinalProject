@@ -164,7 +164,7 @@
                 <div id="calenderMemu" class="collapse" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="/mvc/calendar?method=list">캘린더</a>
+                        <a class="collapse-item" href="/mvc/calendar">캘린더</a>
                     </div>
                 </div>
             </li>
