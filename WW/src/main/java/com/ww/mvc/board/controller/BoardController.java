@@ -81,10 +81,14 @@ public class BoardController {
 
 		Board board = service.findBoardByNo(no);
 		
+		int boardHits = service.getBoardHits(no);
+		
 		int replyCount = service.getReplyCount(no);
 		
 		board.setReplyCount(replyCount);
+		board.setHits(boardHits);
 		
+		model.addObject("boardHits", boardHits);
 		model.addObject("replyCount", replyCount);
 		model.addObject("board", board);
 		model.setViewName("board/view");
@@ -228,7 +232,6 @@ public class BoardController {
 			}
 		}
 		
-		
 		board.setEmpNo(loginMember.getNo());
 		result = service.save(board);
 		log.info(board.toString());
@@ -265,26 +268,64 @@ public class BoardController {
 		
 		return model;
 	}
-	
-	
-//	@PostMapping("/edit")
-//	public ModelAndView edit(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member loginMember,
-//			@RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) {
-//		
-//		int result = 0;
-//		
-//		if(loginMember.getId().equals(board.getWriter())) {
-//
-//			if(upfile != null && !upfile.isEmpty()) {
-//				
-//				
-//			}
-//			
-//		}
-//		
-//		
-//		return model;
-//	}
+
+	@PostMapping("/edit")
+	public ModelAndView update(@SessionAttribute(name = "loginMember", required = false) Member loginMember,
+			Board board, ModelAndView model, @RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
+		
+		int result = 0;
+		
+		if(upfile != null && !upfile.isEmpty()) {
+			
+			List<BoardAttach> attachList = new ArrayList<>();
+			
+			for (MultipartFile multipartFile : upfile) {
+				
+				String location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
+				String renamedFileName = FileProcess.save(multipartFile, location);
+				
+				BoardAttach boardAttach = new BoardAttach();
+				
+				if(renamedFileName != null) {
+					boardAttach.setOriginalFileName(multipartFile.getOriginalFilename());
+					boardAttach.setRenamedFileName(renamedFileName);
+					boardAttach.setFileSize(multipartFile.getSize());
+					boardAttach.setBoardNo(board.getNo());
+					boardAttach.setEmpNo(loginMember.getNo());
+					boardAttach.setFileNo(boardAttach.getFileNo());
+
+				} else {
+						//기존에 저장된 파일 삭제
+						FileProcess.delete(boardAttach.getRenamedFileName());
+					
+				}
+				
+				attachList.add(boardAttach);
+				
+				board.setAttachList(attachList);
+
+			}
+		}
+		
+		board.setEmpNo(loginMember.getNo());
+
+		result = service.save(board);
+		
+		log.info(board.toString());
+
+		if (result > 0) {
+			model.addObject("msg", "게시글이 정상적으로 등록되었습니다.");
+			model.addObject("location", "/board/view?no=" + board.getNo());
+		} else {
+			model.addObject("msg", "게시글 등록이 실패하였습니다.");
+			model.addObject("location", "/board/write");
+		}
+
+		
+		model.setViewName("common/msg");
+
+		return model;
+	}
 	
 	
 	// ▼ 게시글 삭제
@@ -351,10 +392,13 @@ public class BoardController {
 	@RequestMapping("/replyUpdate")
 	public String updateReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply){
 		int result = 0;
+		int boardNo = reply.getBoardNo();
 		
 		reply.setNo(reply.getNo());
+		reply.setBoardNo(board.getNo());
+		reply.setEmpNo(member.getNo());
+		reply.setWriter(member.getId());		
 		reply.setContent(reply.getContent());
-		
 		
 		result = service.updateReply(reply);
 		
@@ -364,7 +408,7 @@ public class BoardController {
 			System.out.println("놉");
 		}
 		
-		return "/board/list";
+		return "/board/view?no=" + boardNo;
 		
 	}
 

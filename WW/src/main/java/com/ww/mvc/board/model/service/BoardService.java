@@ -33,6 +33,8 @@ public interface BoardService {
 
 	int getReplyCount(int no);
 
+	int getBoardHits(int no);
+
 	
 
 	

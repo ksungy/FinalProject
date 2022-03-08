@@ -124,18 +124,18 @@
 	function checkConfirm(){
 		
 		Swal.fire({
-			  title: '게시글을 등록하시겠습니까?',
+			  title: '게시글을 수정하시겠습니까?',
 			  text: "작성한 글이 게시판에 등록됩니다.",
 			  icon: 'warning',
 			  showCancelButton: true,
 			  confirmButtonColor: '#3085d6',
 			  cancelButtonColor: '#d33',
-			  confirmButtonText: '등록',
+			  confirmButtonText: '수정',
 			  cancelButtonText: '취소'
 			}).then((result) => {
 			  if (result.isConfirmed) {
 			    Swal.fire(
-			      '게시글 등록완료!',
+			      '게시글 수정완료!',
 			      'Whereware 자유게시판을 확인하세요.',
 			      'success'
 			    );
@@ -146,7 +146,5 @@
 
 	
 </script>
-
-
  
 <%@include file="../common/footer.jsp"%>
