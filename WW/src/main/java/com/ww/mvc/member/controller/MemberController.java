@@ -137,7 +137,7 @@ public class MemberController {
 		return model;
 	}
 	
-	
+	// 아이디 중복 체크
 	@PostMapping("/idCheck")
 	@ResponseBody
 	public Object idCheck(@RequestParam("userId") String userId) {

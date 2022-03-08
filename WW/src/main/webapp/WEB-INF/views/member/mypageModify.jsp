@@ -132,13 +132,13 @@
                 <td>
                     <button id="searchAdd">주소 찾기</button>
                     <div class="span_area">
-                        <input type="text" id="userAddress" name="address" value="${loginMember.address}" class="int_box_other">
+                        <input type="text" id="userAddress" name="address" value="value="${arr[0]}"" class="int_box_other">
                     </div>
                     <div class="input_area">
-                        <input type="text" id="address1" name="address" value="" class="int_box">
+                        <input type="text" id="address1" name="address" value="${arr[1]}" class="int_box">
                     </div>
                     <div class="input_area">
-                        <input type="text" id="address2" name="address" value="" class="int_box">
+                        <input type="text" id="address2" name="address" value="${arr[2]}" class="int_box">
                     </div>
                 </td>
             </tr>

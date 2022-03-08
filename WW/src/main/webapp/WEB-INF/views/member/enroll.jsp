@@ -86,15 +86,15 @@
                     <label for="userEddress">주소</label>
                 </h3>
                 <span class="box_int">
-                    <input type="text" id="userAddress" name="address" value="${arr[0]}" value="우편번호" />
+                    <input type="text" id="userAddress" name="address" />
                 </span>
                 <span class="error_eddress"></span>
                 <button type="button" id="addressBtn" class="modify_input"  onclick="sample6_execDaumPostcode();">찾기</button>
                 <span class="box int_address">
-                    <input type="text" id="address1" class="modify_input" value="${arr[1]}" name="address"/>
+                    <input type="text" id="address1" class="modify_input" name="address"/>
                 </span>
                 <span class="box int_address">
-                    <input type="text" id="address2" class="modify_input" value="${arr[2]}" name="address"/>
+                    <input type="text" id="address2" class="modify_input" name="address"/>
                 </span>
                 <span class="error_email"></span>
 			</div>
