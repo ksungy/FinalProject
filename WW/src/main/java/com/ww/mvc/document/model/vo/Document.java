@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class document {
+public class Document {
 	private int doc_id;
 	private int emp_no;
 	private String doc_titile;
