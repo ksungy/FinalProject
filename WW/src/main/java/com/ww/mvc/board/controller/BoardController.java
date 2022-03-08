@@ -48,9 +48,6 @@ public class BoardController {
 
 	@Autowired
 	private BoardService service;
-	
-	@Autowired
-	private MemberService service2;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
