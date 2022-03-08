@@ -4,7 +4,7 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   
- <mapper namespace="com.ww.mvc.calendar.model.dao.CalendarDao">
+ <mapper namespace="Calendar">
   <resultMap id="calendarRM" type="Calendar">
     <id property="calendarNo" column="CALENDAR_NO" />
     <result property="calendarTitle" column="CALENDAR_TITLE" />
@@ -14,7 +14,7 @@
   </resultMap>
 	
 	<select id="calendarList" resultMap="calendarRM">
-		select * from calendar 
+		select * from calendar
 	</select>
 	
 </mapper>
