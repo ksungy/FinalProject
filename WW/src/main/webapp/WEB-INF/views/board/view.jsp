@@ -73,7 +73,7 @@
                                작성일
                                </td>
                                <td>
-                               <fmt:formatDate type="date" value="${ board.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/> <span style='float:right'>조회수 : ${ board.hits }</span>
+                               <fmt:formatDate type="date" value="${ board.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/>
                                </td>
                            </tr>
                            <tr>
@@ -118,7 +118,7 @@
 										<div class="header">
 											<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
 											<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
-											<button class="btn float-right btn-default btn-xs" id="replyUpdate" data-toggle='modal' data-target='#modifyModal' type="button">수정</button>
+											<button class="btn float-right btn-default btn-xs" id="replyUpdate" data-toggle='modal' data-target='#modifyModal' data-rno="${ reply.no }" data-rcontent="${ reply.content }" data-writer="${ reply.writer }" type="button">수정</button>
 											</c:if>
 												<input type="hidden" id="replyNo" name="no" value="${ reply.no }">
 												<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
@@ -158,7 +158,7 @@
 					</div>
 					<div class="modal-footer">
 						<button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
-						<button type="submit" class="btn btn-success modalModBtn" >수정</button>
+						<button type="submit" class="btn btn-success modalModBtn" onclick="modifyModal()" >수정</button>
 					</div>
 					</div>
 				</div>
@@ -231,11 +231,6 @@
 
 </script>
 
-<script>
-function replyUpdate(){
-	location.href = "${ path }/board/replyUpdate?no=${ reply.no }"
-}
-</script>
 <!-- 
 <script>
 function modal_view(no, content, writer){
@@ -290,6 +285,21 @@ $("#replyUpdate").on("click", function () {
 </script>
  -->
 
+<script>
+$(document).ready(function() {     
+    $('#modifyModal').on('show.bs.modal', function(event) {          
+        NO = $(event.relatedTarget).data('rno');
+        WRITER = $(event.relatedTarget).data('writer');
+        CONTENT = $(event.relatedTarget).data('rcontent');
+    });
+});
+
+function modifyModal()
+{
+    var reply_content = $('#reply_content').val();
+    location.href='${path}/board/replyUpdate?no='+NO+'&nonNotifyId='+WRITER+'&nContent='+CONTENT+'&reply_content='+reply_content;
+}
+</script>
 
 <script>
 	function checkReplyConfirm(){

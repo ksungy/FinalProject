@@ -99,6 +99,13 @@ public class BoardServieImpl implements BoardService {
 		return mapper.deleteBoard(no);
 	}
 
+	// ▼ 게시글 조회수
+	@Override
+	public int getBoardHits(int no) {
+		
+		return mapper.plusHits(no);
+	}
+
 	
 	// ▼ 댓글 작성
 	@Override
@@ -143,6 +150,7 @@ public class BoardServieImpl implements BoardService {
 		
 		return mapper.getReplyCount(no);
 	}
+
 
 
 

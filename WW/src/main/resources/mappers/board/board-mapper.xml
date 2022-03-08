@@ -116,9 +116,14 @@
 		ORDER BY B.BOARD_NO DESC
 	</select>
 	
+	<!-- 게시글 조회수 -->
+	<update id="plusHits" parameterType="_int">
+		UPDATE BOARD 
+			SET BOARD_HITS = BOARD_HITS + 1
+			WHERE BOARD_NO = #{no}
+	</update>
 	
-	<!-- 게시글 상세조회 
-	-->
+	<!-- 게시글 상세조회 -->
   	<select id="selectBoardByNo" parameterType="_int" resultMap="boardDetailResultMap">
 			SELECT B.BOARD_NO AS,
 			       B.BOARD_TITLE, 
