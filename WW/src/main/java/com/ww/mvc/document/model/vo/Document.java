@@ -9,7 +9,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class document {
 public class Document {
 	private int doc_id;
 	private int emp_no;
