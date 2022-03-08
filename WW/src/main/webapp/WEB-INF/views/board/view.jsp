@@ -123,7 +123,7 @@
 												<input type="hidden" id="replyNo" name="no" value="${ reply.no }">
 												<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
 												<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>										
-											<p><input name="content" id="replycontent" value="<c:out value="${ reply.content }" />"></p>
+											<p id="rp"><input name="content" id="replycontent" value="<c:out value="${ reply.content }" />"></p>
 										</div>
 										<hr>
 									</div>
@@ -231,11 +231,11 @@
 
 </script>
 
-<!-- 
 <script>
-function modal_view(no, content, writer){
-	$("#replyUpdate").on("click", function () {
+
+	$("#rp").on("click", "replyUpdate button", function () {
 		var reply = $(this).parent(); 
+		
 		var no = reply.attr("#reply_no"); 
 		var content = reply.find("#reply_content").text(); 
 		var writer = reply.find("#reply_writer").text(); 
@@ -246,8 +246,10 @@ function modal_view(no, content, writer){
 
 		
 	});	
-}
 
+</script>
+
+<!--
 
 $("#replyUpdate").on("click", function () { 
 	const content = $('#replycontent').val();
@@ -285,21 +287,6 @@ $("#replyUpdate").on("click", function () {
 </script>
  -->
 
-<script>
-$(document).ready(function() {     
-    $('#modifyModal').on('show.bs.modal', function(event) {          
-        NO = $(event.relatedTarget).data('rno');
-        WRITER = $(event.relatedTarget).data('writer');
-        CONTENT = $(event.relatedTarget).data('rcontent');
-    });
-});
-
-function modifyModal()
-{
-    var reply_content = $('#reply_content').val();
-    location.href='${path}/board/replyUpdate?no='+NO+'&nonNotifyId='+WRITER+'&nContent='+CONTENT+'&reply_content='+reply_content;
-}
-</script>
 
 <script>
 	function checkReplyConfirm(){
