@@ -5,6 +5,8 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="path" value="${ pageContext.request.contextPath }" /><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<c:set var="path" value="${ pageContext.request.contextPath }" />
 
 <%@include file="../common/header.jsp"%>
 
@@ -58,6 +60,7 @@
                         <tr>
                             <td>
                                 <select>
+                                <select onchange="window.open(value,'_self')">
                                     <option value="10">10개씩</option>
                                     <option value="20">20개씩</option>
                                     <option value="30">30개씩</option>
@@ -312,6 +315,27 @@
                                         <td></td>
                                         <td>처리 대기중</td>
                                     </tr>
+									<c:if test="${ empty documentLest }">			
+										<tr>
+											<td colspan="7">
+												조회된 문서가 없습니다.
+											</td>
+										</tr>	
+									</c:if>
+									
+									<c:if test="${ !empty documentList }">
+										<c:forEach var="document" items="${ documentList }">
+		                                    <tr onclick="location.href='www.naver.com'" >
+		                                        <td>${ document.no }</td>
+		                                        <td>${ document.title }</td>
+		                                        <td>${ document.writer }</td>
+		                                        <td>${ document.reader }</td>
+		                                        <td>${ document.writ_date }</td>
+		                                        <td>${ document.type }</td>
+		                                        <td>${ document.doc_status }</td>
+		                                    </tr>
+	                                    </c:forEach>
+	        						</c:if>
                                 </tbody>
     
                             </table>
@@ -321,6 +345,10 @@
                                 <tr>
                                     <td style="
                                     border-top-left-radius: 10px; border-bottom-left-radius: 10px;
+                                	<!-- 처음 페이지로 -->
+                                    <td 
+                                    onclick="location.href='${ path }/document/list?page=1'"
+                                    style="border-top-left-radius: 10px; border-bottom-left-radius: 10px;
                                     box-shadow: 0px 1px 1px rgb(202, 202, 202),0px -1px 1px rgb(202, 202, 202), -1px 0px 1px rgb(202, 202, 202)  ;"
                                     class="listButton"
                                     > &lt; </td>
@@ -333,12 +361,35 @@
                                     <td class="listButton">5</td>
                                     <td class="listButton">&gt;</td>
 
+                                    > &lt;&lt; </td>
+									
+									<!-- 이전 페이지로 -->
+                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.prevPage }'"> &lt; </td>
+									
+									<!--  10개 페이지 목록 -->
+									<c:forEach begin="${ pageInfo.startPage }" end="${ pageInfo.endPage }" varStatus="status">
+									<c:if test="${ status.current == pageInfo.currentPage }">
+									<td class="listButton">선택</td>
+									</c:if>
+                                    
+                                    <c:if test="${ status.current != pageInfo.currentPage }">
+                                    <td class= "listButton" onclick="location.href='${ path }/document/list?page=${ status.current }&count=${ pageInfo.listLimit }'">${ status.current }</td>
+                                    </c:if>
+                                    </c:forEach>
+                                    
+                                    <!-- 다음 페이지로 -->
+                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.nextPage }'">&gt;</td>
+									
+									<!-- 마지막 페이지로 -->
                                     <td 
                                     onclick="location.href='페이지 주소'"
                                     style="
                                     border-top-right-radius: 10px; border-bottom-right-radius: 10px;
+                                    onclick="location.href='${ path }/board/list?page=${ pageInfo.maxPage }'"
+                                    style="border-top-right-radius: 10px; border-bottom-right-radius: 10px;
                                     box-shadow: 0px 1px 1px rgb(202, 202, 202),0px -1px 1px rgb(202, 202, 202), 1px 0px 1px rgb(202, 202, 202)  ;"
                                     class="listButton">&gt;&gt;</td>
+                                    
                                 </tr>
                             </table>
 

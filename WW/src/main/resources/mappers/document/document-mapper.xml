@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.ww.mvc.document.model.dao.DocumentMapper">
+
+	<!-- ▼ document ResultMap -->
+  	<resultMap type="DOCUMENT" id="documentListResultMap">
+  		<id property="doc_id" column="DOC_ID"/>
+  		<result property="emp_no" column="EMP_NO"/>
+  		<result property="doc_titile" column="DOC_TITLE"/>
+  		<result property="doc_content" column="DOC_CONTENT"/>
+  		<result property="doc_status" column="DOC_STATUS"/>	
+  		<result property="doc_emergency" column="DOC_EMERGENCY"/>
+  		<result property="doc_date" column="DOC_DATE"/>
+  		<result property="doc_complet_date" column="DOC_COMPLET_DATE"/>
+  	</resultMap>
+  	
+	<!-- 페이징 -->
+	<select id="getDocumentCount" parameterType="map" resultType="_int">
+		SELECT COUNT(*) FROM DOCUMENT
+	</select>
+	
+		<select id="findAll" parameterType="map" resultType="documentListResultMap">
+		SELECT COUNT(*) FROM DOCUMENT
+	</select>
+	
+</mapper>
