@@ -60,6 +60,7 @@
 		    <artifactId>spring-security-config</artifactId>
 		    <version>${org.springsecurity-version}</version>
 		</dependency>
+		
 				
 		<!-- AspectJ -->
 		<dependency>

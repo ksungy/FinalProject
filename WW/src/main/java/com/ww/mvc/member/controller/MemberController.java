@@ -3,6 +3,8 @@ package com.ww.mvc.member.controller;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -25,12 +27,22 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-@SessionAttributes("loginMember") 
+@RequestMapping("/member")
+@SessionAttributes("loginMember") // session 범위까지 확장!
 public class MemberController {
 	
 	@Autowired
 	@Qualifier("memberService")
 	private MemberService service;
+	
+	// 로그인 페이지 이동
+	@GetMapping("/login")
+	public String login() {
+		
+		log.info("로그인 페이지 요청");
+		
+		return "member/login";
+	};
 	
 	// 로그인 처리
 	@RequestMapping(value="/login", method = {RequestMethod.POST})
@@ -38,13 +50,18 @@ public class MemberController {
 			ModelAndView model,
 			@RequestParam("id") String id, @RequestParam("password") String password) {
 		
+		log.info("{}, {}", id, password);
+		
 		Member loginMember = service.login(id, password);
 		
 		if (loginMember != null) {
-			// 모델은 request scope을 가지는데 session 객체에 담아도 로그인이 유지됨
-			// why? @SessionAttributes()어노테이션을 사용해서 키값에 해당하는 Attribute를 session 범위까지 확장해서!
-			model.addObject("loginEmployee", loginMember);
-			model.setViewName("redirect:/");
+			// 로그인 성공
+//			model.addObject("msg", "로그인에 성공하셨습니다.");
+			
+			model.addObject("loginMember", loginMember);			
+			model.setViewName("home");
+
+			log.info("{}, {}", id, password);
 		} else {
 			// 로그인 실패
 			model.addObject("msg", "아이디나 비밀번호가 일치하지 않습니다.");
@@ -56,11 +73,20 @@ public class MemberController {
 		return model;
 	}
 	
+	// 이용약관 페이지 열기!
+	@GetMapping("/joinTerms")
+	public String joinTerms() {
+		
+		return "member/joinTerms";
+	}
+	
 	// 로그아웃 처리
 	@GetMapping("/logout")
 	public String logout(SessionStatus status) {
 		
 		status.setComplete();
+		
+		log.info("로그아웃 성공");
 		
 		return "redirect:/"; 
 	}
@@ -69,27 +95,34 @@ public class MemberController {
 	@GetMapping("/enroll")
 	public String enroll() {
 		
-		return "employee/enroll";
+		log.info("회원 가입 페이지 요청");
+		
+		return "member/enroll";
 	}
 	
-	@PostMapping("/employee/enroll")
+	@PostMapping("/enroll")
 	public ModelAndView enroll(ModelAndView model, @ModelAttribute Member member) {
-		int result =  service.save(member); // 정수값 리턴
+		
+		log.info("회원가입 으로 넘어가나?");
+		
+		int result = service.save(member); // 정수값 리턴
 		
 		if (result > 0) {
 			model.addObject("msg", "회원가입이 정상적으로 완료되었습니다.");
 			model.addObject("location", "/");
 		} else {
 			model.addObject("msg", "회원가입을 실패하였습니다.");
-			model.addObject("location", "/employee/enroll");
+			model.addObject("location", "/member/enroll");
 		}
 		
 		model.setViewName("common/msg");
 		
+		log.info(member.toString());
+		
 		return model;
 	}
 	
-	@PostMapping("employee/idCheck")
+	@PostMapping("/idCheck")
 	@ResponseBody
 	public Object idCheck(@RequestParam("userId") String userId) {
 		Map<String, Boolean> map = new HashMap<>();

@@ -145,7 +145,7 @@
                 <div id="boardMenu" class="collapse" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">list 1번</a>
+                        <a class="collapse-item" href="/mvc/board/list">사내 게시판</a>
                     </div>
                 </div>
             </li>
@@ -159,12 +159,12 @@
                 <a class="nav-link" href="#" data-toggle="collapse" data-target="#calenderMemu" aria-expanded="true"
                     aria-controls="calenderMemu">
                     <i class="fas fa-fw fa-address-card"></i>
-                    <span>켈린더</span>
+                    <span>일정관리</span>
                 </a>
                 <div id="calenderMemu" class="collapse" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">list 1번</a>
+                        <a class="collapse-item" href="/mvc/calendar">캘린더</a>
                     </div>
                 </div>
             </li>

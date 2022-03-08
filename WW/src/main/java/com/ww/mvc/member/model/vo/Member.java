@@ -14,6 +14,10 @@ public class Member {
 	
 	private int no;
 	
+	private String jobCode;
+	
+	private String deptCode;
+	
 	private String id;
 	
 	private String password;
@@ -24,7 +28,7 @@ public class Member {
 	
 	private String phone;
 	
-	private String adderss;
+	private String address;
 	
 	private String birth;
 	
@@ -43,4 +47,10 @@ public class Member {
 	private String originalProfilename;
 
 	private String renamedProfilename;
+	
+	public Member(String id, String password, String name) {
+		this.id = id;
+		this.password = password;
+		this.name = name;
+	}
 }
