@@ -81,9 +81,11 @@
                                첨부파일
                                </td>
                                <td>
+                               <c:forEach var="boardAttach" items="${ board.attachList }">
 	                               <div class="uploadResult">
 	                              		${ boardAttach.originalFileName }
 	                               </div>
+	                           </c:forEach>
                                </td>
                            </tr>
                            <tr>
@@ -98,7 +100,12 @@
 
 			<!-- 댓글 리스트 -->
 			<div class="card-header bg-light">
-			        <i class="fa fa-comment fa">댓글</i> <span> [0] </span>
+			        <i class="fa fa-comment fa">댓글</i>
+			        <c:if test="${ board.replyCount != 0 }">
+			        <span>
+			        	[&nbsp;<c:out value="${ board.replyCount }" />&nbsp;]
+			        </span>
+			        </c:if> 
 			</div>
 			<div class="card-body">
 				<div class="col-lg-12">
@@ -109,14 +116,15 @@
 								<li class="left clearfix">
 									<div>
 										<div class="header">
-											<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
-											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>
 											<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
 											<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
-											<button class="btn float-right btn-default btn-xs">수정</button>
+											<button class="btn float-right btn-default btn-xs" id="replyUpdate" data-toggle='modal' data-target='#modifyModal' type="button">수정</button>
 											</c:if>
+												<input type="hidden" id="replyNo" name="no" value="${ reply.no }">
+												<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
+												<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>										
+											<p><input name="content" id="replycontent" value="<c:out value="${ reply.content }" />"></p>
 										</div>
-										<p><c:out value="${ reply.content }"/></p>
 										<hr>
 									</div>
 								</li>
@@ -127,22 +135,52 @@
 				</div>
 			</div>
 			
+			<div class="modal fade" id="modifyModal" role="dialog">
+				<div class="modal-dialog">
+					<div class="modal-content">
+						<div class="modal-header">
+							<h4 class="modal-title">댓글 수정</h4>
+							<button type="button" class="btn btn-default pull-right" data-dismiss="modal">&times;</button>
+						</div>
+					<div class="modal-body">
+						<div class="form-group">
+							<label for="reply_no">댓글 번호</label>
+							<input class="form-control" id="reply_no" name="no" value="<c:out value="${ reply.no }"/>" readonly>
+						</div>
+						<div class="form-group">
+							<label for="reply_writer">댓글 작성자</label>
+							<input class="form-control" id="reply_writer" name="writer" value="<c:out value="${ reply.writer }"/>" readonly>
+						</div>
+						<div class="form-group">
+							<label for="reply_text">댓글 내용</label>
+							<textarea class="form-control" rows="3" id="reply_content" name="content" placeholder="댓글 내용을 입력해주세요" >${ reply.content }</textarea>
+						</div>
+					</div>
+					<div class="modal-footer">
+						<button type="button" class="btn btn-default pull-left" data-dismiss="modal">닫기</button>
+						<button type="submit" class="btn btn-success modalModBtn" >수정</button>
+					</div>
+					</div>
+				</div>
+			</div>
+
+			
 			<!-- 댓글 작성 영역 -->
 			<c:if test="${ !empty loginMember }">
 			<div class="card-body">
 				<ul class="list-group list-group-flush">
 				    <li class="list-group-item">
-					<form id="replyForm" name="replyForm" method="get" action="${ path }/board/reply">
-					<input type="hidden" name="no" value="${ board.no }" /> 
-					<div class="form-inline mb-2">
-						<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-						<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId" name="writer" value="<c:out value="${ loginMember.id }"/>" readonly>
-						<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-						<input type="password" class="form-control ml-2" placeholder="비밀번호 입력" id="replyPassword">
-					</div>
-					<textarea class="form-control" id="exampleFormControlTextarea1" name="content" rows="3"></textarea>
-					<button type="button" onclick="checkReplyConfirm()" class="btn btn-dark mt-3" style="background:#2A3D72;">댓글 작성</button>
-					</form>
+						<form id="replyForm" name="replyForm" method="get" action="${ path }/board/reply">
+							<input type="hidden" name="no" value="${ board.no }" /> 
+							<div class="form-inline mb-2">
+								<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
+								<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId" name="writer" value="<c:out value="${ loginMember.id }"/>" readonly>
+								<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
+								<input type="password" class="form-control ml-2" placeholder="비밀번호 입력" id="replyPassword">
+							</div>
+							<textarea class="form-control" id="exampleFormControlTextarea1" name="content" rows="3"></textarea>
+							<button type="button" onclick="checkReplyConfirm()" class="btn btn-dark mt-3" style="background:#2A3D72;">댓글 작성</button>
+						</form>
 				    </li>
 				</ul>
 			</div>
@@ -150,23 +188,8 @@
 		</div>
 </div>
 
-<script>
-	var uploadResult = $(".uploadResult div");
-	
-		function showFiles(uploadResultArr){
-			var str = "";
-			
-			$(uploadResultArr).each(function(i, obj)){
-				str += "<span>" + obj.originalFileName + "<span>";
-			});
-			
-			uploadResult.append(str);
-		};
-		
 
-</script>
 <script>
-	
 	function boardDelete(){
 		
 		const swalWithBootstrapButtons = Swal.mixin({
@@ -209,6 +232,66 @@
 </script>
 
 <script>
+function replyUpdate(){
+	location.href = "${ path }/board/replyUpdate?no=${ reply.no }"
+}
+</script>
+<!-- 
+<script>
+function modal_view(no, content, writer){
+	$("#replyUpdate").on("click", function () {
+		var reply = $(this).parent(); 
+		var no = reply.attr("#reply_no"); 
+		var content = reply.find("#reply_content").text(); 
+		var writer = reply.find("#reply_writer").text(); 
+		
+		$("#reply_no").val(no); 
+		$("#reply_text").val(content); 
+		$("#reply_writer").val(writer);
+
+		
+	});	
+}
+
+
+$("#replyUpdate").on("click", function () { 
+	const content = $('#replycontent').val();
+	const no = ${'#reply_no'}.val();
+	
+	// AJAX통신 
+	$.ajax({ 
+		type : "post", 
+		url : "${path}/board/replyUpdate" + no, 
+		headers : { 
+			"Content-type" : "application/json", 
+			"X-HTTP-Method-Override" : "PUT" 
+		}, 
+		data : JSON.stringify({ 
+				'content' : content,
+				'reply_no' : no
+		}), 
+		dataType : "text", 
+		success : function (result) {
+			console.log("result : " + result); 
+			if (result == "modSuccess") { 
+				alert("댓글 수정 완료!"); 
+				$("#modifyModal").modal("hide"); // Modal 닫기 
+				document.replyUpdateForm.submit();
+				
+			}
+		}
+		
+	});
+	
+});
+
+	
+
+</script>
+ -->
+
+
+<script>
 	function checkReplyConfirm(){
 		
 		Swal.fire({
@@ -234,5 +317,7 @@
 
 	
 </script>
+
+
 
 <%@include file="../common/footer.jsp"%>

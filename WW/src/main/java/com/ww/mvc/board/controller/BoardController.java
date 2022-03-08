@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -35,6 +36,7 @@ import com.ww.mvc.board.model.vo.BoardAttach;
 import com.ww.mvc.board.model.vo.Reply;
 import com.ww.mvc.common.util.FileProcess;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.member.model.service.MemberService;
 import com.ww.mvc.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -46,6 +48,9 @@ public class BoardController {
 
 	@Autowired
 	private BoardService service;
+	
+	@Autowired
+	private MemberService service2;
 
 	@Autowired
 	private ResourceLoader resourceLoader;
@@ -75,7 +80,12 @@ public class BoardController {
 	public ModelAndView view(ModelAndView model, @RequestParam("no") int no) {
 
 		Board board = service.findBoardByNo(no);
-
+		
+		int replyCount = service.getReplyCount(no);
+		
+		board.setReplyCount(replyCount);
+		
+		model.addObject("replyCount", replyCount);
 		model.addObject("board", board);
 		model.setViewName("board/view");
 
@@ -335,8 +345,31 @@ public class BoardController {
 		return model;
 	}
 	
-	// ▼ 댓글 수정
 	
+	
+	// ▼ 댓글 수정
+	@RequestMapping("/replyUpdate")
+	public String updateReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply){
+		int result = 0;
+		
+		reply.setNo(reply.getNo());
+		reply.setContent(reply.getContent());
+		
+		
+		result = service.updateReply(reply);
+		
+		if(result > 0) {
+			System.out.println("오케이");
+		} else {
+			System.out.println("놉");
+		}
+		
+		return "/board/list";
+		
+	}
+
+
+
 	// ▼ 댓글 삭제
 	@GetMapping("/replyDelete")
 	public ModelAndView deleteReply(ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int no) {
