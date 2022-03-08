@@ -34,6 +34,7 @@ public class LoginCheckIntercepter extends HandlerInterceptorAdapter{
 		
 		// Member로 형변환
 		Member loginMember = (Member) request.getSession().getAttribute("loginMember");
+		System.out.println(loginMember);
 		
 		if (loginMember == null) {
 			request.setAttribute("msg", "로그인후에 이용이 가능합니다.");

@@ -1,0 +1,177 @@
+@charset "UTF-8";
+
+#container {
+    margin: auto;
+    /* border: 2px solid red; */
+    width: 650px;
+    height: 800px;
+}
+
+#myPage {
+    margin: auto;
+    margin-top: 20px;
+    
+}
+
+/* 테이블 간격 테스트 해보기 */
+/* table, td, th {
+    border : 1px solid black;
+    border-collapse : collapse;
+  } */
+
+/* 테이블 간격 조절 */
+/* table 태그에는 margin 적용 안됨 */
+table {
+    border-collapse: separate;
+    border-spacing: 0 20px;
+     
+  }
+
+
+label {
+    /* border: 2px solid red; */
+    font-size: 15px;
+    font-weight: bold;
+    margin: 5px;
+    margin-right: 30px;
+}
+
+/* 프로필 수정 */
+.UserModifyImg {
+    display: inline-flex;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    overflow: hidden;
+    object-fit: cover;
+}
+ 
+/* input 스타일 */
+.int_box {
+    margin-left: 12px;
+    margin-top: 2.5px;
+    border-radius: 5px;
+    border: hidden;
+    width: 400px;
+    height: 20px;
+    font-size: 15px;
+}
+
+/* input div 태그 */
+.input_area {
+    border: 1px solid rgba(42, 61, 114, 0.3);
+    border-radius: 5px;
+    width: 450px;
+    height: 30px;
+}
+
+
+/* 아이디, 주소 input 스타일 */
+.int_box_other {
+    margin-left: 12px;
+    margin-top: 2px;
+    border-radius: 5px;
+    border: hidden;
+    width: 300px;
+    height: 20px;
+}
+
+/* 아이디 주소 span 태그  */
+.span_area {
+    border: 1px solid rgba(42, 61, 114, 0.3);
+    border-radius: 5px;
+    height: 30px;
+    width: 330px;
+}
+
+/* 아이디 중복 체크 버튼 */
+#id_check {
+    margin-right: 0px;
+    /* width:10px; */
+    background-color: rgb(61, 83, 143);
+    border: none;
+    color:#fff;
+    padding: 6px 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    float: right;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 4px;  
+}
+
+
+#id_check:hover {
+    color: #fff;
+    background-color: orange;
+}
+
+
+/* 주소찾기 버튼 */
+#searchAdd {
+    margin-left: 10px;
+    /* height: 25px; */
+    background-color: rgb(61, 83, 143);
+    border: none;
+    color:#fff;
+    padding: 6px 0;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 13px;
+    cursor: pointer;
+    border-radius: 4px;
+    float: right;
+}
+
+#searchAdd:hover {
+    color: #fff;
+    background-color: orange;
+}
+
+#addressDetail {
+    margin-top: 10px;
+}
+
+/* 수정하기 다시쓰기 버튼 영역 */
+.btn_area {
+    /*border: 2px solid green;*/
+    text-align: center;
+    margin-top: 10px;
+    
+}
+
+/* 회원 정보 수정 버튼 */
+#modifyBtn {
+    background-color: rgb(61, 83, 143);
+    border: none;
+    border-radius: 4px;
+    border: hidden;
+    color: #fff;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+}
+
+/* 다시쓰기 버튼*/
+#reWriteBtn {
+	background-color: rgb(61, 83, 143);
+    border: none;
+    border-radius: 4px;
+    border: hidden;
+    color: #fff;
+    padding-left: 5px;
+    padding-right: 5px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 15px;
+}

@@ -3,9 +3,9 @@
 let idCheck = RegExp(/^[a-zA-Z][a-zA-Z\d]{4,11}$/);
 $('#userId').keyup(function() {
   if (!idCheck.test($('#userId').val())) {
-    $('.error_id').css('color', 'red').text("형식에 맞지 않음");
+    $('.error_id').css('color', 'red').text("알맞지 않은 아이디 입니다.");
   } else {
-    $('.error_id').css('color', 'green').text("형식에 맞음");
+    $('.error_id').css('color', 'green').text("알맞은 아이디 입니다.");
   }
 });
 
@@ -14,9 +14,9 @@ $('#userId').keyup(function() {
 let passwordCheck = RegExp(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^~*+=-])(?=.*[0-9]).{8,16}$/);
 $('#userPwd').keyup(function() {
   if (!passwordCheck.test($('#userPwd').val())) {
-    $('.error_pwd').css('color', 'red').text("형식에 맞지 않음");
+    $('.error_pwd').css('color', 'red').text("영문 대문자, 소문자, 특수문자를 포함해주제요.");
   } else {
-    $('.error_pwd').css('color', 'green').text("형식에 맞음");
+    $('.error_pwd').css('color', 'green').text("사용가능한 비밀번호 입니다.");
   }
 });
 

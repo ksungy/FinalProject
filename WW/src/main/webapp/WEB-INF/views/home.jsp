@@ -28,12 +28,6 @@
 
 </p>
 
-<p>
-	<c:if test="${ !empty loginMember}">
-		<button type="button">버튼!</button>
-	</c:if>
-</p>
-
 
 </div>
 <%@include file="./common/footer.jsp" %>
