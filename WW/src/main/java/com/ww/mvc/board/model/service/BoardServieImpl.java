@@ -1,5 +1,6 @@
 package com.ww.mvc.board.model.service;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -7,12 +8,13 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
 
 import com.ww.mvc.board.model.dao.BoardMapper;
 import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.board.model.vo.BoardAttach;
+import com.ww.mvc.board.model.vo.Reply;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.member.model.vo.Member;
 
 @Service
 public class BoardServieImpl implements BoardService {
@@ -20,12 +22,14 @@ public class BoardServieImpl implements BoardService {
 	@Autowired
 	private BoardMapper mapper;
 	
+	// ▼ 게시글 전체 개수
 	@Override
 	public int getBoardCount() {
 		
 		return mapper.getBoardCount();
 	}
 
+	// ▼ 게시글 목록 조회
 	@Override
 	public List<Board> getBoardList(PageInfo pageInfo) {
 		
@@ -37,12 +41,15 @@ public class BoardServieImpl implements BoardService {
 		 
 	}
 
+	// ▼ 게시글 상세 조회
 	@Override
 	public Board findBoardByNo(int no) {
 		
 		return mapper.selectBoardByNo(no);
 	}
 
+	
+	// ▼ 게시글 수정, 게시글 작성
 	@Override
 	@Transactional
 	public int save(Board board) {
@@ -65,7 +72,7 @@ public class BoardServieImpl implements BoardService {
 	}
 
 
-
+	// ▼ 게시글 검색
 	@Override
 	public List<Board> boardSearch(Map<String, String> searchMap, PageInfo pageInfo) {
 		
@@ -77,16 +84,77 @@ public class BoardServieImpl implements BoardService {
 	}
 
 	
+	// ▼ 게시글 검색 전체 개수
 	@Override
 	public int getSearchCount() {
 		
 		return mapper.searchCount();
 	}
 
+	
+	// ▼ 게시글 삭제
+	@Override
+	public int delete(int no) {
+		
+		return mapper.deleteBoard(no);
+	}
+
+	// ▼ 게시글 조회수
+	@Override
+	public int getBoardHits(int no) {
+		
+		return mapper.plusHits(no);
+	}
+
+	
+	// ▼ 댓글 작성
+	@Override
+	@Transactional
+	public int saveReply(Member member, Reply reply) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("content", reply.getContent());
+		map.put("boardNo", reply.getBoardNo());
+		map.put("empNo", member.getNo());
+		map.put("writer", member.getId());
+		
+		return mapper.insertReply(map);
+	}
+
+	
+	// ▼ 댓글 삭제
+	@Override
+	public int deleteReply(int no) {
+		
+		return mapper.deleteReply(no);
+	}
+	
+
+	// ▼ 댓글 수정
+	@Override
+	public int updateReply(Reply reply) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("content", reply.getContent());
+		map.put("no", reply.getNo());
+		
+		return mapper.updateReply(map);
+	}
+	
+	
+	// ▼ 댓글 개수
+	@Override
+	public int getReplyCount(int no) {
+		
+		return mapper.getReplyCount(no);
+	}
 
 
 
 
+	
 
 
 

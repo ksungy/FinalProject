@@ -32,6 +32,8 @@ public class Board {
 	
 	private List<Reply> replies;
 	
+	private int replyCount;
+	
 	private List<BoardAttach> attachList;
 	
 	public void setNo(int no) {

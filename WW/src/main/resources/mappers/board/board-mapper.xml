@@ -16,7 +16,7 @@
 		B.BOARD_MODIFIED,
 		B.BOARD_HITS
 		FROM BOARD B
-		JOIN EMPLOYEE E ON(B.BOARD_WRITER = E.EMP_ID)
+		JOIN EMPLOYEE E ON(B.EMP_NO = E.EMP_NO)
 	</sql>
 	
 	<!-- ▼ Board ResultMap -->
@@ -29,6 +29,7 @@
   		<result property="createDate" column="BOARD_CREATED"/>
   		<result property="modifyDate" column="BOARD_MODIFIED"/>
   		<result property="hits" column="BOARD_HITS"/>
+  		<result property="replyCount" column="COMMENT_COUNT"/>
   	</resultMap>
   	
   	<!-- ▼ Reply ResultMap -->
@@ -115,8 +116,14 @@
 		ORDER BY B.BOARD_NO DESC
 	</select>
 	
+	<!-- 게시글 조회수 -->
+	<update id="plusHits" parameterType="_int">
+		UPDATE BOARD 
+			SET BOARD_HITS = BOARD_HITS + 1
+			WHERE BOARD_NO = #{no}
+	</update>
 	
-	<!-- 게시글 상세조회(댓글 포함) -->
+	<!-- 게시글 상세조회 -->
   	<select id="selectBoardByNo" parameterType="_int" resultMap="boardDetailResultMap">
 			SELECT B.BOARD_NO AS,
 			       B.BOARD_TITLE, 
@@ -134,7 +141,8 @@
 			       C.EMP_NO,
 			       E2.EMP_ID, 
 			       C.B_COMMENT_CREATED, 
-			       C.B_COMMENT_MODIFIED
+			       C.B_COMMENT_MODIFIED,
+			       B.COMMENT_COUNT
 			FROM BOARD B
 			JOIN EMPLOYEE E ON(B.EMP_NO = E.EMP_NO)
 			LEFT OUTER JOIN BOARD_COMMENT C ON(B.BOARD_NO = C.BOARD_NO)
@@ -142,11 +150,13 @@
 			WHERE B.BOARD_NO = #{no}
   	 </select>
 	
+	
 	<!-- 게시글 작성 -->
 	<insert id="insertBoard" parameterType="Board" useGeneratedKeys="true" keyProperty="no" keyColumn="BOARD_NO">
 		INSERT INTO BOARD(
 			BOARD_NO,
 			BOARD_WRITER,
+			EMP_NO,
 			BOARD_TITLE,
 			BOARD_CONTENT,
 			BOARD_CREATED,
@@ -155,6 +165,7 @@
 		) VALUES(
 			SEQ_BOARD_NO.NEXTVAL,
 			#{writer},
+			#{empNo},
 			#{title},
 			#{content},
 			DEFAULT,
@@ -185,5 +196,82 @@
 			DEFAULT
 		)
 	</insert>
+	
+	<!-- 게시글 수정 -->
+	<update id="updateBoard" parameterType="Board">
+		UPDATE BOARD
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="title != null">
+				BOARD_TITLE = #{title},
+			</if>
+			<if test="content != null">
+				BOARD_CONTENT = #{content},
+			</if>
+				BOARD_MODIFIED = SYSDATE
+		</trim>
+		WHERE BOARD_NO = #{no}
+	</update>
+	
+	<!-- 게시글 삭제 -->
+	<delete id="deleteBoard" parameterType="Board">
+		DELETE FROM BOARD WHERE BOARD_NO = #{no}
+	</delete>
+
+	<!-- 댓글 개수 -->
+	<select id="getReplyCount" parameterType="map" resultType="_int">
+		SELECT COUNT(COMMENT_NO)
+		FROM BOARD_COMMENT
+		WHERE BOARD_NO = #{no}
+	</select>
+	
+	<update id="updateReplyCount" parameterType="_int">
+		UPDATE BOARD 
+			SET COMMENT_COUNT = (
+				SELECT COUNT(COMMENT_NO) 
+				FROM BOARD_COMMENT 
+				WHERE BOARD_NO = #{no} 
+			)
+			WHERE BOARD_NO = #{no}
+	
+	</update>
+	
+	<!-- 댓글 등록 -->
+	<insert id="insertReply" parameterType="map" useGeneratedKeys="true" keyProperty="no" keyColumn="COMMENT_NO">
+		INSERT INTO BOARD_COMMENT (
+			COMMENT_NO,
+			BOARD_NO,
+			EMP_NO,
+			COMMENT_WRITER,
+			COMMENT_CONTENT,
+			B_COMMENT_CREATED,
+			B_COMMENT_MODIFIED
+		) VALUES (
+			SEQ_COMMENT_NO.NEXTVAL,
+			#{boardNo},
+			#{empNo},
+			#{writer},
+			#{content},
+			SYSDATE,
+			SYSDATE
+		)
+	</insert>
+	
+	
+	<!-- 댓글 수정 
+	-->
+	<update id="updateReply" parameterType="map">
+		UPDATE BOARD_COMMENT
+	      SET 
+	         COMMENT_CONTENT = #{content},
+	         B_COMMENT_MODIFIED = SYSDATE 
+	      WHERE 
+	         COMMENT_NO = #{no}
+	</update>
+	
+	<!-- 댓글 삭제 -->
+	<delete id="deleteReply" parameterType="Reply" >
+		DELETE FROM BOARD_COMMENT WHERE COMMENT_NO = #{no}
+	</delete>
+	
 	
 </mapper>
