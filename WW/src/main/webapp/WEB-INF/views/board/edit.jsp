@@ -86,7 +86,7 @@
 						취소
 					</button>
 					<button type="button" onclick="checkConfirm()" class="contact100-form-btn">
-						등록
+						수정
 					</button>
 				</div>
 			</form>

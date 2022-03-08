@@ -122,6 +122,27 @@ public class BoardServieImpl implements BoardService {
 		
 		return mapper.deleteReply(no);
 	}
+	
+
+	// ▼ 댓글 수정
+	@Override
+	public int updateReply(Reply reply) {
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("content", reply.getContent());
+		map.put("no", reply.getNo());
+		
+		return mapper.updateReply(map);
+	}
+	
+	
+	// ▼ 댓글 개수
+	@Override
+	public int getReplyCount(int no) {
+		
+		return mapper.getReplyCount(no);
+	}
 
 
 

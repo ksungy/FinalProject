@@ -29,6 +29,14 @@ public interface BoardService {
 
 	int deleteReply(int no);
 
+	int updateReply(Reply reply);
+
+	int getReplyCount(int no);
+
+	
+
+	
+
 	
 
 	

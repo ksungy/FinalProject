@@ -29,6 +29,7 @@
   		<result property="createDate" column="BOARD_CREATED"/>
   		<result property="modifyDate" column="BOARD_MODIFIED"/>
   		<result property="hits" column="BOARD_HITS"/>
+  		<result property="replyCount" column="COMMENT_COUNT"/>
   	</resultMap>
   	
   	<!-- ▼ Reply ResultMap -->
@@ -135,7 +136,8 @@
 			       C.EMP_NO,
 			       E2.EMP_ID, 
 			       C.B_COMMENT_CREATED, 
-			       C.B_COMMENT_MODIFIED
+			       C.B_COMMENT_MODIFIED,
+			       B.COMMENT_COUNT
 			FROM BOARD B
 			JOIN EMPLOYEE E ON(B.EMP_NO = E.EMP_NO)
 			LEFT OUTER JOIN BOARD_COMMENT C ON(B.BOARD_NO = C.BOARD_NO)
@@ -210,6 +212,24 @@
 		DELETE FROM BOARD WHERE BOARD_NO = #{no}
 	</delete>
 
+	<!-- 댓글 개수 -->
+	<select id="getReplyCount" parameterType="map" resultType="_int">
+		SELECT COUNT(COMMENT_NO)
+		FROM BOARD_COMMENT
+		WHERE BOARD_NO = #{no}
+	</select>
+	
+	<update id="updateReplyCount" parameterType="_int">
+		UPDATE BOARD 
+			SET COMMENT_COUNT = (
+				SELECT COUNT(COMMENT_NO) 
+				FROM BOARD_COMMENT 
+				WHERE BOARD_NO = #{no} 
+			)
+			WHERE BOARD_NO = #{no}
+	
+	</update>
+	
 	<!-- 댓글 등록 -->
 	<insert id="insertReply" parameterType="map" useGeneratedKeys="true" keyProperty="no" keyColumn="COMMENT_NO">
 		INSERT INTO BOARD_COMMENT (
@@ -232,7 +252,16 @@
 	</insert>
 	
 	
-	<!-- 댓글 수정 -->
+	<!-- 댓글 수정 
+	-->
+	<update id="updateReply" parameterType="map">
+		UPDATE BOARD_COMMENT
+	      SET 
+	         COMMENT_CONTENT = #{content},
+	         B_COMMENT_MODIFIED = SYSDATE 
+	      WHERE 
+	         COMMENT_NO = #{no}
+	</update>
 	
 	<!-- 댓글 삭제 -->
 	<delete id="deleteReply" parameterType="Reply" >

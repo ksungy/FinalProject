@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 
 import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.board.model.vo.BoardAttach;
+import com.ww.mvc.board.model.vo.Reply;
 
 @Mapper
 public interface BoardMapper {
@@ -33,6 +34,13 @@ public interface BoardMapper {
 	int insertReply(Map<Object, Object> map);
 
 	int deleteReply(int no);
+
+	int updateReply(Map<Object, Object> map);
+
+	int getReplyCount(int no);
+
+	
+
 
 
 }
