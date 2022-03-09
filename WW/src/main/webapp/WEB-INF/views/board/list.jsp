@@ -19,6 +19,7 @@
 	<h1 class="h3 mb-1"><a href="${ path }/board/list" style="color:#2A3D72; font-weight:bold;">Whereware 게시판</a></h1>
 	<p class="mb-4">서로 존중하는 공간입니다.</p>
 
+
     <!-- Table Wrapper -->
 	<div class="limiter">
 		<div class="container-table100">
@@ -46,9 +47,11 @@
                     </form>
                 
                 <!-- Write Button -->
-			  	<a href="${ path }/board/write" style="background:#2A3D72;" class="btn btn-primary btn-circle">
-                	<i style="color:white;" class="fas fa-edit"></i>
-                </a>
+                <c:if test="${ !empty loginMember }">
+				  	<a href="${ path }/board/write" style="background:#2A3D72;" class="btn btn-primary btn-circle">
+	                	<i style="color:white;" class="fas fa-edit"></i>
+	                </a>
+                </c:if>
 				</div>
 	
 				<!-- Table -->
@@ -99,16 +102,13 @@
 
 
 
-	<!--===============================================================================================-->
+	<!--
 	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-	<!--===============================================================================================-->
 	<script src="vendor/bootstrap/js/popper.js"></script>
 	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-	<!--===============================================================================================-->
 	<script src="vendor/select2/select2.min.js"></script>
-	<!--===============================================================================================-->
 	<script src="js/main.js"></script>
-
+	-->
 
 
 </div>

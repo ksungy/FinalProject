@@ -5,10 +5,20 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 <c:set var="path" value="${ pageContext.request.contextPath }" />
 
-<%@include file="../common/header.jsp"%>
-<link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/main.css">
-<link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/util.css">
 
+<%@include file="../common/header.jsp"%>
+
+<link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/write.css">
+<link rel="stylesheet" type="text/css" href="${ path }/resources/css/board/utilwrite.css">
+
+<script src="//cdn.ckeditor.com/4.17.2/standard/ckeditor.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+<style>
+	.ck-editor__editable_inline {
+	    min-height: 600px;
+	}
+</style>
 
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -16,126 +26,125 @@
 	<!-- Page Heading -->
 	<h1 class="h3 mb-1 text-gray-800">Whereware 게시판</h1>
 	<p class="mb-4">서로 존중하는 공간입니다.</p>
-
-	<!-- Dropdown Card Example -->
-	<div class="card shadow mb-4">
-		<!-- Card Header - Dropdown -->
-		<div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-			<h6 class="m-0 font-weight-bold text-primary">게시글 상세보기</h6>
-			<div class="dropdown no-arrow">
-				<a class="dropdown-toggle" href="#" role="button"
-					id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false">
-				<i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-				</a>
-				<div
-					class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
-					aria-labelledby="dropdownMenuLink">
-					<div class="dropdown-header">게시글 옵션</div>
-					<a class="dropdown-item" href="#">게시글 수정</a>
-					<a class="dropdown-item" href="#">게시글 삭제</a>
-					<div class="dropdown-divider"></div>
-					<a class="dropdown-item" href="#">게시글 스크랩</a>
-				</div>
-			</div>
-		</div>
-		<!-- Card Body -->
-		<div class="card-body">
-		
-		<!-- 게시글 상세보기 -->
-        <div class="container">
-           <a href="${ path }/board/list" class="btn btn-light btn-icon-split">
-               <span class="text">목록으로</span>
-           </a>
-           <div class="board-write-body">
-               <div class="card-body">
-                   <table class="table table-condensed">
-                       <thead>
-                           <tr align="center">
-                               <th width="10%">${ board.no }</th>
-                               <th width="60%">${ board.title }</th>
-                           </tr>
-                       </thead>
-                       <tbody>
-                           <tr>
-                               <td>
-                               글쓴이
-                               </td>
-                               <td>
-                               ${ board.writer }
-                               </td>
-                           </tr>
-                           <tr>
-                               <td>
-                               작성일
-                               </td>
-                               <td>
-                               <fmt:formatDate type="date" value="${ board.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/> <span style='float:right'>조회수 : ${ board.hits }</span>
-                               </td>
-                           </tr>
-                           <tr>
-                               <td>
-                               첨부파일
-                               </td>
-                               <td>
-                               <span> - </span>
-                               </td>
-                           </tr>
-                           <tr>
-                               <td colspan="2">
-                                   <div>${ board.content }</div>
-                               </td>
-                           </tr>
-                       </tbody>
-                   </table>
-				</div>
-			</div>
-
-			<!-- 댓글 -->
-			<div class="card-header bg-light">
-			        <i class="fa fa-comment fa">댓글</i> <span> [0] </span>
-			</div>
-
-			<div class="card-body">
-				<div class="col-lg-12">
-					<div class="panel panel-default">
-						<div class="panel-body">
-							<ul class="chat">
-								<c:forEach var="reply" items="${ board.replies }">
-								<li class="left clearfix">
-									<div>
-										<div class="header">
-											<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
-											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>
-											<button class="btn float-right btn-default btn-xs">삭제</button>
-											<button class="btn float-right btn-default btn-xs">수정</button>
-										</div>
-										<p><c:out value="${ reply.content }"/></p>
-										<hr>
-									</div>
-								</li>
-								</c:forEach>
-							</ul>
-						</div>
-					</div>
-				</div>
-			</div>
-				    
-			<div class="card-body">
-				<ul class="list-group list-group-flush">
-				    <li class="list-group-item">
-					<div class="form-inline mb-2">
-						<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-						<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId">
-						<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-						<input type="password" class="form-control ml-2" placeholder="비밀번호 입력" id="replyPassword">
-					</div>
-					<textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-					<button type="button" class="btn btn-dark mt-3" style="background:#2A3D72;">댓글 작성</button>
-				    </li>
-				</ul>
-			</div>
-		</div>
-</div>
 	
+
+	<div class="container-contact100">
+		<div class="wrap-contact100">
+			<form action="${ path }/board/edit" method="post" enctype="multipart/form-data" class="contact100-form validate-form" id="writeForm">
+				<input type="hidden" name="no" value="${ board.no }">
+				<input type="hidden" name="originalFileName" value="${ boardAttach.originalFileName }">
+				<input type="hidden" name="renamedFileName" value="${ boardAttach.renamedFileName }">
+				<span class="contact100-form-title">
+					WhereWare
+				</span>
+				
+				<label class="label-input100">Your Name *</label>
+				<div class="wrap-input100 rs1 validate-input">
+					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명" value="<c:out value="${ loginMember.id }"/>" readonly>
+					<span class="focus-input100"></span>
+				</div>
+		
+				<div class="wrap-input100 rs1 validate-input">
+					<input class="input100" type="text" name="deptTitle" placeholder="부서명" value="<c:out value="${ loginMember.deptCode }"/>" readonly>
+					<span class="focus-input100"></span>
+				</div>
+
+				<label class="label-input100">Title *</label>
+				<div class="wrap-input100 validate-input">
+					<input id="title" class="input100" type="text" name="title" placeholder="제목을 입력하세요." value="<c:out value="${ board.title }"/>">
+					<span class="focus-input100"></span>
+				</div>
+
+				<label class="label-input100">Content(4000자) *</label>
+				<div class="wrap-input100 validate-input">
+					<textarea id="boardContent" name="content">${ board.content }</textarea>
+					<script>
+						CKEDITOR.replace('boardContent', {
+							height: '300px',
+							filebrowserUploadMethod: 'form',
+							filebrowserUploadUrl : "${ pageContext.request.contextPath }/board/ckUpload"
+						});
+					</script>
+				<span class="focus-input100"></span>
+				</div>
+				
+				<label class="label-input100">첨부파일</label>
+					<c:if test="${ !empty boardAttach.originalFileName }">
+						<c:out value="${ boardAttach.originalFileName }"></c:out>
+					</c:if>
+					<div class="form-group" id="file-list">
+						<a href="#this" onclick="addFile()">파일 추가</a>	
+					<div class="file-group">
+						<input id="upfile" type="file" name="upfile" multiple="multiple"><a href='#this' name="file-delete">삭제</a>
+					</div>
+					<span class="focus-input100"></span>
+					</div>
+
+				 
+				<div class="container-contact100-form-btn">
+					<button type="reset" onclick="location.href='${ pageContext.request.contextPath }/board/list'" class="contact100-form-btn">
+						취소
+					</button>
+					<button type="button" onclick="checkConfirm()" class="contact100-form-btn">
+						수정
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+
+</div>
+
+<!-- Scripts -->
+
+<script type="text/javascript">
+    $(document).ready(function() {
+        $("a[name='file-delete']").on("click", function(e) {
+            e.preventDefault();
+            deleteFile($(this));
+        });
+    })
+ 
+    function addFile() {
+        var str = "<div class='file-group'><input type='file' name='file' multiple='multifle'><a href='#this' name='file-delete'>삭제</a></div>";
+        $("#file-list").append(str);
+        $("a[name='file-delete']").on("click", function(e) {
+            e.preventDefault();
+            deleteFile($(this));
+        });
+    }
+ 
+    function deleteFile(obj) {
+        obj.parent().remove();
+    }
+</script>
+
+<script>
+	function checkConfirm(){
+		
+		Swal.fire({
+			  title: '게시글을 수정하시겠습니까?',
+			  text: "작성한 글이 게시판에 등록됩니다.",
+			  icon: 'warning',
+			  showCancelButton: true,
+			  confirmButtonColor: '#3085d6',
+			  cancelButtonColor: '#d33',
+			  confirmButtonText: '수정',
+			  cancelButtonText: '취소'
+			}).then((result) => {
+			  if (result.isConfirmed) {
+			    Swal.fire(
+			      '게시글 수정완료!',
+			      'Whereware 자유게시판을 확인하세요.',
+			      'success'
+			    );
+			    $('#writeForm').submit();
+			  }
+			})
+	}
+
+	
+</script>
+ 
 <%@include file="../common/footer.jsp"%>

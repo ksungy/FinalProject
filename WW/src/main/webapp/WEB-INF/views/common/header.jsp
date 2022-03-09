@@ -134,8 +134,28 @@
 				</div></li>
 
 
+<<<<<<< HEAD
 			<!-- Divider 매뉴 구분 줄-->
 			<hr class="sidebar-divider">
+=======
+            <!-- Nav Item - Pages Collapse Menu -->
+            <li class="nav-item">
+                <a class="nav-link" href="#" data-toggle="collapse" data-target="#calenderMemu" aria-expanded="true"
+                    aria-controls="calenderMemu">
+                    <i class="fas fa-fw fa-address-card"></i>
+                    <span>일정관리</span>
+                </a>
+                <div id="calenderMemu" class="collapse" aria-labelledby="headingPages"
+                    data-parent="#accordionSidebar">
+                    <div class="bg-white py-2 collapse-inner rounded">
+                        <a class="collapse-item" href="/mvc/calendar">캘린더</a>
+                    </div>
+                </div>
+            </li>
+                        
+            <!-- Divider 매뉴 구분 줄-->
+            <hr class="sidebar-divider">
+>>>>>>> main
 
 
 			<!-- Nav Item - Pages Collapse Menu -->

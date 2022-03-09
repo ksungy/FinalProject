@@ -27,6 +27,8 @@
 	
 	<beans:bean id="memberService" class="com.ww.mvc.member.model.service.MemberServiceImpl"/>
 	
+	<beans:bean id="pageJsonReport" class="com.ww.mvc.member.model.service.MemberServiceImpl"/>
+	
 	<context:component-scan base-package="com.ww.mvc" />
 	
 	<!-- 인터셉터 -->
