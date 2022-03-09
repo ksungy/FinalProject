@@ -1,17 +1,18 @@
-package com.ww.mvc.cmt.model.service;
+package com.ww.mvc.cmt.model.dao;
 
 import java.util.List;
 import java.util.Map;
 
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.session.RowBounds;
+
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
-import com.ww.mvc.common.util.PageInfo;
 
-public interface CmtService {
+@Mapper
+public interface CmtMapper {
 
 	Cmt getTodayAttendance(int emp_no);
-
-	String getAttStartDateTime(Map<String, Object> mapMS);
 
 	Map<String, Object> getElapsedWTime(Map<String, Object> mapMS);
 
@@ -25,6 +26,12 @@ public interface CmtService {
 
 	int updateCheckout(int emp_no);
 
+	void updateBrEndForce(Map<String, Object> mapS);
+
+	String getRestAll(Map<String, Object> mapS);
+
+	void updateRestAll(Map<String, Object> mapS);
+
 	String getAttEnd(int emp_no);
 
 	int insertRestin(int emp_no);
@@ -35,14 +42,14 @@ public interface CmtService {
 
 	Rest getWorkBreak(int rs_no);
 
-	Map<String, Object> getElapsedRTime(Map<String, Object> mapS);
-
+	Map<String, Object> getElapsedRTime(Map<String, Object> mapMS);
+	
+	// -
 	int countAttList(int emp_no);
 
+	// -
 	List<Cmt> getAttList(int emp_no, int currentPage, int limitInOnePage);
 
-	int getMonthlyCount();
-
-	List<Cmt> getMonthlyList(PageInfo pageInfo);
+	List<Cmt> findAll(RowBounds rowBounds);
 
 }

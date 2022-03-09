@@ -13,6 +13,8 @@
 	SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 %>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
 <%@include file="../common/header.jsp"%>
 
 	<!-- Begin Page Content -->
@@ -27,6 +29,30 @@
 			<div class="col-lg-2">
 				<!-- Overflow Hidden -->
 
+            <h1 class="mobileTitle">내정보</h1>
+            <div id="myInfo">
+                <h3 id="miName">${loginMember.name}</h3>
+                <c:choose>
+                	<c:when test="${!empty att.attStart}">
+	                	<div id="miToday">
+		                    <p id="miGo">출근</p>
+		                    <p id="miGoTime">${att.attStart}</p>
+		                    <p id="miOut">퇴근</p>
+		                    <p id="miOutTime">${att.attEnd}</p>
+		                </div>
+                	</c:when>
+                	<c:otherwise>
+                		<div id="miToday">
+                			<button id="checkin_btn">오늘의 근무 시작</button>
+                		</div>
+                	</c:otherwise>
+                </c:choose>
+                <p id="miWeekHour">주간 근무시간</p>
+                <progress value="60" max="100"></progress>
+                <p id="miMonthHour">월간 근무시간</p>
+                <progress value="20" max="100"></progress>
+            </div>
+			
 				<div class="card mb-4" style="height: 665px;">
 					<div class="card-header py-3">
 						<h6 class="m-0 font-weight-bold text-primary">Today</h6>
@@ -41,12 +67,12 @@
 						</c:if>
 						<div style="margin-bottom: 40px;">
 							출근 시간
-							<c:out value="${ cmt.cmt_srt_time }"></c:out>
+							<c:out value="${ cmt.cmt_srt }"></c:out>
 						</div>
 						<div style="margin-bottom: 40px;">
 							퇴근 시간
-							<c:if test="${ !empty cmt.cmt_end_time }">
-							<c:out value="${ cmt.cmt_end_time }"></c:out>
+							<c:if test="${ !empty cmt.cmt_end }">
+							<c:out value="${ cmt.cmt_end }"></c:out>
 							</c:if>
 							<div id="time"></div>
 						</div>
@@ -182,4 +208,46 @@
 			</div>
 		</div>
 	</div>
+	<script type="text/javascript">
+		let ckInterval = "";
+		let attNoFormat = "";
+		let attStartFormat = "";
+		let attEndFormat = "";
+		let restStartFormat = "";
+		let restEndFormat = "";
+		let attStartDateTime = "";
+		let calAplT = "";
+		let calAplU = "";
+		let elapsedWTime = "";
+		let elapsedRTime = "";
+		let brNo = "";
+		let XiuApl = [];
+
+		let today = new Date();
+		let tomorrow = new Date(today.setDate(today.getDate() + 1));
+		let tomorrowYear = tomorrow.getFullYear();
+		let tomorrowMonth = (tomorrow.getMonth() + 1);
+		let tomorrowDate = tomorrow.getDate();
+		let minDate = tomorrowYear + "-" + tomorrowMonth + "-" + tomorrowDate;
+		
+    	//출근
+	    $(document).ready(function() {
+	    	$("#checkin_btn").onclick(function () {
+	    		$.ajax({
+	    			url : "checkin"
+	    			, data: {emp_no : "${loginMember.no}"}
+	    			, type : "post"
+	    			, success: function(data) {
+	    				location.reload();
+	    			}
+	    			, error : function(request, status, errorData){ 
+	    				 alert("error code : " + request.status + "\n" 
+	    						 + "message : " + request.responseText + "\n" 
+	    						 + "error : " + errorData);}
+	    		});
+			});
+		    
+	    });
+		
+	</script>
 <%@include file="../common/footer.jsp"%>

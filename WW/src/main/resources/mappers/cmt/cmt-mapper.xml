@@ -6,51 +6,178 @@
 <mapper namespace="com.ww.mvc.cmt.model.dao.CmtMapper">
 	<sql id="cmtListSql">
 		SELECT C.CMT_NO,
-		E.EMP_ID,
-		C.CMT_SRT_TIME,
-		C.CMT_END_TIME
-		FROM CMT_TB C
-		JOIN EMPLOYEE E ON(C.EMP_ID = E.EMP_ID)
+		E.EMP_NO,
+		C.CMT_SRT,
+		C.CMT_END,
+		C.CMT_RS
+		FROM CMT_AT C
+		JOIN EMPLOYEE E ON(C.EMP_NO = E.EMP_NO)
 	</sql>
 
-	<resultMap type="Cmt" id="CmtListResultMap">
+	<resultMap type="Cmt" id="TodayAttendance">
 		<id property="cmt_no" column="CMT_NO" />
 		<result property="emp_no" column="EMP_NO" />
-		<result property="cmt_srt_time" column="CMT_SRT_TIME" />
-		<result property="cmt_end_time" column="CMT_END_TIME" />
+		<result property="cmt_srt" column="CMT_SRT" />
+		<result property="cmt_end" column="CMT_END" />
+		<result property="cmt_rs" column="CMT_RS" />
 	</resultMap>
-
-	<select id="fintMonthlyCmt" parameterType="map"
-		resultMap="CmtListResultMap">
-		<include refid="cmtListSql"></include>
-
-		WHERE C.CMT_MONTH = ${ cmt_month }
-		<choose>
-			<when test="emp_id != null">
-				AND C.EMP_NO LIKE '%' || #{emp_no} || '%'
-			</when>
-			<when test="cmt_no != null">
-				AND C.CMT_NO LIKE '%' || #{cmt_no} || '%'
-			</when>
-		</choose>
-		ORDER BY CMT_DATE
+	
+	<resultMap type="Rest" id="WorkBreak1">
+		<id property="rs_no" column="RS_NO" />
+		<result property="rs_srt" column="RS_SRT"/>
+		<result property="rs_end" column="RS_END"/>
+	</resultMap>
+	
+	<resultMap type="Rest" id="WorkBreak2">
+		<id property="rs_no" column="RS_NO" />
+		<result property="rs_srt" column="RS_SRT"/>
+		<result property="rs_end" column="RS_END"/>
+		<result property="cmt_no" column="CMT_NO"/>
+		<result property="emp_no" column="EMP_NO"/>
+	</resultMap>	
+	
+	<select id="getTodayAttendance" parameterType="_int" resultMap="TodayAttendance">
+		<![CDATA[ 
+		select CMT_NO, EMP_NO, to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT, to_char(CMT_END, 'hh24:mi:ss') CMT_END
+		, (
+			select replace((to_char(sum(beh), '09')||':'||to_char(sum(bem),'09')||':'||to_char(sum(bes), '09')),' ', '')
+	        	from (select extract(HOUR FROM diff) AS beh
+	       		,extract(MINUTE FROM diff) AS bem
+	        	,extract(SECOND FROM diff) AS bes
+	            	from (SELECT (be-bs) as diff 
+	            		from (select to_timestamp(to_char(RS_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') bs
+	                		, to_timestamp(to_char(RS_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') be 
+	                    		from CMT_RS
+	                    		where EMP_NO =#{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD')))))
+		) as CMT_RS
+			from CMT_AT where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+	  	]]>		
+	</select>
+	
+	<select id="getElapsedWTime" parameterType="map" resultType="map">
+		<![CDATA[ 
+	  		select to_char(extract(HOUR FROM diff), '09') as eh
+	        ,to_char(extract(MINUTE FROM diff), '09') as em
+	        ,to_char(extract(SECOND FROM diff), '09') as es
+	    	    from(select (atte-atts) as diff from (select rownum,
+	       		to_timestamp(to_char(CMT_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') atts,
+	        	to_timestamp(to_char(CMT_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') atte 
+	        		from CMT_AT
+	        		where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo}))
+	  	]]>
+	</select>
+	
+	<select id="getLatestWB" parameterType="map" resultMap="WorkBreak1">
+		<![CDATA[ 
+		select RS_NO, to_char(RS_SRT, 'hh24:mi:ss') RS_SRT, to_char(RS_END, 'hh24:mi:ss') RS_END 
+			from (select * from CMT_RS where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo} order by RS_NO desc)
+			where rownum = 1
+	  	]]>
+	</select>
+	
+	<select id="countAttStart" parameterType="_int" resultType="_int">
+		<![CDATA[ 
+		select count(CMT_SRT) from CMT_AT where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+			]]>
+	</select>
+	
+	<select id="getAttStart" parameterType="_int" resultType="string">
+		<![CDATA[ 
+		select to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT from CMT_AT where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+				]]>
+	</select>
+	
+	<insert id="insertCheckin" parameterType="_int">
+		<![CDATA[ 
+		Insert into CMT_AT (CMT_NO, EMP_NO, CMT_SRT) values (
+		    to_number(to_char(SYSDATE, 'YYYYMMDD'))
+		    , #{emp_no}
+		    , SYSDATE
+		)
+		]]>
+	</insert>
+	
+	<update id="updateCheckout" parameterType="_int">
+		<![CDATA[
+	Update CMT_AT set CMT_END = SYSDATE where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+		]]>
+	</update>
+	
+	<update id="updateBrEndForce" parameterType="map">
+		<![CDATA[
+		Update CMT_RS set RS_END = SYSDATE where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo} and RS_END is null
+		]]>
+	</update>
+	
+	<select id="getRestAll" parameterType="map" resultType="string">
+		<![CDATA[ 
+		 select replace((to_char(sum(beh), '09')||':'||to_char(sum(bem),'09')||':'||to_char(sum(bes), '09')),' ', '') CMT_RS
+	        	from (select extract(HOUR FROM diff) AS beh
+	       		,extract(MINUTE FROM diff) AS bem
+	        	,extract(SECOND FROM diff) AS bes
+	            	from (SELECT (be-bs) as diff 
+	            		from (select to_timestamp(to_char(BR_START, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') bs
+	                		, to_timestamp(to_char(BR_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') be 
+	                    		from CMT_RS
+	                    		where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo} )))
+			]]>
+	</select>
+	
+	<update id="updateRestAll" parameterType="map">
+		update CMT_AT set CMT_RS = #{restAll} where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo}
+	</update>
+	
+	<select id="getAttEnd" parameterType="_int" resultType="string">
+		<![CDATA[ 
+		select to_char(CMT_END, 'hh24:mi:ss') CMT_END from CMT_AT where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+			]]>
+	</select>
+	
+	<insert id="insertRestin" parameterType="_int">
+		<![CDATA[ 
+		Insert into CMT_RS (RS_NO, RS_SRT, CMT_NO, EMP_NO)values (
+		SEQ_CMT_RS.nextval
+		, SYSDATE
+		, to_number(to_char(SYSDATE, 'YYYYMMDD'))
+		, #{emp_no}
+		)
+				]]>
+	</insert>
+	
+	<select id="getRestStart" parameterType="_int" resultMap="WorkBreak1">
+		<![CDATA[ 
+		Select
+		RS_NO
+		, to_char(RS_SRT, 'hh24:mi:ss') RS_SRT
+		from (select * from CMT_RS where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD')) order by RS_NO desc)
+		where rownum = 1
+		]]>
+	</select>
+	
+	<update id="updateBrEnd" parameterType="_int">
+		<![CDATA[
+		Update CMT_RS set RS_END = SYSDATE where RS_NO = #{rs_no} and RS_END is null
+			]]>
+	</update>
+	
+	<select id="getWorkBreak" parameterType="_int" resultMap="WorkBreak2">
+		<![CDATA[ 
+		select to_char(RS_SRT, 'hh24:mi:ss') RS_SRT, to_char(RS_END, 'hh24:mi:ss') RS_END, CMT_NO from CMT_RS where RS_NO = #{rs_no}
+		]]>
+	</select>
+	
+	<select id="getElapsedRTime" parameterType="map" resultType="map">
+		<![CDATA[ 
+	        select to_char(sum(beh), '09') eh,  to_char(sum(bem), '09') em,  to_char(sum(bes), '09') es
+	        	from (select extract(HOUR FROM diff) AS beh
+	       		,extract(MINUTE FROM diff) AS bem
+	        	,extract(SECOND FROM diff) AS bes
+	            	from (SELECT (be-bs) as diff 
+	            		from (select to_timestamp(to_char(RS_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') bs
+	                		, to_timestamp(to_char(RS_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') be 
+	                    		from CMT_RS
+	                    		where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo})))
+	  	]]>
 	</select>
 
-	<update id="updateEndTime" parameterType="Cmt">
-		UPDATE CMT_TB
-		<trim prefix="SET" suffixOverrides=",">
-			<if test="cmt_srt_time != null">
-				CMT_SRT_TIME = #{cmt_srt_time},
-			</if>
-			CMT_END_DATE = SYSDATE
-		</trim>
-		WHERE
-		CMT_NO = #{cmt_no}
-	</update>
-
-	<update id="updateStatus" parameterType="map">
-		UPDATE BOARD
-		SET STATUS = #{status}
-		WHERE NO = #{no}
-	</update>
 </mapper>
