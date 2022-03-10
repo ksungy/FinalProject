@@ -1,15 +1,27 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
+
+<c:set var="path" value="${ pageContext.request.contextPath }"/>     
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <link rel="stylesheet" href="${ path }/resources/css/joinTerms.css">
+<link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 </head>
 <body>
 	<form id="terms_form" class="f">
+	<h2 id="title">
+		WHEREWARE 이용약관
+	</h2>
+	
 	<div id="content">
             <div id="terms_box">
                 <p class="input_chk">
@@ -137,7 +149,6 @@
                     적용 일자: 2022년 2월 8일
                     웨어웨어 서비스와 관련하여 궁금하신 사항이 있으시면 고객센터(대표번호: 1588 – 3820/ 평일 09:00~18:00)로 문의 주시기 바랍니다.
                 </p>
-            </div>
 
             <div>
                 <div id="terms_box">
@@ -289,7 +300,7 @@
                     상호: 웨어웨어 주식회사
                     주소: 경기도 성남시 분당구 불정로 6 웨어웨어 그린팩토리 (463-867)
                     전화번호: 1588-3820
-                    이메일 주소: navercc@naver.com
+                    이메일 주소: navercc@whereware.com
                     부칙
                     제1조 시행일
                     2015년 6월 2일부터 시행되던 종전의 약관은 본 약관으로 대체하며, 본 약관은 2015년 11월 26일부터 적용됩니다.
@@ -299,7 +310,7 @@
 
                     위치정보 관리책임자 : (개인)정보보호 담당 부서 임원(개인정보 보호책임자 겸직)
                     전화번호 : 1588-3820
-                    이메일 주소 : privacy@wherewarecom
+                    이메일 주소 : privacy@whereware.com
             </p>
             
             <div id="terms_1">
@@ -313,10 +324,13 @@
                     </label>
                 </p>
             </div>
+            </div>
 
     <div id="btn_area">
-        <input type="button" class="join_btn" id="cancle_btn" value="취소">
-        <input type="button" class="join_btn" id="agree_btn"  value="확인">
+        	<input type="button" class="join_btn" id="cancle_btn"
+        			onclick="location.href='${path}/member/login'" value="취소">
+        	<input type="button" class="join_btn" id="agree_btn"
+        			onclick="location.href='${path}/member/enroll'"  value="확인">
     </div>
 	</form>
     

@@ -59,9 +59,10 @@ public class MemberController {
 //			model.addObject("msg", "로그인에 성공하셨습니다.");
 			
 			model.addObject("loginMember", loginMember);			
-			model.setViewName("home");
+			model.setViewName("redirect:/");
 
 			log.info("{}, {}", id, password);
+			log.info(loginMember.toString());
 		} else {
 			// 로그인 실패
 			model.addObject("msg", "아이디나 비밀번호가 일치하지 않습니다.");
@@ -86,9 +87,9 @@ public class MemberController {
 		
 		status.setComplete();
 		
-		log.info("로그아웃 성공");
+		log.info("로그아웃 성공 : {}", status.isComplete());
 		
-		return "redirect:/"; 
+		return "member/login"; 
 	}
 	
 	// 회원가입 페이지 이동
@@ -122,6 +123,21 @@ public class MemberController {
 		return model;
 	}
 	
+	// 마이페이지 이동
+	@GetMapping("/mypageModify")
+	public String myPage() {
+		
+		return "member/mypageModify";
+	}
+	
+	// 마이페이지 업데이트
+	@PostMapping("/mypageModify")
+	public ModelAndView mypageModify(ModelAndView model) {
+		
+		return model;
+	}
+	
+	// 아이디 중복 체크
 	@PostMapping("/idCheck")
 	@ResponseBody
 	public Object idCheck(@RequestParam("userId") String userId) {

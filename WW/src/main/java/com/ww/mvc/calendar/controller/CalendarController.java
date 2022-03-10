@@ -14,16 +14,21 @@ import com.ww.mvc.calendar.model.service.CalendarService;
 import com.ww.mvc.calendar.model.vo.Calendar;
 
 @Controller
+@RequestMapping("/calendar")
 public class CalendarController {
+	
 	@Autowired
 	private CalendarService service;
-
+	
 	@RequestMapping(value = "/calendar", method = RequestMethod.GET)
 	public ModelAndView getCalendarList(ModelAndView mv, HttpServletRequest request) {
 		String viewpage = "calendar/calendar";
 		List<Calendar> calendar = null;
 		try {
 			calendar = service.getCalendar();
+			
+			System.out.println(calendar);
+			
 			request.setAttribute("calendarList", calendar);
 		} catch (Exception e) {
 			e.printStackTrace();
