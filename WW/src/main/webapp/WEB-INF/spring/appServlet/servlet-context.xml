@@ -24,8 +24,8 @@
 		<beans:property name="prefix" value="/WEB-INF/views/" />
 		<beans:property name="suffix" value=".jsp" />
 	</beans:bean>
-	
-	<beans:bean id="memberService" class="com.ww.mvc.member.model.service.MemberServiceImpl"/>
+		
+	<beans:bean id="memberService" class="com.ww.mvc.member.model.service.MemberServiceImpl"/>		 
 	
 	<beans:bean id="pageJsonReport" class="com.ww.mvc.member.model.service.MemberServiceImpl"/>
 	
@@ -40,6 +40,7 @@
 		 	<exclude-mapping path="/member/login"/>
 		 	<exclude-mapping path="/member/enroll"/>
 		 	<exclude-mapping path="/member/idCheck"/>
+		 	<exclude-mapping path="/member/joinTerms"/>
 		
 		
 			<beans:bean id="LoginCheckIntercepter" class="com.ww.mvc.common.intercepter.LoginCheckIntercepter"/>

@@ -1,12 +1,14 @@
 @charset "UTF-8";
 
-/* 모달 창 띄우기*/
+#title {
+	text-align: center;
+}
 
 #content {
-    /* border: 2px solid; */
+    /*border: 2px solid;*/
     margin: auto;
-    margin-top: 30px;
-    padding: 20px;
+    /*margin-top: 30px;*/
+    padding: 3px;
     padding-left: 70px;
     /* width: auto; */
     max-width: 450px;
@@ -16,6 +18,7 @@
 
 /* 이용약관 컨텐츠 부분 */
 .join_terms {
+	font-size: 13px;
     border: 1px solid;
     max-width: 400px;
     max-height: 100px;
@@ -24,6 +27,7 @@
     overflow-y:scroll;
 }
 
+/* 체크박스 */
 #check_all {
     /* border: 1px solid; */
     /* max-width: 410px; */
@@ -57,8 +61,11 @@
 
 #agree_btn {
     background-color: #2A3D72;
+    cursor: pointer;
+    
 }
 
 #cancle_btn {
     background-color: #8e8e8e;
+    cursor: pointer;
 }

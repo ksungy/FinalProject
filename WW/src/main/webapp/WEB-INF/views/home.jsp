@@ -15,7 +15,7 @@
 <P>  The time on the server is ${serverTime}. </P>
 
 <p>
-	<a href="${ path }/calendar">
+	<a href="${ path }/calendar/calendar">
 		일정관리
 	</a>
 
@@ -26,12 +26,6 @@
 		채팅방 접속
 	</a>
 
-</p>
-
-<p>
-	<c:if test="${ !empty loginMember}">
-		<button type="button">버튼!</button>
-	</c:if>
 </p>
 
 

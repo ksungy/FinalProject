@@ -14,7 +14,7 @@
   </resultMap>
 	
 	<select id="calendarList" resultMap="calendarRM">
-		select * from calendar 
+		select * from calendar
 	</select>
 	
 </mapper>

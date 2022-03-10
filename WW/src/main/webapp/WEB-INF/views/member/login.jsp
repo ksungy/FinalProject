@@ -9,55 +9,53 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<link rel="stylesheet" href="${ path }/resources/css/login.css">
 
-<title>Insert title here</title>
+<link rel="stylesheet" href="${ path }/resources/css/login.css">
+<link
+      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+      rel="stylesheet">
+      
+<title>WHEREWARE</title>
+
 </head>
 <body>
-	<section>
-        <div id="wrapper">
-            <div id="content">
-                <div id="logo">
-                    <h2>Login To WhereWare</h2>
-                </div>
+        <div class="wrapper">
+            <div class="container">
+            
+                    <div class="logo">
+                    	WHEREWARE
+                    </div>
+                
 				<form id="login_form" action="${path}/member/login" method="post">
+				
                 <div class="form-group"> 
                     <span class="box int_id">
-                        <input type="text" id="userId" name="id" class="input" placeholder="아이디를 입력하세요"/>
+                        <input type="text" id="userId" name="id" class="input" placeholder="USERID"/>
                     </span>
                 </div>
 
                 <div class="form-group">
                     <span class="box int_pwd">
-                        <input type="password" id="userPwd" name="password" class="input" placeholder="비밀번호를 입력하세요"/>
+                        <input type="password" id="userPwd" name="password" class="input" placeholder="Password"/>
                     </span>
                 </div>
 
                 <div>
-                    <input type="checkbox" name="id_save" id="id_check" value="saveOk">아이디 기억하기 
+                    <input type="checkbox" name="id_save" id="id_check" value="saveOk"> save ID
                 </div>
                 
                 <div>
-                    <button type="submit" style="cursor:pointer;" id="btn login_btn">로그인</button>
+                    <button type="submit" style="cursor:pointer;" id="btn login_btn">Log In</button>
                 </div>
+                
+                <p id="findPwdAndSignUp">
+                    <a onclick="location.href='${path}/member/findIDorPwd'" id="findIDorPwd">아이디 / 비밀번호 </a>
+
+                    <a href="${path}/member/joinTerms" id="enrollBtn">회원가입</a>
+                </p>
 				</form>
-
-                <h3 id="sns_area">SNS 간편 로그인</h3>
-
-                <div id="btn_area">
-                    <div>
-                        <button type="button" id="naver_btn">네이버 간편 로그인</button>
-                    </div>
-                    <div>
-                        <button type="button" id="kakao_btn">카카오 간편 로그인</button>
-                    </div>
-                    <div>
-                        <button type="button" id="google_btn">구글 간편 로그인</button>
-                    </div>
-                </div>
             </div>
         </div>
-    </section>
     
     <!-- 로그인 js -->
     <script>
@@ -86,6 +84,7 @@
 	        }
 	    });
 
+	    
 	// 쿠키 저장하기 
 	// setCookie => saveid함수에서 넘겨준 시간이 현재시간과 비교해서 쿠키를 생성하고 지워주는 역할
 	function setCookie(cookieName, value, exdays) {
@@ -94,7 +93,7 @@
 		var cookieValue = escape(value)
 				+ ((exdays == null) ? "" : "; expires=" + exdate.toGMTString());
 		document.cookie = cookieName + "=" + cookieValue;
-	}
+	};
 
 	// 쿠키 삭제
 	function deleteCookie(cookieName) {
