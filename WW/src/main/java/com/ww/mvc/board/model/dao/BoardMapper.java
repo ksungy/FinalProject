@@ -41,6 +41,8 @@ public interface BoardMapper {
 
 	int plusHits(int no);
 
+	List<BoardAttach> findByBoardNo(int no);
+
 	
 
 

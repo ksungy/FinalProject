@@ -81,10 +81,10 @@
                                첨부파일
                                </td>
                                <td>
-                               <c:forEach var="boardAttach" items="${ boardAttachlist }">
-	                               <a href="javascript:fileDownload('${ boardAttach.originalFileName }', '${ boardAttach.renamedFileName }')">
+                               <c:forEach var="boardAttach" items="${ board.attachList }">
+	                               <div class="uploadResult">
 	                              		${ boardAttach.originalFileName }
-	                               </a>
+	                               </div>
 	                           </c:forEach>
                                </td>
                            </tr>
@@ -114,21 +114,23 @@
 							<ul class="chat">
 								<c:forEach var="reply" items="${ board.replies }">
 								<li class="left clearfix">
+								<form id="updateForm" name="updateForm" method="POST" action="${ path }/board/replyUpdate">
+									<input type="hidden" name="no" value="${ reply.no }">
+									<input type="hidden" name="boardNo" value="${ board.no }">
 									<div>
-										<div class="header">
+										<div class="header">											
+											<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
+											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>										
+											<textarea class="form-control" id="content" name="content" rows="3"><c:out value="${ reply.content }" /></textarea>
+											
 											<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
-											<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
-											<button class="btn float-right btn-default btn-xs" id="replyUpdate" onclick="location.href='${ path }/board/replyEdit?no=${ board.no }'">수정</button>
+												<button type="submit" onclick="location.href='${ path }/board/replyUpdate" class="update_btn btn btn-dark mt-3" style="background:#2A3D72;">댓글 수정</button>
+												<button type="reset" onclick="location.href='${ path }/board/view?no=${ board.no }'" class="cancel_btn btn btn-dark mt-3" style="background:#808080;">취소</button>
 											</c:if>
-												<input type="hidden" id="replyNo" name="no" value="${ reply.no }">
-												<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
-												<small class="pull-right text-muted">
-													<fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/>
-												</small>										
-											<p id="rp"><c:out value="${ reply.content }" /></p>
 										</div>
 										<hr>
 									</div>
+								</form>
 								</li>
 								</c:forEach>
 							</ul>
@@ -136,27 +138,6 @@
 					</div>
 				</div>
 			</div>
-
-			<!-- 댓글 작성 영역 -->
-			<c:if test="${ !empty loginMember }">
-			<div class="card-body">
-				<ul class="list-group list-group-flush">
-				    <li class="list-group-item">
-						<form id="replyForm" name="replyForm" method="get" action="${ path }/board/reply">
-							<input type="hidden" name="no" value="${ board.no }" /> 
-							<div class="form-inline mb-2">
-								<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-								<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId" name="writer" value="<c:out value="${ loginMember.id }"/>" readonly>
-								<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-								<input type="password" class="form-control ml-2" placeholder="비밀번호 입력" id="replyPassword">
-							</div>
-							<textarea class="form-control" id="exampleFormControlTextarea1" name="content" rows="3"></textarea>
-							<button type="button" onclick="checkReplyConfirm()" class="btn btn-dark mt-3" style="background:#2A3D72;">댓글 작성</button>
-						</form>
-				    </li>
-				</ul>
-			</div>
-			</c:if>
 		</div>
 </div>
 
@@ -204,23 +185,23 @@
 
 </script>
 
-
+<!-- 
 <script>
-	function checkReplyConfirm(){
+	function editReplyConfirm(){
 		
 		Swal.fire({
-			  title: '댓글을 등록하시겠습니까?',
-			  text: "작성한 댓글이 게시판에 등록됩니다.",
+			  title: '댓글을 수정하시겠습니까?',
+			  text: "작성한 댓글이 수정됩니다.",
 			  icon: 'warning',
 			  showCancelButton: true,
 			  confirmButtonColor: '#3085d6',
 			  cancelButtonColor: '#d33',
-			  confirmButtonText: '등록',
+			  confirmButtonText: '수정',
 			  cancelButtonText: '취소'
 			}).then((result) => {
 			  if (result.isConfirmed) {
 			    Swal.fire(
-			      '댓글 등록완료!',
+			      '댓글 수정완료!',
 			      '게시글을 확인하세요.',
 			      'success'
 			    );
@@ -231,14 +212,53 @@
 
 	
 </script>
-<script>
-function fileDownload(oname, rname) {
-	
-	// encodeURIComponent()
-	//  - 아스키문자(a~z, A~Z, 1~9, ... )는 그대로 전달하고 기타 문자(한글, 특수 문자 등)만 %XX(16진수 2자리)와 같이 변환된다.
-	location.assign("${ pageContext.request.contextPath }/board/fileDown?oname=" + encodeURIComponent(oname) + "&rname=" + encodeURIComponent(rname));
-}
-</script>
+ <script type="text/javascript">
+		$(document).ready(function(){
+			var formObj = $("form[name='updateForm']");
+			
+			$(".cancel_btn").on("click", function(){
+				location.href = "/board/view?no=${ board.no }";
+			})
+			
+		})
+		
+		function editReplyConfirm() {
+			var yn = confirm("댓글을 수정 하시겠습니까?");
+			if (yn == true) {
+				$.ajax({
+					
+					url : "${ path }/board/replyUpdate",
+					data    : $("#updateForm").serialize(),
+					cache : false,
+					async : true,
+					type : 'POST',
+					success : function(str) {
+						replyUpdateCallBack(str);
+					},
+					error : function (request, error) {
+						alert("code:" + request.status + "message:" + request.responseText);
+					}
+				});	
+			}
+		}
+		
+		function replyUpdateCallBack(str) {
+			if (str != null) {
+				var result = str;
+				
+				if (result == "SUCCESS") {
+					alert("댓글을 수정하였습니다.");
+					location.href = "${ path }/board/view?no=${board.no}";
+				} else {
+					alert("댓글 수정에 실패하였습니다.");
+					return;
+				}
+			}
+		}
+		
+	</script>
+ -->
+
 
 
 <%@include file="../common/footer.jsp"%>

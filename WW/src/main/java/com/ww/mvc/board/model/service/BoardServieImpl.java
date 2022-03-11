@@ -141,6 +141,7 @@ public class BoardServieImpl implements BoardService {
 		map.put("no", reply.getNo());
 		
 		return mapper.updateReply(map);
+		
 	}
 	
 	
@@ -151,10 +152,13 @@ public class BoardServieImpl implements BoardService {
 		return mapper.getReplyCount(no);
 	}
 
-
-
-
 	
+	// ▼ 첨부파일 리스트 조회
+	@Override
+	public List<BoardAttach> getBoardAttachList(int no) {
+		
+		return mapper.findByBoardNo(no);
+	}
 
 
 

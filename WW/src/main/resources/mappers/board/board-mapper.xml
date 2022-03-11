@@ -42,6 +42,19 @@
 		<result property="createDate" column="B_COMMENT_CREATED"/>
 		<result property="modifyDate" column="B_COMMENT_MODIFIED"/>
 	</resultMap>
+	
+	<!-- ▼ Board_Attach ResultMap -->
+	<resultMap type="BoardAttach" id="boardAttachListResultMap">
+		<id property="fileNo" column="FILE_NO" />
+		<result property="boardNo" column="BOARD_NO"/>
+		<result property="empNo" column="EMP_NO" />
+		<result property="originalFileName" column="ORIGINAL_FILENAME" />
+		<result property="renamedFileName" column="RENAMED_FILENAME" />
+		<result property="uploadPath" column="FILE_UPLOADPATH" />
+		<result property="fileSize" column="FILE_SIZE" />
+		<result property="fileType" column="FILE_TYPE" />
+		<result property="regDate" column="REG_DATE" />
+	</resultMap>
 
 	<resultMap type="Board" extends="boardListResultMap" id="boardDetailResultMap">
 		<collection property="replies" javaType="arraylist" resultMap="replyResultMap"/>
@@ -142,12 +155,15 @@
 			       E2.EMP_ID, 
 			       C.B_COMMENT_CREATED, 
 			       C.B_COMMENT_MODIFIED,
-			       B.COMMENT_COUNT
+			       B.COMMENT_COUNT,
+			       A.ORIGINAL_FILENAME
 			FROM BOARD B
 			JOIN EMPLOYEE E ON(B.EMP_NO = E.EMP_NO)
 			LEFT OUTER JOIN BOARD_COMMENT C ON(B.BOARD_NO = C.BOARD_NO)
 			LEFT OUTER JOIN EMPLOYEE E2 ON(C.EMP_NO = E2.EMP_NO)
+			LEFT OUTER JOIN BOARD_ATTACH A ON(B.BOARD_NO = A.BOARD_NO)
 			WHERE B.BOARD_NO = #{no}
+			ORDER BY C.COMMENT_NO DESC
   	 </select>
 	
 	
@@ -175,10 +191,11 @@
 	</insert>
 	
 	<!-- 파일 등록 -->
-	<insert id="insertFile" parameterType="BoardAttach">
+	<insert id="insertFile" parameterType="BoardAttach" useGeneratedKeys="true" keyProperty="fileNo" keyColumn="FILE_NO">
 		INSERT INTO BOARD_ATTACH(
 			FILE_NO,
 			BOARD_NO,
+			EMP_NO,
 			ORIGINAL_FILENAME,
 			RENAMED_FILENAME,
 			FILE_UPLOADPATH,
@@ -188,6 +205,7 @@
 		) VALUES (
 			SEQ_BOARDATTACH_NO.NEXTVAL,
 			#{boardNo},
+			#{empNo},
 			#{originalFileName},
 			#{renamedFileName},
 			#{uploadPath},
@@ -257,13 +275,12 @@
 	</insert>
 	
 	
-	<!-- 댓글 수정 
-	-->
+	<!-- 댓글 수정 -->
 	<update id="updateReply" parameterType="map">
 		UPDATE BOARD_COMMENT
 	      SET 
 	         COMMENT_CONTENT = #{content},
-	         B_COMMENT_MODIFIED = SYSDATE 
+	         B_COMMENT_CREATED = SYSDATE 
 	      WHERE 
 	         COMMENT_NO = #{no}
 	</update>
@@ -273,5 +290,16 @@
 		DELETE FROM BOARD_COMMENT WHERE COMMENT_NO = #{no}
 	</delete>
 	
+	
+	<!-- 첨부 파일 리스트 조회 -->
+	<select id="findByBoardNo" parameterType="_int" resultMap="boardAttachListResultMap">
+		SELECT  FILE_NO, 
+				BOARD_NO, 
+				EMP_NO, 
+				ORIGINAL_FILENAME, 
+				RENAMED_FILENAME  
+		FROM BOARD_ATTACH 
+		WHERE BOARD_NO = #{no}
+	</select>
 	
 </mapper>

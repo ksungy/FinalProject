@@ -67,10 +67,14 @@
 					</script>
 				<span class="focus-input100"></span>
 				</div>
-				
+
 				<label class="label-input100">첨부파일</label>
 					<c:if test="${ !empty boardAttach.originalFileName }">
-						<c:out value="${ boardAttach.originalFileName }"></c:out>
+				    	<c:forEach var="boardAttach" items="${ boardAttachlist }">
+	                        <a class="uploadResult">
+	                       		${ boardAttach.originalFileName }
+	                        </a>
+	                    </c:forEach>
 					</c:if>
 					<div class="form-group" id="file-list">
 						<a href="#this" onclick="addFile()">파일 추가</a>	

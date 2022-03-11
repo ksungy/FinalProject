@@ -23,8 +23,6 @@
 		SELECT COUNT(*) FROM DOCUMENT
 	</select>
 	
-		<select id="findAll" parameterType="map" resultType="documentListResultMap">
-		SELECT COUNT(*) FROM DOCUMENT
-	</select>
+
 	
 </mapper>

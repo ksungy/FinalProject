@@ -18,14 +18,12 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Controller
-public class document_controller {
 public class Document_Controller {
 	
 	@Autowired
 	private DocumentService serivce;
 	
 	@GetMapping("/document/list")
-	public String documentList() {
 	public ModelAndView documentList(ModelAndView model,
 			@RequestParam(defaultValue = "1") int page) {
 		
@@ -41,7 +39,6 @@ public class Document_Controller {
 		model.addObject("documentLest",documentLest);
 		model.setViewName("document/documentList");
 		
-		return "document/documentList";
 		return model;
 	}
 	
