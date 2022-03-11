@@ -65,12 +65,7 @@ document.addEventListener('DOMContentLoaded', function() {
 						calendarStart : moment(arg.start).format('YYYY-MM-DD'),
 						calendarEnd : moment(arg.end).format('YYYY-MM-DD')
 					},
-					success : function(data) {
-								
-				     },
-					error : function() {
-						alert("error");
-					}
+					
 				});
 				
 				calendar.addEvent({
