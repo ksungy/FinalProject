@@ -17,4 +17,8 @@
 		select * from calendar
 	</select>
 	
+	<insert id="calendarInsert" parameterType="map">
+		INSERT INTO CALENDAR VALUES (CALENDAR_NO_SEQ.NEXTVAL, #{calendarTitle}, NULL, #{calendarStart}, #{calendarEnd})
+	</insert>
+	
 </mapper>

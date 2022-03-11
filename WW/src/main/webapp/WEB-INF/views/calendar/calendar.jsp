@@ -7,6 +7,8 @@
 <%@page import="java.util.List"%>
 <%@page import="com.ww.mvc.calendar.model.vo.Calendar"%>
 
+
+
 <c:set var="path" value="${ pageContext.request.contextPath }"/>
 
 <!DOCTYPE html>
@@ -31,6 +33,8 @@
 
   <div id='calendar'></div>
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+
 <script>
 
 document.addEventListener('DOMContentLoaded', function() {
@@ -50,8 +54,25 @@ document.addEventListener('DOMContentLoaded', function() {
 				console.log(arg);
 				
 			var title = prompt('입력할 일정:');
+			
 			// title 값이 있을때, 화면에 calendar.addEvent() json형식으로 일정을 추가 
 			if (title) {
+				$.ajax({
+					url : "http://localhost:8088/mvc/calendarinsert",
+					type : 'post',
+					data : {
+						calendarTitle : title,
+						calendarStart : moment(arg.start).format('YYYY-MM-DD'),
+						calendarEnd : moment(arg.end).format('YYYY-MM-DD')
+					},
+					success : function(data) {
+								
+				     },
+					error : function() {
+						alert("error");
+					}
+				});
+				
 				calendar.addEvent({
 					title: title,
 					start: arg.start,

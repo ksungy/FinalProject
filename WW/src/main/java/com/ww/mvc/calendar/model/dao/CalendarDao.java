@@ -1,6 +1,8 @@
 package com.ww.mvc.calendar.model.dao;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.session.SqlSession;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,21 @@ public class CalendarDao {
 	public List<Calendar> getCalendar() throws Exception {
 		List<Calendar> calendar = null;
 		calendar = sqlSession.selectList("Calendar.calendarList");
+		return calendar;
+		
+	}
+
+	public List<Calendar> setCalendar(Calendar calen) throws Exception {
+		List<Calendar> calendar = null;
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("calendarTitle", calen.getCalendarTitle());
+		map.put("calendarStart", calen.getCalendarStart());
+		map.put("calendarEnd", calen.getCalendarEnd());
+		
+		calendar = sqlSession.selectList("Calendar.calendarInsert", map);
+		
 		return calendar;
 		
 	}

@@ -18,4 +18,9 @@ public class CalendarServiceImpl implements CalendarService {
 	public List<Calendar> getCalendar() throws Exception {
 		return calendardao.getCalendar();
 	}
+	
+	@Override
+	public List<Calendar> setCalendar(Calendar calen) throws Exception {
+		return calendardao.setCalendar(calen);
+	}
 }
