@@ -8,8 +8,10 @@
 
 	<!-- ▼ document ResultMap -->
   	<resultMap type="DOCUMENT" id="documentListResultMap">
-  		<id property="doc_id" column="DOC_ID"/>
+  		<id property="doc_id" column="DOC_ID"/>  		
+  		<result property="rownum" column="ROWNUM"/>
   		<result property="emp_no" column="EMP_NO"/>
+  		<result property="emp_id" column="EMP_ID"/>
   		<result property="doc_titile" column="DOC_TITLE"/>
   		<result property="doc_content" column="DOC_CONTENT"/>
   		<result property="doc_status" column="DOC_STATUS"/>	
@@ -18,9 +20,88 @@
   		<result property="doc_complet_date" column="DOC_COMPLET_DATE"/>
   	</resultMap>
   	
-	<!-- 페이징 -->
+  	<sql id="documentListSql">
+			SELECT D.DOC_ID,
+					D.DOC_TITLE,
+					E.EMP_ID,
+					L.LINK_ID,
+					D.DOC_DATE,
+		            A.ATTACH_ORIGIN,
+					L.DOC_STATUS,
+		            E.EMP_NO
+			FROM DOCUMENT D
+			JOIN EMPLOYEE E ON(D.EMP_NO = E.EMP_NO)
+			JOIN (SELECT L.DOC_ID,
+				         L.LINK_ID,
+				         S.DOC_STATUS
+				  FROM REPORT_LINK L
+	              JOIN DOC_STATUS S ON(S.DOC_STATUS_CODE = L.LINK_TYPE)
+				  WHERE (LINK_NUM) in (SELECT MAX(LINK_NUM) AS LINK_NUM
+					                       		FROM REPORT_LINK GROUP BY DOC_ID)
+				) L ON(L.DOC_ID = D.DOC_ID)
+	        JOIN (SELECT MAX(ATTACH_NUM), DOC_ID, MAX(ATTACH_ORIGIN) AS ATTACH_ORIGIN
+					FROM DOC_ATTACH GROUP BY DOC_ID
+				) A ON( A.DOC_ID = D.DOC_ID )
+	</sql>
+  	
+	<!-- 문서 기본적인 리스트 불러오기 -->
 	<select id="getDocumentCount" parameterType="map" resultType="_int">
-		SELECT COUNT(*) FROM DOCUMENT
+		SELECT COUNT(*) 
+		FROM (	SELECT DOC_ID AS LINK_NUM
+        		FROM REPORT_LINK GROUP BY DOC_ID)
 	</select>
+	
+	<select id="documentfindAll" parameterType="map" resultMap="documentListResultMap">
+		SELECT ROWNUM , DOC_ID, DOC_TITLE, EMP_ID, LINK_ID, DOC_DATE, ATTACH_ORIGIN, DOC_STATUS
+        FROM(
+        
+        <include refid="documentListSql" />
+        		
+			ORDER BY D.DOC_ID DESC
+		)
+	</select>
+	
+	
+	<!-- 문서 검색한 리스트 불러오기 -->
+		<select id="getDocumentSearchCount" parameterType="map" resultType="_int">
+		SELECT COUNT(*) 
+		FROM (	SELECT DOC_ID AS LINK_NUM
+        		FROM REPORT_LINK GROUP BY DOC_ID)
+        	<trim prefix="WHERE" prefixOverrides="AND|OR">
+				<if test="type=='title' and search != null and search != '' ">
+					AND D.DOC_ID LIKE '%'||#{search}||'%'
+				</if>
+				
+
+			</trim>
+	</select>
+	
+	<select id="getDocumentSearchList" parameterType="map" resultMap="documentListResultMap">
+		SELECT ROWNUM , DOC_ID, DOC_TITLE, EMP_ID, LINK_ID, DOC_DATE, ATTACH_ORIGIN, DOC_STATUS
+        FROM(SELECT D.DOC_ID,
+					D.DOC_TITLE,
+					E.EMP_ID,
+					L.LINK_ID,
+					D.DOC_DATE,
+		            A.ATTACH_ORIGIN,
+					L.DOC_STATUS,
+		            E.EMP_NO
+			FROM DOCUMENT D
+			JOIN EMPLOYEE E ON(D.EMP_NO = E.EMP_NO)
+			JOIN (SELECT L.DOC_ID,
+				         L.LINK_ID,
+				         S.DOC_STATUS
+				  FROM REPORT_LINK L
+	              JOIN DOC_STATUS S ON(S.DOC_STATUS_CODE = L.LINK_TYPE)
+				  WHERE (LINK_NUM) in (SELECT MAX(LINK_NUM) AS LINK_NUM
+					                       		FROM REPORT_LINK GROUP BY DOC_ID)
+				) L ON(L.DOC_ID = D.DOC_ID)
+	        JOIN (SELECT MAX(ATTACH_NUM), DOC_ID, MAX(ATTACH_ORIGIN) AS ATTACH_ORIGIN
+					FROM DOC_ATTACH GROUP BY DOC_ID
+				) A ON( A.DOC_ID = D.DOC_ID )
+			ORDER BY D.DOC_ID DESC
+		)
+	</select>
+	
 	
 </mapper>
