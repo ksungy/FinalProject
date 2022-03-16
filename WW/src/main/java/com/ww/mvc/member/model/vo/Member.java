@@ -47,6 +47,8 @@ public class Member {
 
 	private String renamedProfilename;
 	
+	private String status; // 가입여부
+	
 	public Member(String id, String password, String name) {
 		this.id = id;
 		this.password = password;

@@ -35,6 +35,12 @@ public class MemberServiceImpl implements MemberService {
 				passwordEncoder.matches(password, member.getPassword()) ? member : null;
 	}
 	
+	@Override
+	public String findId(Member member) {
+		
+		return mapper.findId(member);
+	}
+	
 	// 회원가입 및 업데이트
 	@Override
 	@Transactional
@@ -52,9 +58,29 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
+	public int deleteMember(String userId) {
+		
+		return mapper.deleteMember(userId);
+	}
+	
+	@Override
 	public Boolean isDuplicateID(String userId) {
 		
 		return this.findMemberById(userId) != null;
+	}
+
+
+	@Override
+	@Transactional
+	public int updatePwd(Member member) {
+		int result = 0;
+		
+		member.setPassword(passwordEncoder.encode(member.getPassword()));
+		
+		result = mapper.updatePwd(member);
+		
+		return result;
 	}
 
 

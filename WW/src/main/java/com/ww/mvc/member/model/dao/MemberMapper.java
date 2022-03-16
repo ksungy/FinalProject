@@ -16,7 +16,18 @@ public interface MemberMapper {
 	// 아이디 찾기
 	Member findMemberById(@Param("id") String id);
 
+	// 회원정보 수정
 	int updateMember(Member member);
+	
+	// 아이디 검색해서 찾기
+	String findId(Member member);
+
+	// 회원 정보 삭제
+	int deleteMember(String userId);
+	
+	// 비밀번호 변경
+	int updatePwd(Member member);
+
 
 
 }

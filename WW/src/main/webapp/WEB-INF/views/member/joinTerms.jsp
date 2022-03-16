@@ -15,6 +15,9 @@
       href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
       rel="stylesheet">
 <script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css"> 
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>
+
 </head>
 <body>
 	<form id="terms_form" class="f">
@@ -25,7 +28,7 @@
 	<div id="content">
             <div id="terms_box">
                 <p class="input_chk">
-                    <input type="checkbox" id="termService" name="termService" class="chk">
+                    <input type="checkbox" id="termService" name="chk_all" class="chk">
                     <label for="termService">
                         웨어웨어 이용약관 동의
                         <span>
@@ -153,7 +156,7 @@
             <div>
                 <div id="terms_box">
                     <p class="input_chk">
-                        <input type="checkbox" id="termPrivacy" name="termPrivacy" class="chk">
+                        <input type="checkbox" id="termPrivacy" name="chk_all" class="chk">
                         <label for="termPrivacy">
                             개인정보 수집 및 이용 동의
                             <span>
@@ -228,7 +231,7 @@
 
         <div id="terms_1">
             <p class="input_chk">
-                <input type="checkbox" id="termLocation" name="termLocation" class="chk">
+                <input type="checkbox" id="termLocation" name="chk_all" class="chk">
                 <label for="termLocation">
                     위치정보 이용약관 동의
                     <span>
@@ -329,11 +332,14 @@
     <div id="btn_area">
         	<input type="button" class="join_btn" id="cancle_btn"
         			onclick="location.href='${path}/member/login'" value="취소">
+        			<!-- onclick="location.href='${path}/member/enroll'" --> 
         	<input type="button" class="join_btn" id="agree_btn"
-        			onclick="location.href='${path}/member/enroll'"  value="확인">
+        			onclick="agreeAndEnrollMember();" value="확인">
     </div>
 	</form>
-    
+
+	
+    <!-- 체크박스 모두 선택 스크립트 -->
     <script type="text/javascript">
     $(document).ready(function() {
         $("#chk_all").click(function() {
@@ -346,5 +352,37 @@
         }); 
     });
     </script>
+    
+    <!-- 체크박스 선택 안돼면 enroll 페이지로 안넘어가는 스크립트 -->
+    <script>
+	function agreeAndEnrollMember() { 
+	    var chkbox = document.getElementsByName('agree'); 
+	    var chk = false; 
+	    var pageLink = '${path}/member/enroll';
+	    
+	    for(var i=0 ; i < chkbox.length ; i++) { 
+	        if(chkbox[i].checked) { 
+	            chk = true; 
+	        } else { 
+	            chk = false; 
+	        } 
+	    }
+	    
+	    if(chk) { 
+	    	
+	        return location.href=pageLink; 
+	    } else { 
+	        /* alert("약관에 동의하지 않으면 탈퇴할 수 없습니다."); */
+	        Swal.fire({
+	        	  icon: 'error',
+	        	  title: '회원 탈퇴 실패!',
+	        	  text: '약관에 동의하지 않으면 탈퇴할 수 없습니다.'
+	        })
+	    } 
+	}
+    </script>
+    
+
 </body>
+
 </html>

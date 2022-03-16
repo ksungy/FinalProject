@@ -14,6 +14,12 @@ public interface MemberService {
 	Member login(String id, String password);
 
 	Boolean isDuplicateID(String userId);
+
+	String findId(Member member);
+
+	int deleteMember(String userId);
+
+	int updatePwd(Member member);
 	
 
 }
