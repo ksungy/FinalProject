@@ -18,9 +18,16 @@
 
 	<!-- 주간 근무 테이블 -->
 	<div class="card shadow mb-4">
-		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">2월</h6>
-		</div>
+		<div class="dropdown card-header py-3">
+		  <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+		    조회 월 입력
+		  </button>
+		  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+		    <a class="dropdown-item" href="#">${ cmt.cmt_month }월</a>
+		    <a class="dropdown-item" href="#">1월</a>
+		    <a class="dropdown-item" href="#">2월</a>
+		  </div>
+		</div>	
 		<div class="card-body">
 			<div class="table-responsive">
 				<table class="table table-bordered" id="dataTable" width="100%"
@@ -42,28 +49,10 @@
 					</tfoot>
 					<tbody>
 						<tr>
-							<td>2/1</td>
-							<td class="editable">09:00</td>
-							<td class="editable">18:00</td>
-							<td>9h</td>
-						</tr>
-						<tr>
-							<td id="editable">2/2</td>
-							<td id="editable">09:00</td>
-							<td id="editable">18:00</td>
-							<td id="editable">9h</td>
-						</tr>
-						<tr>
-							<td>2/3</td>
-							<td>09:00</td>
-							<td>18:00</td>
-							<td>9h</td>
-						</tr>
-						<tr>
-							<td>2/4</td>
-							<td>09:00</td>
-							<td>18:00</td>
-							<td>9h</td>
+							<td>${ todayDate }</td>
+							<td class="editable">${ cmt.cmt_srt }</td>
+							<td class="editable">${ cmt.cmt_end }</td>
+							<td>${ todayHours }시간 ${ todayMinutes }분</td>
 						</tr>
 					</tbody>
 				</table>

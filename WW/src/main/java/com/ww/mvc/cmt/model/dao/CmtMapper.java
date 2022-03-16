@@ -6,6 +6,7 @@ import java.util.Map;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.session.RowBounds;
 
+import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
 
@@ -44,12 +45,29 @@ public interface CmtMapper {
 
 	Map<String, Object> getElapsedRTime(Map<String, Object> mapMS);
 	
-	// -
 	int countAttList(int emp_no);
 
-	// -
 	List<Cmt> getAttList(int emp_no, int currentPage, int limitInOnePage);
+	
+	Map<String, Object> getCmtMonth(Map<String, Object> mapMS);
 
-	List<Cmt> findAll(RowBounds rowBounds);
+	Map<String, Object> getCmtDate(Map<String, Object> mapMS);
+
+	int getMonthlyCount();
+
+	List<Cmt> getMonthlyList(RowBounds rowBounds);
+
+	List<Cmt> getMonthlyListAjax();
+
+	Cmt getAllElapsedWTime(int emp_no);
+
+	String getAllAttStart(int emp_no);
+
+	String getAllAttEnd(int emp_no);
+
+	Cmt getAllAttendance(int emp_no);
+	
+	Map<String, Object> getAllElapsedWTime(Map<String, Object> mapMS);
+
 
 }

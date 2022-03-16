@@ -18,11 +18,17 @@
 
 	<!-- 월별 근태 테이블 -->
 	<div class="card shadow mb-4">
-		<div class="card-header py-3">
-			<h6 class="m-0 font-weight-bold text-primary">${ cmt.cmt_month }월</h6>
+		<div class="dropdown card-header py-3">
+			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
+				aria-expanded="false">조회 월 입력</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+				<a class="dropdown-item" href="#">${ cmt.cmt_month }월</a>
+				<a class="dropdown-item" href="#">1월</a>
+				<a class="dropdown-item" href="#">2월</a>
+			</div>
 		</div>
 		<div class="card-body">
-			<div class="table-responsive">
+			<table class="table-responsive">
 				<table class="table table-bordered" id="dataTable" width="100%"
 					cellspacing="0">
 					<thead>
@@ -36,8 +42,7 @@
 					<tfoot>
 						<tr>
 							<th colspan="3">월 근무 총 합계</th>
-							<th>${ cmt.cmt_total_time }</th>
-
+							<th>-</th>
 						</tr>
 					</tfoot>
 					<tbody>
@@ -47,40 +52,39 @@
 							</tr>
 						</c:if>
 						<c:if test="${ !empty list }">
-							<c:forEach var="board" items="${ list }">
+							<c:forEach var="cmt" items="${ list }">
 								<tr>
-									<td><fmt:formatDate type="date"
-											value="${ cmt.cmt_date }" /></td>
-									<td>${ cmt.cmt_srt_time }</td>
-									<td>${ cmt.cmt_end_time }</td>
-									<td>${ cmt.cmt_time }</td>
+									<td>${ cmt.cmt_no }</td>
+									<td>${ cmt.cmt_srt }</td>
+									<td>${ cmt.cmt_end }</td>
+									<td>${ wHours }시간 ${ wMinutes }분</td>
 								</tr>
 							</c:forEach>
 						</c:if>
-				</table>
-				</tbody>
-				</table>
-				<a href="${ path }/cmt/modify">
-					<div class="col-12">
-						<input type="button"
-							style="color: #4e73df !important; font-weight: bold"
-							class="btn float-right" value="근무 수정">
-
-					</div>
-				</a>
-			</div>
+						
+					</tbody>
+				</div>
+			</table>
+			<a href="${ path }/cmt/modify">
+				<div class="col-12">
+					<input type="button"
+						style="color: #4e73df !important; font-weight: bold"
+						class="btn float-right" value="근무 수정">
+				</div>
+			</a>
 		</div>
 	</div>
-
-
-	<div class="col-lg-10"></div>
-
 </div>
 
-</div>
+
+<div class="col-lg-10"></div>
+
+
+</script>
+
+
 <!-- /.container-fluid -->
 
-</div>
 <!-- End of Main Content -->
 
 <%@include file="../common/footer.jsp"%>

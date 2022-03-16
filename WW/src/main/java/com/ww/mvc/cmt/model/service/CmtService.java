@@ -3,6 +3,7 @@ package com.ww.mvc.cmt.model.service;
 import java.util.List;
 import java.util.Map;
 
+import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
 import com.ww.mvc.common.util.PageInfo;
@@ -10,8 +11,6 @@ import com.ww.mvc.common.util.PageInfo;
 public interface CmtService {
 
 	Cmt getTodayAttendance(int emp_no);
-
-	String getAttStartDateTime(Map<String, Object> mapMS);
 
 	Map<String, Object> getElapsedWTime(Map<String, Object> mapMS);
 
@@ -43,6 +42,25 @@ public interface CmtService {
 
 	int getMonthlyCount();
 
+	Map<String, Object> getCmtMonth(Map<String, Object> mapMS);
+
+	Map<String, Object> getCmtDate(Map<String, Object> mapMS);
+
+	String getAttStartDateTime(Map<String, Object> mapMS);
+
 	List<Cmt> getMonthlyList(PageInfo pageInfo);
+
+	List<Cmt> getMonthlyListAjax();
+
+	Cmt getAllElapsedWTime(int no);
+
+	String getAllAttStart(int no);
+
+	String getAllAttEnd(int no);
+
+	Cmt getAllAttendance(int no);
+
+	Map<String, Object> getAllElapsedWTime(Map<String, Object> mapMS);
+
 
 }

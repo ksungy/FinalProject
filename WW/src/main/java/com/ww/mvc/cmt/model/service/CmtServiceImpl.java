@@ -8,6 +8,7 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.cmt.model.dao.CmtMapper;
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
@@ -21,11 +22,6 @@ public class CmtServiceImpl implements CmtService {
 	@Override
 	public Cmt getTodayAttendance(int emp_no) {
 		return mapper.getTodayAttendance(emp_no);
-	}
-
-	@Override
-	public String getAttStartDateTime(Map<String, Object> mapMS) {
-		return getAttStartDateTime(mapMS);
 	}
 
 	@Override
@@ -123,18 +119,73 @@ public class CmtServiceImpl implements CmtService {
 	}
 
 	@Override
-	public int getMonthlyCount() {
+	public Map<String, Object> getCmtMonth(Map<String, Object> mapMS) {
 		// TODO Auto-generated method stub
-		return 0;
+		return mapper.getCmtMonth(mapMS);
 	}
 
 	@Override
-	public List<Cmt> getMonthlyList(PageInfo pageInfo) {
-		int offset = (pageInfo.getCurrentPage() - 1) * pageInfo.getListLimit();
-		int limit = pageInfo.getListLimit();
-		RowBounds rowBounds = new RowBounds(offset, limit);
-		
-		return mapper.findAll(rowBounds);
+	public Map<String, Object> getCmtDate(Map<String, Object> mapMS) {
+		// TODO Auto-generated method stub
+		return mapper.getCmtDate(mapMS);
 	}
 
+	@Override
+	public String getAttStartDateTime(Map<String, Object> mapMS) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// 월별 게시글 개수
+	@Override
+	public int getMonthlyCount() {
+		
+		return mapper.getMonthlyCount();
+	}
+	
+	// 게시글 목록
+	@Override
+	public List<Cmt> getMonthlyList(PageInfo pageInfo) {
+		
+		 int offset = (pageInfo.getCurrentPage() - 1 ) * pageInfo.getListLimit();
+		 int limit = pageInfo.getListLimit();
+		 RowBounds rowBounds = new RowBounds(offset, limit);
+
+		 return mapper.getMonthlyList(rowBounds);
+		 
+	}
+
+	@Override
+	public List<Cmt> getMonthlyListAjax() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Cmt getAllElapsedWTime(int emp_no) {
+		return mapper.getAllElapsedWTime(emp_no);
+	}
+
+	@Override
+	public String getAllAttStart(int emp_no) {
+		return mapper.getAllAttStart(emp_no);
+
+	}
+
+	@Override
+	public String getAllAttEnd(int emp_no) {
+		return mapper.getAllAttEnd(emp_no);
+
+	}
+
+	@Override
+	public Cmt getAllAttendance(int emp_no) {
+		return mapper.getAllAttendance(emp_no);
+
+	}
+
+	@Override
+	public Map<String, Object> getAllElapsedWTime(Map<String, Object> mapMS) {
+		return mapper.getAllElapsedWTime(mapMS);
+	}
 }

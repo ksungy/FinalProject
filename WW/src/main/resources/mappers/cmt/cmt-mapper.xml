@@ -20,6 +20,7 @@
 		<result property="cmt_srt" column="CMT_SRT" />
 		<result property="cmt_end" column="CMT_END" />
 		<result property="cmt_rs" column="CMT_RS" />
+		<result property="cmt_month" column="CMT_MONTH" />
 	</resultMap>
 	
 	<resultMap type="Rest" id="WorkBreak1">
@@ -34,8 +35,17 @@
 		<result property="rs_end" column="RS_END"/>
 		<result property="cmt_no" column="CMT_NO"/>
 		<result property="emp_no" column="EMP_NO"/>
-	</resultMap>	
+	</resultMap>
 	
+	<resultMap type="Cmt" id="attList">
+	<result property="cmt_no" column="CMT_NO"/>
+	<result property="emp_no" column="EMP_NO"/>
+	<result property="cmt_srt" column="CMT_SRT"/>
+	<result property="cmt_end" column="CMT_END"/>
+	<result property="cmt_rs" column="CMT_RS"/>
+	</resultMap>
+	
+	<!-- 당일 근무내역 조회 -->
 	<select id="getTodayAttendance" parameterType="_int" resultMap="TodayAttendance">
 		<![CDATA[ 
 		select CMT_NO, EMP_NO, to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT, to_char(CMT_END, 'hh24:mi:ss') CMT_END
@@ -54,16 +64,81 @@
 	  	]]>		
 	</select>
 	
+	<!-- 당일 근무시간 조회 -->
 	<select id="getElapsedWTime" parameterType="map" resultType="map">
 		<![CDATA[ 
-	  		select to_char(extract(HOUR FROM diff), '09') as eh
-	        ,to_char(extract(MINUTE FROM diff), '09') as em
-	        ,to_char(extract(SECOND FROM diff), '09') as es
-	    	    from(select (atte-atts) as diff from (select rownum,
-	       		to_timestamp(to_char(CMT_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') atts,
-	        	to_timestamp(to_char(CMT_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') atte 
-	        		from CMT_AT
-	        		where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo}))
+		SELECT TO_CHAR(EXTRACT(HOUR FROM DIFF), '09') AS EH,
+		       TO_CHAR(EXTRACT(MINUTE FROM DIFF), '09') AS EM,
+		       TO_CHAR(EXTRACT(SECOND FROM DIFF), '09') AS ES
+		FROM(SELECT (ATTE-ATTS) AS DIFF
+		     FROM(SELECT ROWNUM,
+		                 TO_TIMESTAMP(TO_CHAR(CMT_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') ATTS,
+		                 TO_TIMESTAMP(TO_CHAR(CMT_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') ATTE
+		          FROM CMT_AT
+		          WHERE EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo}))
+	  	]]>
+	</select>
+	
+	<!-- 전체 근무내역 조회 -->
+	<select id="getAttendance" parameterType="_int" resultMap="TodayAttendance">
+		<![CDATA[ 
+		select CMT_NO, EMP_NO, to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT, to_char(CMT_END, 'hh24:mi:ss') CMT_END
+		, (
+			select replace((to_char(sum(beh), '09')||':'||to_char(sum(bem),'09')||':'||to_char(sum(bes), '09')),' ', '')
+	        	from (select extract(HOUR FROM diff) AS beh
+	       		,extract(MINUTE FROM diff) AS bem
+	        	,extract(SECOND FROM diff) AS bes
+	            	from (SELECT (be-bs) as diff 
+	            		from (select to_timestamp(to_char(RS_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') bs
+	                		, to_timestamp(to_char(RS_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') be 
+	                    		from CMT_RS
+	                    		where EMP_NO =#{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD')))))
+		) as CMT_RS
+			from CMT_AT where EMP_NO = #{emp_no}
+	  	]]>		
+	</select>
+	
+	<!-- 전체 근무시간 조회 -->
+	<select id="getAllElapsedWTime" parameterType="map" resultType="map">
+		<![CDATA[ 
+		SELECT TO_CHAR(EXTRACT(HOUR FROM DIFF), '09') AS WH,
+		       TO_CHAR(EXTRACT(MINUTE FROM DIFF), '09') AS WM,
+		       TO_CHAR(EXTRACT(SECOND FROM DIFF), '09') AS WS
+		FROM(SELECT (ATTE-ATTS) AS DIFF
+		     FROM(SELECT ROWNUM,
+		                 TO_TIMESTAMP(TO_CHAR(CMT_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') ATTS,
+		                 TO_TIMESTAMP(TO_CHAR(CMT_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') ATTE
+		          FROM CMT_AT
+		          WHERE EMP_NO = #{emp_no}))
+	  	]]>
+	</select>
+		
+	<!-- YYYYMM -->	
+	<select id="getCmtMonth" parameterType="map" resultType="map">
+		<![CDATA[ 
+		SELECT SUBSTR(CMT_NO, 0, 4) AS WY,
+			   SUBSTR(CMT_NO, 5,2) AS WM 
+		FROM CMT_AT
+		WHERE EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo}
+	  	]]>
+	</select>
+	
+	<!-- date -->
+	<select id="getCmtDate" parameterType="map" resultType="map">
+		<![CDATA[ 
+		SELECT TO_CHAR(CMT_SRT, 'MM/DD') AS WD
+		FROM CMT_AT
+		WHERE EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo}
+	  	]]>
+	</select>	
+	
+	<!-- 기간별 LIST -->
+	<select id="getCmtMonthlyList" parameterType="map" resultType="map">
+		<![CDATA[ 
+			SELECT TO_CHAR(CMT_SRT, 'MM/DD') AS thisDate, TO_CHAR(CMT_SRT, 'HH:MM'), TO_CHAR(CMT_END, 'HH:MM')
+			FROM CMT_AT
+			WHERE SUBSTR(CMT_NO, 0, 4) = #{thisYear} AND SUBSTR(CMT_NO, 5, 2) = #{thisMonth}
+			ORDER BY 1;
 	  	]]>
 	</select>
 	
@@ -81,11 +156,19 @@
 			]]>
 	</select>
 	
+	<!-- 오늘 출근시간 가져오기 -->
 	<select id="getAttStart" parameterType="_int" resultType="string">
 		<![CDATA[ 
 		select to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT from CMT_AT where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
-				]]>
+		]]>
 	</select>
+	
+	<!-- 전체 출근시간 가져오기 -->
+	<select id="getAllAttStart" parameterType="_int" resultType="string">
+		<![CDATA[ 
+		select to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT from CMT_AT where EMP_NO = #{emp_no}
+		]]>
+	</select>	
 	
 	<insert id="insertCheckin" parameterType="_int">
 		<![CDATA[ 
@@ -99,7 +182,7 @@
 	
 	<update id="updateCheckout" parameterType="_int">
 		<![CDATA[
-	Update CMT_AT set CMT_END = SYSDATE where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+	Update CMT_AT set (CMT_END, CMT_MONTH) = (SYSDATE, SUBSTR(CMT_NO, 4, 2)) where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
 		]]>
 	</update>
 	
@@ -116,8 +199,8 @@
 	       		,extract(MINUTE FROM diff) AS bem
 	        	,extract(SECOND FROM diff) AS bes
 	            	from (SELECT (be-bs) as diff 
-	            		from (select to_timestamp(to_char(BR_START, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') bs
-	                		, to_timestamp(to_char(BR_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') be 
+	            		from (select to_timestamp(to_char(RS_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') bs
+	                		, to_timestamp(to_char(RS_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') be 
 	                    		from CMT_RS
 	                    		where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo} )))
 			]]>
@@ -127,17 +210,26 @@
 		update CMT_AT set CMT_RS = #{restAll} where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo}
 	</update>
 	
+	<!-- 당일 퇴근시간 조회 -->
 	<select id="getAttEnd" parameterType="_int" resultType="string">
 		<![CDATA[ 
 		select to_char(CMT_END, 'hh24:mi:ss') CMT_END from CMT_AT where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
 			]]>
 	</select>
 	
+	<!-- 전체 퇴근시간 조회 -->
+	<select id="getAllAttEnd" parameterType="_int" resultType="string">
+		<![CDATA[ 
+		select to_char(CMT_END, 'hh24:mi:ss') CMT_END from CMT_AT where EMP_NO = #{emp_no}
+			]]>
+	</select>	
+	
 	<insert id="insertRestin" parameterType="_int">
 		<![CDATA[ 
-		Insert into CMT_RS (RS_NO, RS_SRT, CMT_NO, EMP_NO)values (
+		Insert into CMT_RS (RS_NO, RS_SRT, RS_END, CMT_NO, EMP_NO) values (
 		SEQ_CMT_RS.nextval
 		, SYSDATE
+		, (SYSDATE + 1/24)
 		, to_number(to_char(SYSDATE, 'YYYYMMDD'))
 		, #{emp_no}
 		)
@@ -156,7 +248,7 @@
 	
 	<update id="updateBrEnd" parameterType="_int">
 		<![CDATA[
-		Update CMT_RS set RS_END = SYSDATE where RS_NO = #{rs_no} and RS_END is null
+		Update CMT_RS set RS_END = (RS_SRT + 1/24) where RS_NO = #{rs_no} and RS_END is null
 			]]>
 	</update>
 	
@@ -166,6 +258,7 @@
 		]]>
 	</select>
 	
+	<!-- 휴게시간 조회 -->
 	<select id="getElapsedRTime" parameterType="map" resultType="map">
 		<![CDATA[ 
 	        select to_char(sum(beh), '09') eh,  to_char(sum(bem), '09') em,  to_char(sum(bes), '09') es
@@ -179,5 +272,51 @@
 	                    		where EMP_NO = #{emp_no} and CMT_NO = #{thisAttNo})))
 	  	]]>
 	</select>
-
+	
+	
+	<!-- 근태내역 목록 수 조회 -->
+	<select id="countAttList" parameterType="_int" resultType="_int">
+		SELECT count(*) from CMT_AT where EMP_NO = #{emp_no}
+	</select>
+	
+	<!-- 근태 내역 조회 -->
+	<select id="getAttList" parameterType="map" resultMap="attList">
+		<![CDATA[ 
+		select CMT_NO, to_char(CMT_SRT, 'HH24:MI') CMT_SRT, to_char(CMT_END, 'HH24:MI') CMT_END
+		, CMT_RS from CMT_AT where EMP_NO = #{emp_no} order by CMT_SRT desc
+		]]>
+	</select>
+	
+	<!-- 월별 근태 페이징 -->
+	<select id="getMonthlyCount" parameterType="map" resultType="_int">
+		<![CDATA[ 	
+		SELECT COUNT(*)
+		FROM CMT_AT
+		]]>		
+	</select>
+	
+	<!-- 월별 근태 내역 조회 -->
+	<select id="getMonthlyList" parameterType="map" resultMap="TodayAttendance">
+		<![CDATA[ 		
+		SELECT CMT_NO,
+		EMP_NO,
+		to_char(CMT_SRT, 'HH24:MI') CMT_SRT,
+		to_char(CMT_END, 'HH24:MI') CMT_END
+		FROM CMT_AT
+		ORDER BY CMT_NO
+		]]>	
+	</select>	
+		<!-- 월별 근태 내역 조회 -->
+	<select id="getMonthlyListAjax" parameterType="map" resultMap="TodayAttendance">
+		<![CDATA[ 		
+		SELECT CMT_NO,
+		EMP_NO,
+		to_char(CMT_SRT, 'HH24:MI') CMT_SRT,
+		to_char(CMT_END, 'HH24:MI') CMT_END
+		FROM CMT_AT C
+		WHERE EMP_NO = #{emp_no}
+		ORDER BY CMT_SRT
+		]]>	
+	</select>
+	
 </mapper>
