@@ -8,11 +8,10 @@ import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.cmt.model.dao.CmtMapper;
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
-import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.common.util.PageInfoByMember;
 
 @Service
 public class CmtServiceImpl implements CmtService {
@@ -114,8 +113,8 @@ public class CmtServiceImpl implements CmtService {
 	}
 
 	@Override
-	public List<Cmt> getAttList(int emp_no, int currentPage, int limitInOnePage) {
-		return mapper.getAttList(emp_no, currentPage, limitInOnePage);
+	public List<Cmt> getAttList(int emp_no) {
+		return mapper.getAttList(emp_no);
 	}
 
 	@Override
@@ -145,14 +144,13 @@ public class CmtServiceImpl implements CmtService {
 	
 	// 게시글 목록
 	@Override
-	public List<Cmt> getMonthlyList(PageInfo pageInfo) {
+	public List<Cmt> getMonthlyList(PageInfoByMember pageInfoByMember) {
 		
-		 int offset = (pageInfo.getCurrentPage() - 1 ) * pageInfo.getListLimit();
-		 int limit = pageInfo.getListLimit();
+		 int offset = (pageInfoByMember.getCurrentPage() - 1 ) * pageInfoByMember.getListLimit();
+		 int limit = pageInfoByMember.getListLimit();
 		 RowBounds rowBounds = new RowBounds(offset, limit);
 
-		 return mapper.getMonthlyList(rowBounds);
-		 
+		 return mapper.getMonthlyList(pageInfoByMember);
 	}
 
 	@Override

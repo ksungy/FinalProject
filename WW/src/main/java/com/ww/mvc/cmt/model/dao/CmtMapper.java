@@ -9,6 +9,7 @@ import org.apache.ibatis.session.RowBounds;
 import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
+import com.ww.mvc.common.util.PageInfoByMember;
 
 @Mapper
 public interface CmtMapper {
@@ -47,7 +48,7 @@ public interface CmtMapper {
 	
 	int countAttList(int emp_no);
 
-	List<Cmt> getAttList(int emp_no, int currentPage, int limitInOnePage);
+	List<Cmt> getAttList(int emp_no);
 	
 	Map<String, Object> getCmtMonth(Map<String, Object> mapMS);
 
@@ -55,7 +56,7 @@ public interface CmtMapper {
 
 	int getMonthlyCount();
 
-	List<Cmt> getMonthlyList(RowBounds rowBounds);
+	List<Cmt> getMonthlyList(PageInfoByMember pageInfoByMember);
 
 	List<Cmt> getMonthlyListAjax();
 

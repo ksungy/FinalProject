@@ -54,8 +54,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 						</c:when>
 						<c:when test="${empty cmt.cmt_srt}">
 							<div id="miToday">
-								<button class="btn btn-primary btn-sm" id="checkin_btn">출근
-									등록</button>
+								<button class="btn btn-primary btn-sm" id="checkin_btn">출근 등록</button>
 							</div>
 						</c:when>
 					</c:choose>
@@ -127,12 +126,6 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 									<th>근무시간</th>
 								</tr>
 							</thead>
-							<tfoot>
-								<tr>
-									<th colspan="3">총 합계</th>
-									<th>-</th>
-								</tr>
-							</tfoot>
 							<tr>
 								<c:if test="${ empty list }">
 									<tr>
@@ -237,6 +230,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 					type : "post",
 					dataType : "json",
 					success : function(data) {
+						console.log(data);
 						if (!isNull(data.cmt)) {
 							attStartFormat = data.cmt.cmt_srt;
 							attEndFormat = data.cmt.cmt_end;
@@ -245,14 +239,11 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 						elapsedWTime = data.elapsedWTime;
 						if (!isNull(attStartFormat) && isNull(attEndFormat)) {
 							ckInterval = setInterval(countTime, 1000);
-							$("#btn_check").attr('href',
-									"javascript:fnCheckOut()");
-							$("#btn_check").html("퇴근");
+							$("#btn_check").attr('href', "javascript:fnCheckOut()");
 						}
 						if (!isNull(attStartFormat) && !isNull(attEndFormat)) {
 							$("#btn_check").attr('href', "#");
 							$("#btn_check").addClass('notable');
-							$("#btn_check").html("출근");
 						}
 
 						$("#checkin_time").html(
@@ -311,7 +302,6 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 						if (!isNull(data)) {
 							$("#btn_check").attr('href', "#");
 							$("#btn_check").addClass('notable');
-							$("#btn_check").html("출근");
 							$("#checkout_time").html(data);
 							clearInterval(ckInterval);
 						} else {
@@ -330,103 +320,173 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 	// 근무내역 조회
 	getPageWork(1);
 	function getPageWork(page) {
-		$
-				.ajax({
-					url : "getattlist",
-					data : {
-						emp_no : "${loginMember.no}",
-						currentPage : page
-					},
-					type : "get",
-					dataType : "json",
-					success : function(data) {
-						var result = data.attList;
-						let totalWorkTime = "";
-						if (result.length == 0) {
-							$("#div_wh_contents").html("");
-							$("#div_wh_contents")
-									.html(
-											'<ul><li class="li_no_xaList">근무 내역이 없습니다.</li></ul>');
+		$.ajax({
+			url : "getattlist",
+			data : {
+				emp_no : "${loginMember.no}",
+				currentPage : page
+			},
+			type : "get",
+			dataType : "json",
+			success : function(data) {
+				var result = data.attList;
+				let totalWorkTime = "";
+				if (result.length == 0) {
+					$("#div_wh_contents").html("");
+					$("#div_wh_contents").html('<ul><li class="li_no_xaList">근무 내역이 없습니다.</li></ul>');
+				} else {
+					<!--리스트불러오기-->
+					var r = '';
+					$.each(result, function (i) {
+						console.log("result[i] : ", result[i]);
+						let attSTime = "";
+                        let attETime = "";
+                        r += '<div><ul>';
+
+                        //근무일자
+                        r += '<li> cmt_no : ' + result[i].cmt_no + '</li>';
+
+                        // 출근시간
+                        if (result[i].cmt_srt) {
+                            // 출근시간 출력
+                            r += '<li> 출근시간: ' + timeFormat(result[i].cmt_srt) + '</li>';
+                        }
+
+						// 퇴근시간
+						if (result[i].cmt_end) {
+							// 퇴근시간 출력
+							r += '<li> 퇴근시간 : ' + timeFormat(result[i].cmt_end) + '</li>';
+							
+							// 총 근무시간 계산
+							attSTime = attTimeFormat(result[i].cmt_srt);
+							attETime = attTimeFormat(result[i].cmt_end);
+							totalWorkTime = calTimeTwo(attSTime, attETime);
+
+							// 총근무시간 화면에 출력
+							r += '<li> 총 근무 시간: ' + totalWorkTime + '</li>';
 						} else {
-							<!--리스트불러오기-->
-							var r = '';
-							$
-									.each(
-											result,
-											function(i) {
-												let attSTime = "";
-												let attETime = "";
-												r += '<div>';
-												r += '<ul>';
-												r += '<li>' + result[i].cmt_no
-														+ '</li>'; //근무일자
-												if (restCode == 1
-														&& isNull(restAllTime)) {
-													attSTime = attTimeFormat(result[i].attStart);
-													attETime = attTimeFormat(result[i].attEnd);
-													totalWorkTime = calTimeTwo(
-															attSTime, attETime);
-												} else if (restCode == 1
-														&& !isNull(restAllTime)) {
-													attSTime = attTimeFormat(result[i].attStart);
-													attETime = attTimeFormat(result[i].attEnd);
-													totalWorkTime = calTimeThree(
-															attSTime, attETime,
-															restAllTime);
-												} else {
-													attSTime = attTimeFormat(result[i].attStart);
-													attETime = attTimeFormat(result[i].attEnd);
-													totalWorkTime = calTimeTwo(
-															attSTime, attETime);
-												}
-												r += '<li>' + totalWorkTime
-														+ '</li>'; //총근무시간
-												r += '<li>'
-														+ timeFormat(result[i].attStart)
-														+ '</li>'; //출근시각					
-												r += '<li>'
-														+ timeFormat(result[i].attEnd)
-														+ '</li>'; //퇴근시각
-												if (isNull(restAllTime)) {
-													restAllTime = "00:00:00";
-												}
-												r += '<li>' + restAllTime
-														+ '</li>';
-												r += '</ul>';
-												r += '</div>';
-											})
-							$("#div_wh_contents").html("");
-							$("#div_wh_contents").html(r);
-							<!--페이징처리-->
-							var p = '';
-							for (var d = data.startPage; d <= data.endPage; d++) {
-								if (d == data.currentPage) {
-									p += '<li>'
-											+ '<a href="javascript:getPageWork('
-											+ d
-											+ ')" name="a_current" class="a_current">'
-											+ d + '</a>' + '</li>';
-								} else {
-									p += '<li>'
-											+ '<a href="javascript:getPageWork('
-											+ d + ')">' + d + '</a>' + '</li>';
-								}
-							}
-							$("#div_wh_paging > ul").html("");
-							$("#div_wh_paging > ul").html(p);
+							// 퇴근시간이 없는 경우, 총 근무시간 = 0
+							r += '<li> 총 근무 시간: ' + totalWorkTime + '</li>';
 						}
-					},
-					error : function(request, status, errorData) {
-						console.log("근무내역 error code : " + request.status + "\n"
-								+ "message : " + request.responseText + "\n"
-								+ "error : " + errorData);
-					}
-				});
-	};
+						r += '</ul>';
+						r += '</div>';
+						$("#div_wh_contents").html("");
+						$("#div_wh_contents").html(r);
+						<!--페이징처리
+						
+						var p = '';
+						for (var d = data.startPage; d <= data.endPage; d++) {
+							if (d == data.currentPage) {
+								p += '<li>' + '<a href="javascript:getPageWork(' + d + ')" name="a_current" class="a_current">'
+										+ d + '</a>' + '</li>';
+							} else {
+								p += '<li>'
+										+ '<a href="javascript:getPageWork('
+										+ d + ')">' + d + '</a>' + '</li>';
+							}
+						}
+						-->
+						$("#div_wh_paging > ul").html("");
+						$("#div_wh_paging > ul").html(p);
+					})
+				}
+			},
+			error : function(request, status, errorData) {
+					console.log("근무내역 error code : " + request.status + "\n"
+							+ "message : " + request.responseText + "\n"
+							+ "error : " + errorData);
+				}
+			});
+	}
 
 	function wh_showhide() {
 		var t_drc = $("#div_wh_contents");
 		t_drc.toggle();
-	};
+	}
+	
+	function isNull(obj) {
+		return (typeof obj != "undefined" && obj != null && obj != "") ? false
+				: true;
+	}
+	function setDefaultValueAtNull(obj) {
+		return (typeof obj != "undefined" && obj != null && obj != "") ? obj
+				: "00:00:00";
+	}
+	
+	function timeFormat(e) {
+		let getTime = e;
+		let getTimeH = getTime.substr(8, 2);
+		let getTimeM = getTime.substr(10, 2);
+		let getTimeS = getTime.substr(12, 2);
+		let formattedTime = getTimeH + ":" + getTimeM + ":" + getTimeS;
+		return formattedTime;
+	}
+
+	function attTimeFormat(e) {
+		var str = e;
+		var by = str.substr(0, 4);
+		var bmm = str.substr(4, 2) - 1;
+		var bd = str.substr(6, 2);
+		var bh = str.substr(8, 2);
+		var bm = str.substr(10, 2);
+		var bs = str.substr(12, 2);
+		let attTimeAfter = new Date(by, bmm, bd, bh, bm, bs);
+		return attTimeAfter;
+	}
+	
+	function countTime() {
+		var nowDate = new Date();
+		var str;
+		if (attStartDateTime && attStartDateTime.length < 7) {
+			attStartFormat = attStartFormat.replaceAll(":", "");
+			str = nowDate.getFullYear() + addZero(nowDate.getMonth(), 2)
+					+ addZero(nowDate.getDate(), 2) + attStartFormat;
+		} else {
+			str = attStartDateTime;
+		}
+
+		if (str) {
+			var by = str.substr(0, 4);
+			var bmm = str.substr(4, 2) - 1;
+			var bd = str.substr(6, 2);
+			var bh = str.substr(8, 2);
+			var bm = str.substr(10, 2);
+			var bs = str.substr(12, 2);
+			var checkinDate = new Date(by, bmm, bd, bh, bm, bs);
+			console.log(checkinDate);
+			var gapTime = nowDate.getTime() - checkinDate.getTime();
+			console.log(gapTime);
+			var wh = Math.floor((gapTime % (1000 * 60 * 60 * 24))
+					/ (1000 * 60 * 60));
+			var wm = Math.floor((gapTime % (1000 * 60 * 60)) / (1000 * 60));
+			var ws = Math.floor((gapTime % (1000 * 60)) / 1000);
+			var totalWorkingTime = addZero(wh, 2) + ":" + addZero(wm, 2) + ":"
+					+ addZero(ws, 2);
+			$("#working_time").html("");
+			$("#working_time").html(totalWorkingTime);
+		}
+	}
+	
+	function calTimeTwo(x, y) {
+		var gapTime = y - x;
+		var wh = Math.floor((gapTime % (1000 * 60 * 60 * 24))
+				/ (1000 * 60 * 60));
+		var wm = Math.floor((gapTime % (1000 * 60 * 60)) / (1000 * 60));
+		var ws = Math.floor((gapTime % (1000 * 60)) / 1000);
+		var totalWorkingTime = addZero(wh, 2) + ":" + addZero(wm, 2) + ":"
+				+ addZero(ws, 2);
+		return totalWorkingTime
+	}
+	
+	function addZero(num, digits) {
+		var zero = '';
+		num = num.toString();
+		if (num.length < digits) {
+			for (var i = 0; i < digits - num.length; i++)
+				zero += '0';
+		}
+		return zero + num;
+	}
+	
 </script>
 <%@include file="../common/footer.jsp"%>

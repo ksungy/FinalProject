@@ -7,6 +7,7 @@ import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.common.util.PageInfoByMember;
 
 public interface CmtService {
 
@@ -38,7 +39,7 @@ public interface CmtService {
 
 	int countAttList(int emp_no);
 
-	List<Cmt> getAttList(int emp_no, int currentPage, int limitInOnePage);
+	List<Cmt> getAttList(int emp_no);
 
 	int getMonthlyCount();
 
@@ -48,7 +49,7 @@ public interface CmtService {
 
 	String getAttStartDateTime(Map<String, Object> mapMS);
 
-	List<Cmt> getMonthlyList(PageInfo pageInfo);
+	List<Cmt> getMonthlyList(PageInfoByMember pageInfoByMember);
 
 	List<Cmt> getMonthlyListAjax();
 

@@ -24,6 +24,7 @@ import com.ww.mvc.cmt.model.service.CmtService;
 import com.ww.mvc.cmt.model.vo.Cmt;
 import com.ww.mvc.cmt.model.vo.Rest;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.common.util.PageInfoByMember;
 import com.ww.mvc.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -45,7 +46,8 @@ public class CmtController {
 
 	// 개인 근무관리 메인페이지
 	@RequestMapping(value = "/dashboard", method = RequestMethod.GET)
-	public ModelAndView CmtDashboard(ModelAndView mv, HttpSession session, @RequestParam(defaultValue = "1") int page,
+	public ModelAndView CmtDashboard(ModelAndView mv, HttpSession session,
+			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "5") int count) {
 
 		Member loginMember = (Member) session.getAttribute("loginMember");
@@ -104,13 +106,13 @@ public class CmtController {
 				List<Cmt> list = null;
 
 				pageInfo = new PageInfo(page, 5, service.getMonthlyCount(), count);
-				list = service.getMonthlyList(pageInfo);
+				list = service.getAttList(loginMember.getNo());
 				
 				mv.addObject("pageInfo", pageInfo);
 				mv.addObject("list", list);
 				mv.setViewName("cmt/dashboard");
 
-				log.info(list.toString());
+				log.info("list : " + list.toString());
 			}
 
 		} catch (Exception e) {
@@ -248,38 +250,49 @@ public class CmtController {
 	@RequestMapping(value = "getattlist", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
 	@ResponseBody
 	public String getAttListMethod(@RequestParam(value = "emp_no") int emp_no,
+			HttpSession session,
 			@RequestParam(value = "currentPage", required = false) String currentpage) {
-		Map<String, Object> mapM = new HashMap<String, Object>();
+				// 최근 근무 내역 5건 조회
+				List<Cmt> attList = null;
+				attList = service.getAttList(emp_no);
 
-		int currentPage = 1;
-		int limitInOnePage = 5;
-		if (currentpage != null) {
-			currentPage = Integer.parseInt(currentpage);
-		}
-		// 전체 게시글 수
-		int attListCount = service.countAttList(emp_no);
-		// 총 페이지 수 계산
-		int maxPage = (int) ((double) attListCount / limitInOnePage + 0.9);
-		// 현재 페이지에 보여줄 시작 페이지 번호
-		int startPage = (((int) ((double) currentPage / limitInOnePage + 0.9)) - 1) * limitInOnePage + 1;
-		int endPage = startPage + limitInOnePage - 1;
-		if (maxPage < endPage) {
-			endPage = maxPage;
-		}
+				Map<String, Object> mapM = new HashMap<String, Object>();
+				mapM.put("attList", attList);
+
+				Gson gson = new Gson();
+				String r = gson.toJson(mapM);
+				return r;
+//		Map<String, Object> mapM = new HashMap<String, Object>();
+//
+//		int currentPage = 1;
+//		int limitInOnePage = 5;
+//		if (currentpage != null) {
+//			currentPage = Integer.parseInt(currentpage);
+//		}
+//		// 전체 게시글 수
+//		int attListCount = service.countAttList(emp_no);
+//		// 총 페이지 수 계산
+//		int maxPage = (int) ((double) attListCount / limitInOnePage + 0.9);
+//		// 현재 페이지에 보여줄 시작 페이지 번호
+//		int startPage = (((int) ((double) currentPage / limitInOnePage + 0.9)) - 1) * limitInOnePage + 1;
+//		int endPage = startPage + limitInOnePage - 1;
+//		if (maxPage < endPage) {
+//			endPage = maxPage;
+//		}
 
 //		// 근무내역 상세내역
-		List<Cmt> attList = null;
-		attList = service.getAttList(emp_no, currentPage, limitInOnePage);
-
-		mapM.put("attList", attList);
-		mapM.put("currentPage", currentPage);
-		mapM.put("maxPage", maxPage);
-		mapM.put("startPage", startPage);
-		mapM.put("endPage", endPage);
-
-		Gson gson = new Gson();
-		String r = gson.toJson(mapM);
-		return r;
+//		List<Cmt> attList = null;
+//		attList = service.getAttList(emp_no, currentPage, limitInOnePage);
+//
+//		mapM.put("attList", attList);
+//		mapM.put("currentPage", currentPage);
+//		mapM.put("maxPage", maxPage);
+//		mapM.put("startPage", startPage);
+//		mapM.put("endPage", endPage);
+//
+//		Gson gson = new Gson();
+//		String r = gson.toJson(mapM);
+//		return r;
 	}
 
 	// 당일 근무시간 조회
@@ -306,21 +319,60 @@ public class CmtController {
 	@GetMapping("/monthly")
 	public ModelAndView list(ModelAndView model, HttpSession session,
 			@RequestParam(defaultValue = "1") int page,
-			@RequestParam(defaultValue = "30") int count) {
+			@RequestParam(defaultValue = "31") int count,
+			@RequestParam(defaultValue = "3") int month) {
 		Member loginMember = (Member) session.getAttribute("loginMember");
 
-		PageInfo pageInfo = null;
+		PageInfoByMember pageInfoByMember = null;
 		List<Cmt> list = null;
 
-		pageInfo = new PageInfo(page, 30, service.getMonthlyCount(), count);
+		pageInfoByMember = new PageInfoByMember(loginMember.getNo(), page, 31, service.getMonthlyCount(), count, month);
+		System.out.println("monthly + emp_no : " + pageInfoByMember.getEmp_no());
+		System.out.println("monthly + month : " + pageInfoByMember.getMonth());
 
-		list = service.getMonthlyList(pageInfo);
-
-		model.addObject("pageInfo", pageInfo);
+		list = service.getMonthlyList(pageInfoByMember);
+		
+		model.addObject("pageInfoByMember", pageInfoByMember);
 		model.addObject("list", list);
+		System.out.println(list);
 		model.setViewName("cmt/monthly");
 
 		return model;
 	
+	}
+	
+	// 근무내역 ajax
+	@RequestMapping(value = "getMonthlyPageInfoByMember", method = RequestMethod.GET, produces = "application/json; charset=utf-8")
+	@ResponseBody
+	public String getAttListMethod(HttpSession session,
+			@RequestParam(value = "month") int month, @RequestParam(value = "page") String page) {
+
+		// emp_no 받아오기
+		Member loginMember = (Member) session.getAttribute("loginMember");
+
+		int emp_no = loginMember.getNo();
+		
+		if (loginMember == null) {
+			System.out.println("**** 로그인 정보 없음 **** ");
+		}
+		
+		// 리턴해줄 데이터 Map
+		Map<String, Object> mapM = new HashMap<String, Object>();
+		
+		// 월별 사용자 근무기록 조회
+		PageInfoByMember pageInfoByMember = null;
+		pageInfoByMember = new PageInfoByMember(loginMember.getNo(), Integer.parseInt(page), 31, service.getMonthlyCount(), 10, month);
+		
+		System.out.println("getMonthlyPageInfoByMember + emp_no : " + pageInfoByMember.getEmp_no());
+		System.out.println("getMonthlyPageInfoByMember + month : " + pageInfoByMember.getMonth());
+		
+		List<Cmt> list = null;
+		list = service.getMonthlyList(pageInfoByMember);
+		System.out.println(list);
+		mapM.put("list", list);
+
+		Gson gson = new Gson();
+		String r = gson.toJson(mapM);
+		return r;
 	}
 }

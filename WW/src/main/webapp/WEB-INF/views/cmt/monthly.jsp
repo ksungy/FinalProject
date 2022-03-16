@@ -1,15 +1,29 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="java.util.Date"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
 
 <c:set var="path" value="${ pageContext.request.contextPath }" />
-
+<%
+String ctxPath = request.getContextPath();
+%>
+<%
+Date nowTime = new Date();
+SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
+%>
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.8.2/css/all.min.css" />
+<script type="text/javascript"
+	src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <%@include file="../common/header.jsp"%>
 
 
 <!-- Begin Page Content -->
+<section>
 <div class="container-fluid">
 
 	<!-- Page Heading -->
@@ -76,13 +90,31 @@
 	</div>
 </div>
 
-
 <div class="col-lg-10"></div>
+</section>
 
-
+<script type="text/javascript">
+	$(document).ready(function() {
+		$.ajax({
+			url : "getMonthlyPageInfoByMember",
+			type : "get",
+			dataType : "json",
+			data : {
+				emp_no : "4",
+				page : "1",
+				month : "3"
+			},
+			success : function(data) {
+				console.log(data);
+			},
+			error : function(request, status, errorData) {
+				console.log("error code : " + request.status + "\n"
+							+ "message : " + request.responseText + "\n"
+							+ "error : " + errorData);
+			}
+		});
+	});
 </script>
-
-
 <!-- /.container-fluid -->
 
 <!-- End of Main Content -->

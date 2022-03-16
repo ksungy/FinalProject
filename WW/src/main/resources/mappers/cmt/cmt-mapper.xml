@@ -60,7 +60,8 @@
 	                    		from CMT_RS
 	                    		where EMP_NO =#{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD')))))
 		) as CMT_RS
-			from CMT_AT where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+			from CMT_AT 
+			where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
 	  	]]>		
 	</select>
 	
@@ -182,7 +183,11 @@
 	
 	<update id="updateCheckout" parameterType="_int">
 		<![CDATA[
-	Update CMT_AT set (CMT_END, CMT_MONTH) = (SYSDATE, SUBSTR(CMT_NO, 4, 2)) where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+    Update CMT_AT 
+			set CMT_END = SYSDATE,
+				CMT_MONTH = SUBSTR(CMT_NO, 4, 2)
+			where EMP_NO = #{emp_no}
+            and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
 		]]>
 	</update>
 	
@@ -280,10 +285,19 @@
 	</select>
 	
 	<!-- 근태 내역 조회 -->
-	<select id="getAttList" parameterType="map" resultMap="attList">
+	<select id="getAttList" parameterType="_int" resultMap="attList">
 		<![CDATA[ 
-		select CMT_NO, to_char(CMT_SRT, 'HH24:MI') CMT_SRT, to_char(CMT_END, 'HH24:MI') CMT_END
-		, CMT_RS from CMT_AT where EMP_NO = #{emp_no} order by CMT_SRT desc
+		select *
+		from (
+		 	select CMT_NO,
+			   to_char(CMT_SRT, 'HH24:MI') CMT_SRT, 
+			   to_char(CMT_END, 'HH24:MI') CMT_END,
+				CMT_RS
+		 	from CMT_AT 
+		 	where EMP_NO = #{emp_no} 
+		 	order by CMT_NO desc
+		 )
+		where ROWNUM < 6
 		]]>
 	</select>
 	
@@ -297,14 +311,13 @@
 	
 	<!-- 월별 근태 내역 조회 -->
 	<select id="getMonthlyList" parameterType="map" resultMap="TodayAttendance">
-		<![CDATA[ 		
 		SELECT CMT_NO,
 		EMP_NO,
 		to_char(CMT_SRT, 'HH24:MI') CMT_SRT,
 		to_char(CMT_END, 'HH24:MI') CMT_END
 		FROM CMT_AT
+		WHERE EMP_NO = #{emp_no} AND CMT_MONTH = #{month}
 		ORDER BY CMT_NO
-		]]>	
 	</select>	
 		<!-- 월별 근태 내역 조회 -->
 	<select id="getMonthlyListAjax" parameterType="map" resultMap="TodayAttendance">
@@ -313,7 +326,7 @@
 		EMP_NO,
 		to_char(CMT_SRT, 'HH24:MI') CMT_SRT,
 		to_char(CMT_END, 'HH24:MI') CMT_END
-		FROM CMT_AT C
+		FROM CMT_AT
 		WHERE EMP_NO = #{emp_no}
 		ORDER BY CMT_SRT
 		]]>	
