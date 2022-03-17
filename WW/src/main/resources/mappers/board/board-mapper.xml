@@ -190,6 +190,18 @@
 		)
 	</insert>
 	
+	<!-- 파일 삭제를 위한 파일 단건 조회 -->
+	<select id="selectBoardAttachByNo" parameterType="_int" resultMap="boardAttachListResultMap">
+		SELECT  FILE_NO,
+				BOARD_NO,
+				EMP_NO,
+				ORIGINAL_FILENAME,
+				RENAMED_FILENAME,
+				FILE_SIZE
+		FROM BOARD_ATTACH
+		WHERE FILE_NO = ${no}
+	</select>
+	
 	<!-- 파일 등록 -->
 	<insert id="insertFile" parameterType="BoardAttach" useGeneratedKeys="true" keyProperty="fileNo" keyColumn="FILE_NO">
 		INSERT INTO BOARD_ATTACH(
@@ -217,7 +229,7 @@
 	
 	<!-- 파일 삭제 -->
 	<delete id="deleteFile" parameterType="BoardAttach">
-		DELETE FROM BOARD_ATTACH WHERE FILE_NO = #{fileNo}
+		DELETE FROM BOARD_ATTACH WHERE FILE_NO = #{no}
 	</delete>
 	
 	<!-- 게시글 수정 -->

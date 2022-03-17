@@ -29,7 +29,7 @@ public interface BoardMapper {
 
 	void insertFile(BoardAttach boardAttach);
 
-	int deleteFile(int fileNo);
+	int deleteFile(int no);
 
 	int deleteBoard(int no);
 
@@ -45,8 +45,7 @@ public interface BoardMapper {
 
 	List<BoardAttach> findByBoardNo(int no);
 
-//	List<BoardAttach> findNewListByBoardNo(int no);
-
+	BoardAttach selectBoardAttachByNo(int no);
 
 
 	

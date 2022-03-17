@@ -164,16 +164,17 @@ public class BoardServieImpl implements BoardService {
 	
 	// ▼ 첨부파일 삭제
 	@Override
-	public int deleteFile(int fileNo) {
+	public int deleteFile(int no) {
 		
-		return mapper.deleteFile(fileNo);
+		return mapper.deleteFile(no);
 	}
 
-//	@Override
-//	public List<BoardAttach> getNewBoardAttachList(int no) {
-//		
-//		return mapper.findNewListByBoardNo(no);
-//	}
+	@Override
+	public BoardAttach findBoardAttachByNo(int no) {
+		
+		return mapper.selectBoardAttachByNo(no);
+		
+	}
 
 
 

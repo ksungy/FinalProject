@@ -257,7 +257,6 @@ public class BoardController {
 			model.addObject("location", "/board/write");
 		}
 
-		
 		model.setViewName("common/msg");
 
 		return model;
@@ -273,7 +272,6 @@ public class BoardController {
 		Resource resource = null;
 		
 		resource = resourceLoader.getResource("resources/upload/board/" + rname);
-		
 		
 		try {
 			if(userAgent.indexOf("MSIE") != -1 || userAgent.indexOf("Trident") != -1) {
@@ -384,27 +382,30 @@ public class BoardController {
 	
 	// ▼ 파일 삭제
 	@GetMapping("/fileDelete")
-	public ModelAndView deleteFile(ModelAndView model, @ModelAttribute Board board, @RequestParam("no") int fileNo, 
+	public ModelAndView deleteFile(ModelAndView model, @RequestParam("no") int no, 
 			@SessionAttribute(name = "loginMember", required = false) Member loginMember) {
 		
 		int result = 0;
 		
-		result = service.deleteFile(fileNo);
+		BoardAttach boardAttach = service.findBoardAttachByNo(no);
 		
-//		List<BoardAttach> boardAttachlist = service.getNewBoardAttachList(no);
+		if (boardAttach != null) {
+			result = service.deleteFile(no);
 		
 			if(result > 0) {
-				model.addObject("board", board);
-//				model.addObject(boardAttachlist);
 				model.addObject("msg", "파일 삭제 완료!");	
-				log.info("파일 삭제 하고 보드 " + board.getNo());
-				log.info("파일 삭제 하고 멤버 " + loginMember.getNo());
-				log.info("파일 삭제 후 " + board.toString());
-				model.addObject("location", "/board/edit?no=" + board.getNo());
+				model.addObject("location", "/board/edit?no=" + boardAttach.getBoardNo());
 			} else {
 				model.addObject("msg", "파일 삭제 실패!");
-				model.addObject("location", "/board/edit?no=" + board.getNo());
+				model.addObject("location", "/board/edit?no=" + boardAttach.getBoardNo());
 			}
+			
+		} else {
+			
+			model.addObject("msg", "잘못된 요청입니다.");
+			model.addObject("location", "/board/list");
+			
+		}
 		
 		model.setViewName("/common/msg");
 		

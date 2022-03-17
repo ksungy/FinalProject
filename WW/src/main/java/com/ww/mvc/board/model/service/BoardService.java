@@ -38,9 +38,9 @@ public interface BoardService {
 
 	List<BoardAttach> getBoardAttachList(int no);
 
-	int deleteFile(int fileNo);
+	int deleteFile(int no);
 
-//	List<BoardAttach> getNewBoardAttachList(int no);
+	BoardAttach findBoardAttachByNo(int no);
 
 
 	
