@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ww.mvc.board.model.service.BoardService;
 import com.ww.mvc.board.model.vo.Board;
@@ -295,15 +296,16 @@ public class BoardController {
 	}
 	
 	
-	
-	
 	// ▼ 게시글 수정
 	@GetMapping("/edit")
 	public ModelAndView edit(@SessionAttribute("loginMember") Member loginMember, ModelAndView model, @RequestParam("no") int no) {
 		
 		Board board = service.findBoardByNo(no);
 		
+		List<BoardAttach> boardAttachlist = service.getBoardAttachList(no);
+		
 		if(loginMember.getNo() == board.getEmpNo()) {
+			model.addObject("boardAttachlist", boardAttachlist);
 			model.addObject("board", board);
 			model.setViewName("board/edit");
 		} else {
@@ -316,33 +318,40 @@ public class BoardController {
 	}
 
 	@PostMapping("/edit")
-	public ModelAndView update(@SessionAttribute(name = "loginMember", required = false) Member loginMember,
-			Board board, ModelAndView model, @RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
+	public ModelAndView update(ModelAndView model, @SessionAttribute(name = "loginMember", required = false) Member loginMember,
+			Board board, @ModelAttribute BoardAttach boardAttach, HttpServletRequest request,
+			@RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
 		
 		int result = 0;
 		
 		if(upfile != null && !upfile.isEmpty()) {
-			
+
 			List<BoardAttach> attachList = new ArrayList<>();
-			
+
 			for (MultipartFile multipartFile : upfile) {
-				
+
 				String location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
-				String renamedFileName = FileProcess.save(multipartFile, location);
+				String renamedFileName = null;
+			
+				if(boardAttach.getRenamedFileName() != null) {
+					
+					// 기존에 업로드된 첨부파일을 삭제
+					FileProcess.delete(boardAttach.getRenamedFileName(), request);
+	
+				}			
+					
+				log.info(boardAttach.getRenamedFileName());
 				
-				BoardAttach boardAttach = new BoardAttach();
-				
+				renamedFileName = FileProcess.save(multipartFile, location);
+
 				if(renamedFileName != null) {
+					
 					boardAttach.setOriginalFileName(multipartFile.getOriginalFilename());
 					boardAttach.setRenamedFileName(renamedFileName);
 					boardAttach.setFileSize(multipartFile.getSize());
 					boardAttach.setBoardNo(board.getNo());
 					boardAttach.setEmpNo(loginMember.getNo());
 					boardAttach.setFileNo(boardAttach.getFileNo());
-
-				} else {
-						//기존에 저장된 파일 삭제
-						FileProcess.delete(boardAttach.getRenamedFileName());
 					
 				}
 				
@@ -360,16 +369,45 @@ public class BoardController {
 		log.info(board.toString());
 
 		if (result > 0) {
-			model.addObject("msg", "게시글이 정상적으로 등록되었습니다.");
+			model.addObject("msg", "게시글이 정상적으로 수정되었습니다.");
 			model.addObject("location", "/board/view?no=" + board.getNo());
 		} else {
-			model.addObject("msg", "게시글 등록이 실패하였습니다.");
+			model.addObject("msg", "게시글 수정이 실패하였습니다.");
 			model.addObject("location", "/board/write");
 		}
 
 		
 		model.setViewName("common/msg");
 
+		return model;
+	}
+	
+	// ▼ 파일 삭제
+	@GetMapping("/fileDelete")
+	public ModelAndView deleteFile(ModelAndView model, @ModelAttribute Board board, @RequestParam("no") int fileNo, 
+			@SessionAttribute(name = "loginMember", required = false) Member loginMember) {
+		
+		int result = 0;
+		
+		result = service.deleteFile(fileNo);
+		
+//		List<BoardAttach> boardAttachlist = service.getNewBoardAttachList(no);
+		
+			if(result > 0) {
+				model.addObject("board", board);
+//				model.addObject(boardAttachlist);
+				model.addObject("msg", "파일 삭제 완료!");	
+				log.info("파일 삭제 하고 보드 " + board.getNo());
+				log.info("파일 삭제 하고 멤버 " + loginMember.getNo());
+				log.info("파일 삭제 후 " + board.toString());
+				model.addObject("location", "/board/edit?no=" + board.getNo());
+			} else {
+				model.addObject("msg", "파일 삭제 실패!");
+				model.addObject("location", "/board/edit?no=" + board.getNo());
+			}
+		
+		model.setViewName("/common/msg");
+		
 		return model;
 	}
 	
@@ -507,6 +545,7 @@ public class BoardController {
 	}
 	
 	
+
 	
 	
 

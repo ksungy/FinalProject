@@ -114,21 +114,19 @@
 							<ul class="chat">
 								<c:forEach var="reply" items="${ board.replies }">
 								<li class="left clearfix">
-									<div>
-										<div class="header">
-											<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
-											<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
-											<button class="btn float-right btn-default btn-xs" id="replyUpdate" onclick="location.href='${ path }/board/replyEdit?no=${ board.no }'">수정</button>
-											</c:if>
-												<input type="hidden" id="replyNo" name="no" value="${ reply.no }">
-												<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
-												<small class="pull-right text-muted">
-													<fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/>
-												</small>										
-											<p id="rp"><c:out value="${ reply.content }" /></p>
-										</div>
-										<hr>
+									<div class="header">
+										<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
+										<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
+										<button class="btn float-right btn-default btn-xs" id="replyUpdate" onclick="location.href='${ path }/board/replyEdit?no=${ board.no }'">수정</button>
+										</c:if>
+											<input type="hidden" id="replyNo" name="no" value="${ reply.no }">
+											<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
+											<small class="pull-right text-muted">
+												<fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/>
+											</small>										
+										<p id="rp"><c:out value="${ reply.content }" /></p>
 									</div>
+									<hr>
 								</li>
 								</c:forEach>
 							</ul>

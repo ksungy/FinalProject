@@ -32,8 +32,11 @@
 		<div class="wrap-contact100">
 			<form action="${ path }/board/edit" method="post" enctype="multipart/form-data" class="contact100-form validate-form" id="writeForm">
 				<input type="hidden" name="no" value="${ board.no }">
+				<input type="hidden" name="fileNo" value="${ boardAttach.fileNo }">
+				<c:forEach var="boardAttach" items="${ boardAttachlist }">
 				<input type="hidden" name="originalFileName" value="${ boardAttach.originalFileName }">
 				<input type="hidden" name="renamedFileName" value="${ boardAttach.renamedFileName }">
+				</c:forEach>
 				<span class="contact100-form-title">
 					WhereWare
 				</span>
@@ -68,23 +71,25 @@
 				<span class="focus-input100"></span>
 				</div>
 
-				<label class="label-input100">첨부파일</label>
-					<c:if test="${ !empty boardAttach.originalFileName }">
-				    	<c:forEach var="boardAttach" items="${ boardAttachlist }">
-	                        <a class="uploadResult">
-	                       		${ boardAttach.originalFileName }
-	                        </a>
-	                    </c:forEach>
-					</c:if>
-					<div class="form-group" id="file-list">
-						<a href="#this" onclick="addFile()">파일 추가</a>	
+				<label class="label-input100">첨부파일		<span style="font-size:10px; color: gray;">※첨부파일은 최대 10개까지 등록이 가능합니다.</span></label>
+					
+				<div class="form-group" id="file-list">
+					<c:forEach var="boardAttach" items="${ boardAttachlist }">
+						<div class="file-input">
+							<span>
+								${ boardAttach.originalFileName }
+							</span>
+							<a href="${ path }/board/fileDelete?no=${ boardAttach.fileNo }" name="file-delete">삭제</a>	
+						</div>
+					</c:forEach>
+					<br>
+					<a href="#this" onclick="addFile()">파일 추가</a>	
 					<div class="file-group">
 						<input id="upfile" type="file" name="upfile" multiple="multiple"><a href='#this' name="file-delete">삭제</a>
 					</div>
 					<span class="focus-input100"></span>
-					</div>
-
-				 
+				</div>
+				
 				<div class="container-contact100-form-btn">
 					<button type="reset" onclick="location.href='${ pageContext.request.contextPath }/board/list'" class="contact100-form-btn">
 						취소
@@ -148,7 +153,7 @@
 			})
 	}
 
-	
 </script>
+
  
 <%@include file="../common/footer.jsp"%>

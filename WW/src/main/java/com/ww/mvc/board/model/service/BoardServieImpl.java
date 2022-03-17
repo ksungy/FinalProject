@@ -71,6 +71,7 @@ public class BoardServieImpl implements BoardService {
 		return result;
 	}
 
+	
 
 	// ▼ 게시글 검색
 	@Override
@@ -159,6 +160,20 @@ public class BoardServieImpl implements BoardService {
 		
 		return mapper.findByBoardNo(no);
 	}
+
+	
+	// ▼ 첨부파일 삭제
+	@Override
+	public int deleteFile(int fileNo) {
+		
+		return mapper.deleteFile(fileNo);
+	}
+
+//	@Override
+//	public List<BoardAttach> getNewBoardAttachList(int no) {
+//		
+//		return mapper.findNewListByBoardNo(no);
+//	}
 
 
 

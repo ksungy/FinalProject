@@ -215,6 +215,11 @@
 		)
 	</insert>
 	
+	<!-- 파일 삭제 -->
+	<delete id="deleteFile" parameterType="BoardAttach">
+		DELETE FROM BOARD_ATTACH WHERE FILE_NO = #{fileNo}
+	</delete>
+	
 	<!-- 게시글 수정 -->
 	<update id="updateBoard" parameterType="Board">
 		UPDATE BOARD
@@ -225,7 +230,7 @@
 			<if test="content != null">
 				BOARD_CONTENT = #{content},
 			</if>
-				BOARD_MODIFIED = SYSDATE
+				BOARD_CREATED = SYSDATE
 		</trim>
 		WHERE BOARD_NO = #{no}
 	</update>
@@ -301,5 +306,22 @@
 		FROM BOARD_ATTACH 
 		WHERE BOARD_NO = #{no}
 	</select>
+	
+	<!-- 
+	<update id="findNewListByBoardNo" parameterType="_int">
+		UPDATE  BOARD_ATTACH
+		<trim prefix="SET" suffixOverrides=",">
+			<if test="originalFileName != null">
+				ORIGINAL_FILENAME = #{originalFileName},
+			</if>
+			<if test="renamedFileName != null">
+				RENAMED_FILENAME = #{renamedFileName},
+			</if>
+		</trim>
+		WHERE BOARD_ATTACH = #{fileNo}
+				
+	
+	</update>
+	 -->
 	
 </mapper>

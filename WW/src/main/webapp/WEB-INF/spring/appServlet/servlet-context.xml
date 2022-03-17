@@ -35,7 +35,7 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/member/**/"/>
-		 	<mapping path="/board/write"/>
+		 	<mapping path="/board/**/"/>
 		 	
 		 	<exclude-mapping path="/member/login"/>
 		 	<exclude-mapping path="/member/enroll"/>
