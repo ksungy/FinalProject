@@ -75,10 +75,12 @@
                     <a class="nav-link" href="${path}/member/mypageModify" >
                     	<c:choose>
       						<c:when test="${ loginMember.originalProfilename == null }">
-                        	<img class="rounded-circle" src="${path}/resources/img/undraw_profile.svg">
+                        	<img class="rounded-circle" src="${path}/resources/img/undraw_profile.svg"
+                        	style="width: 200px; height:200px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
                         </c:when>
                         <c:otherwise>
-		        			<img class="rounded-circle" alt="x" src="${path}/upload/profileUpload/${loginMember.renamedProfilename}">
+		        			<img class="rounded-circle" alt="x" src="${path}/upload/profileUpload/${loginMember.renamedProfilename}"
+		        			style="width: 200px; height:200px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
             			</c:otherwise>
             			</c:choose>
                     </a>

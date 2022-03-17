@@ -17,6 +17,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +33,10 @@ import org.springframework.web.servlet.ModelAndView;
 import com.ww.mvc.board.model.service.BoardService;
 import com.ww.mvc.board.model.vo.Board;
 import com.ww.mvc.board.model.vo.BoardAttach;
+import com.ww.mvc.board.model.vo.Reply;
 import com.ww.mvc.common.util.FileProcess;
 import com.ww.mvc.common.util.PageInfo;
+import com.ww.mvc.member.model.service.MemberService;
 import com.ww.mvc.member.model.vo.Member;
 
 import lombok.extern.slf4j.Slf4j;
@@ -69,12 +72,21 @@ public class BoardController {
 
 	}
 
-	// ▼ 게시글 1건 상세조회
+	// ▼ 게시글 상세조회
 	@GetMapping("/view")
 	public ModelAndView view(ModelAndView model, @RequestParam("no") int no) {
 
 		Board board = service.findBoardByNo(no);
-
+		
+		int boardHits = service.getBoardHits(no);
+		
+		int replyCount = service.getReplyCount(no);
+		
+		board.setReplyCount(replyCount);
+		board.setHits(boardHits);
+		
+		model.addObject("boardHits", boardHits);
+		model.addObject("replyCount", replyCount);
 		model.addObject("board", board);
 		model.setViewName("board/view");
 
@@ -184,7 +196,7 @@ public class BoardController {
 
 	// ▼ 첨부파일 글 작성
 	@PostMapping("/write")
-	public ModelAndView write(ModelAndView model, @ModelAttribute Board board,
+	public ModelAndView write(ModelAndView model, @ModelAttribute Board board, @SessionAttribute(name = "loginMember") Member loginMember,
 			@RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
 		
 		int result = 0;
@@ -207,6 +219,7 @@ public class BoardController {
 					boardAttach.setRenamedFileName(renamedFileName);
 					boardAttach.setFileSize(multipartFile.getSize());
 					boardAttach.setBoardNo(board.getNo());
+					boardAttach.setEmpNo(loginMember.getNo());
 
 				}
 				
@@ -216,8 +229,7 @@ public class BoardController {
 			}
 		}
 		
-		
-//		board.setWriterNo(loginMember.getNo());
+		board.setEmpNo(loginMember.getNo());
 		result = service.save(board);
 		log.info(board.toString());
 
@@ -237,34 +249,188 @@ public class BoardController {
 	
 	
 	// ▼ 게시글 수정
-//	@GetMapping("/edit")
-//	public ModelAndView edit(@SessionAttribute("loginMember") Member loginMember, ModelAndView model, @RequestParam("no") int no) {
-//		
-//		Board board = service.findBoardByNo(no);
-//		
-//		if(loginMember.getNo() == board.getEmpNo()) {
-//			model.addObject("board", board);
-//			model.setViewName("board/edit");
-//		} else {
-//			model.addObject("msg", "접근 권한이 없습니다.");
-//			model.addObject("location", "/board/list");
-//			model.setViewName("common/msg");
-//		} 
-//		
-//		return model;
-//	}
+	@GetMapping("/edit")
+	public ModelAndView edit(@SessionAttribute("loginMember") Member loginMember, ModelAndView model, @RequestParam("no") int no) {
+		
+		Board board = service.findBoardByNo(no);
+		
+		if(loginMember.getNo() == board.getEmpNo()) {
+			model.addObject("board", board);
+			model.setViewName("board/edit");
+		} else {
+			model.addObject("msg", "접근 권한이 없습니다.");
+			model.addObject("location", "/board/list");
+			model.setViewName("common/msg");
+		} 
+		
+		return model;
+	}
+
+	@PostMapping("/edit")
+	public ModelAndView update(@SessionAttribute(name = "loginMember", required = false) Member loginMember,
+			Board board, ModelAndView model, @RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
+		
+		int result = 0;
+		
+		if(upfile != null && !upfile.isEmpty()) {
+			
+			List<BoardAttach> attachList = new ArrayList<>();
+			
+			for (MultipartFile multipartFile : upfile) {
+				
+				String location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
+				String renamedFileName = FileProcess.save(multipartFile, location);
+				
+				BoardAttach boardAttach = new BoardAttach();
+				
+				if(renamedFileName != null) {
+					boardAttach.setOriginalFileName(multipartFile.getOriginalFilename());
+					boardAttach.setRenamedFileName(renamedFileName);
+					boardAttach.setFileSize(multipartFile.getSize());
+					boardAttach.setBoardNo(board.getNo());
+					boardAttach.setEmpNo(loginMember.getNo());
+					boardAttach.setFileNo(boardAttach.getFileNo());
+
+				} else {
+						//기존에 저장된 파일 삭제
+						FileProcess.delete(boardAttach.getRenamedFileName());
+					
+				}
+				
+				attachList.add(boardAttach);
+				
+				board.setAttachList(attachList);
+
+			}
+		}
+		
+		board.setEmpNo(loginMember.getNo());
+
+		result = service.save(board);
+		
+		log.info(board.toString());
+
+		if (result > 0) {
+			model.addObject("msg", "게시글이 정상적으로 등록되었습니다.");
+			model.addObject("location", "/board/view?no=" + board.getNo());
+		} else {
+			model.addObject("msg", "게시글 등록이 실패하였습니다.");
+			model.addObject("location", "/board/write");
+		}
+
+		
+		model.setViewName("common/msg");
+
+		return model;
+	}
 	
 	
 	// ▼ 게시글 삭제
-	
+	@GetMapping("/delete")
+	public ModelAndView delete(ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int no) {
+		
+		Board board = service.findBoardByNo(no);
+		
+		int result = 0;
+		
+		if(loginMember.getNo() == board.getEmpNo()) {
+			result = service.delete(board.getNo());
+			
+			if(result > 0) {
+				model.addObject("msg", "게시글이 정상적으로 삭제되었습니다.");
+				model.addObject("location", "/board/list");
+			} else {
+				model.addObject("msg", "게시글 삭제가 실패했습니다.");
+				model.addObject("location", "/board/view?no=" + board.getNo());
+			}
+			
+		} else {
+			model.addObject("msg", "본인 게시글만 삭제할 수 있습니다.");
+			model.addObject("location", "/board/list");
+		}
+		
+		model.setViewName("common/msg");
+		
+		return model;
+	}
 	
 	
 	// ▼ 댓글 작성
+	@RequestMapping("/reply")
+	public ModelAndView writeReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply) {
+		
+		int result = 0;
+		
+		reply.setBoardNo(board.getNo());
+		reply.setEmpNo(member.getNo());
+		reply.setWriter(member.getId());
+		
+		int boardNo = reply.getBoardNo();
+
+		result = service.saveReply(member, reply);
+		
+		if(result > 0) {
+			model.addObject("msg", "댓글 등록 완료!");
+			model.addObject("location", "/board/view?no=" + boardNo);
+		} else {
+			model.addObject("msg", "댓글 등록 실패!");
+			model.addObject("location", "/board/view?no=" + boardNo);	
+			
+		}
+		
+		model.setViewName("/common/msg");
+		
+		return model;
+	}
+	
+	
 	
 	// ▼ 댓글 수정
-	
+	@RequestMapping("/replyUpdate")
+	public String updateReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply){
+		int result = 0;
+		int boardNo = reply.getBoardNo();
+		
+		reply.setNo(reply.getNo());
+		reply.setBoardNo(board.getNo());
+		reply.setEmpNo(member.getNo());
+		reply.setWriter(member.getId());		
+		reply.setContent(reply.getContent());
+		
+		result = service.updateReply(reply);
+		
+		if(result > 0) {
+			System.out.println("오케이");
+		} else {
+			System.out.println("놉");
+		}
+		
+		return "/board/view?no=" + boardNo;
+		
+	}
+
+
+
 	// ▼ 댓글 삭제
-	
+	@GetMapping("/replyDelete")
+	public ModelAndView deleteReply(ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int no) {
+		
+		int result = 0;
+		
+		result = service.deleteReply(no);
+		
+		if(result > 0) {
+			model.addObject("msg", "댓글 삭제 완료!");
+			model.addObject("location", "/board/list");
+		} else {
+			model.addObject("msg", "댓글 삭제 실패!");
+			model.addObject("location", "/board/list");
+		}
+		
+		model.setViewName("/common/msg");
+		
+		return model;
+	}
 	
 	
 	
