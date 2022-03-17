@@ -2,7 +2,8 @@
 	pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
-<c:set var="path" value="${ pageContext.request.contextPath }" /><%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
+<c:set var="path" value="${ pageContext.request.contextPath }" />
 
 
 <!DOCTYPE html>
@@ -39,15 +40,12 @@
             color: #3a3b45;
             border-radius: 0.35rem;
         }
-
         .profile-nav:hover {
             background-color: #eaecf4;
             color: #3a3b45;
             text-decoration: none;
         }
-
         .bg-base-color {background-color: #2A3D72;}
-
     </style>
 	<title>WhereWare</title>
 </head>
@@ -61,7 +59,7 @@
         <ul class="navbar-nav sidebar bg-base-color sidebar-dark accordion" id="accordionSidebar">
 
             <!-- Sidebar - Brand -->
-            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${path}/home" >
+            <a class="sidebar-brand d-flex align-items-center justify-content-center" href="${path}/" >
                 <div class="sidebar-brand-icon rotate-n-15">
                 </div>
                 <div class="sidebar-brand-text mx-3">WhereWare</div>
@@ -175,7 +173,7 @@
                 <div id="cmtMenu" class="collapse" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="/mvc/cmt/dashBoard">근태 확인</a>
+                        <a class="collapse-item" href="/mvc/cmt/dashboard">근태 확인</a>
                         <a class="collapse-item" href="/mvc/cmt/modify">근태 수정</a>
                         <a class="collapse-item" href="/mvc/cmt/monthly">월별 근태</a>
                     </div>
@@ -222,5 +220,4 @@
                     </button>
                     
                 </nav>
-
 

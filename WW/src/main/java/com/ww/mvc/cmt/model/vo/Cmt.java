@@ -1,32 +1,25 @@
 package com.ww.mvc.cmt.model.vo;
 
-import java.sql.Timestamp;
-import java.util.Date;
+import org.springframework.stereotype.Component;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 public class Cmt {
 	private int cmt_no;
 	
-	private int emp_id;
+	private int emp_no;
 	
-	private Date cmt_srt_time;
+	private String cmt_srt;
 	
-	private Date cmt_end_time;
+	private String cmt_end;
 	
-	private double cmt_time;
+	private String cmt_rs;
 	
-	private Date cmt_date;
+	private String cmt_month;
 	
-	private double cmt_total_time;
-	
-	private double cmt_over_time;
-	
-	private int cmt_month;
-
 }
