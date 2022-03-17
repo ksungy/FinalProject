@@ -38,7 +38,7 @@ public class LoginCheckIntercepter extends HandlerInterceptorAdapter{
 		
 		if (loginMember == null) {
 			request.setAttribute("msg", "로그인후에 이용이 가능합니다.");
-			request.setAttribute("location", "/");
+			request.setAttribute("location", "/member/login");
 			request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp").forward(request, response);
 		
 			return false;
