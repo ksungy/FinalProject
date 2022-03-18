@@ -15,9 +15,15 @@ public class CalendarDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<Calendar> getCalendar() throws Exception {
+	public List<Calendar> getCalendar(Calendar calen) throws Exception {
 		List<Calendar> calendar = null;
-		calendar = sqlSession.selectList("Calendar.calendarList");
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+		
+		map.put("empNo", calen.getEmpNo());
+		
+		calendar = sqlSession.selectList("Calendar.calendarList", map);
+		
 		return calendar;
 		
 	}
@@ -27,6 +33,7 @@ public class CalendarDao {
 		
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
+		map.put("empNo", calen.getEmpNo());
 		map.put("calendarTitle", calen.getCalendarTitle());
 		map.put("calendarStart", calen.getCalendarStart());
 		map.put("calendarEnd", calen.getCalendarEnd());
@@ -35,6 +42,18 @@ public class CalendarDao {
 		
 		return calendar;
 		
+	}
+
+	public List<Calendar> delCalendar(Calendar calen) {
+		List<Calendar> calendar = null;
+		
+		Map<Object, Object> map = new HashMap<Object, Object>();
+
+		map.put("calendarTitle", calen.getCalendarTitle());
+		
+		calendar = sqlSession.selectList("Calendar.calendarDelete", map);
+		
+		return calendar;
 	}
 	
 }

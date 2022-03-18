@@ -15,12 +15,17 @@ public class CalendarServiceImpl implements CalendarService {
 	private CalendarDao calendardao;
 	
 	@Override
-	public List<Calendar> getCalendar() throws Exception {
-		return calendardao.getCalendar();
+	public List<Calendar> getCalendar(Calendar calen) throws Exception {
+		return calendardao.getCalendar(calen);
 	}
 	
 	@Override
 	public List<Calendar> setCalendar(Calendar calen) throws Exception {
 		return calendardao.setCalendar(calen);
+	}
+
+	@Override
+	public List<Calendar> delCalendar(Calendar calen) throws Exception {
+		return calendardao.delCalendar(calen);
 	}
 }

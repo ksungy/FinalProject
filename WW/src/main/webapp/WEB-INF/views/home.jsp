@@ -22,7 +22,7 @@
 <p>
 
 <p>
-	<a href="${ path }/chat">
+	<a href="http://localhost:80" target = "_blank">
 		채팅방 접속
 	</a>
 
