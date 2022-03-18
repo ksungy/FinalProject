@@ -95,9 +95,9 @@ public class BoardController {
 		
 		board.setReplyCount(replyCount);
 		board.setHits(boardHits);
-
+		
 		log.info(board.toString());
-		log.info(boardAttachlist.toString());
+		
 		
 		model.addObject("boardHits", boardHits);
 		model.addObject("replyCount", replyCount);
@@ -374,7 +374,6 @@ public class BoardController {
 			model.addObject("location", "/board/write");
 		}
 
-		
 		model.setViewName("common/msg");
 
 		return model;
@@ -422,6 +421,7 @@ public class BoardController {
 		int result = 0;
 		
 		if(loginMember.getNo() == board.getEmpNo()) {
+			
 			result = service.delete(board.getNo());
 			
 			if(result > 0) {
@@ -451,7 +451,7 @@ public class BoardController {
 		
 		reply.setBoardNo(board.getNo());
 		reply.setEmpNo(member.getNo());
-		reply.setWriter(member.getId());
+		reply.setWriter(member.getName());
 		
 		int boardNo = reply.getBoardNo();
 
@@ -530,24 +530,33 @@ public class BoardController {
 		
 		int result = 0;
 		
-		result = service.deleteReply(no);
+		Reply reply = service.findReplyByNo(no);
 		
-		if(result > 0) {
-			model.addObject("msg", "댓글 삭제 완료!");
-			model.addObject("location", "/board/list");
-		} else {
-			model.addObject("msg", "댓글 삭제 실패!");
-			model.addObject("location", "/board/list");
+		int boardNo = reply.getBoardNo();
+
+		if(reply != null) {
+			
+			result = service.deleteReply(no);
+			
+			if(result > 0) {
+				model.addObject("msg", "댓글 삭제 완료!");
+				model.addObject("location", "/board/view?no=" + boardNo);
+			} else {
+				model.addObject("msg", "댓글 삭제 실패!");
+				model.addObject("location", "/board/list");
+			}
+			
 		}
 		
 		model.setViewName("/common/msg");
 		
 		return model;
+	
+
 	}
 	
 	
 
-	
 	
 
 }

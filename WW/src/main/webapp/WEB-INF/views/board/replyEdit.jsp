@@ -123,7 +123,7 @@
 											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>										
 											<textarea class="form-control" id="content" name="content" rows="3"><c:out value="${ reply.content }" /></textarea>
 											
-											<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
+											<c:if test="${ !empty loginMember && (loginMember.no == reply.empNo) }">
 												<button type="submit" onclick="location.href='${ path }/board/replyUpdate" class="update_btn btn btn-dark mt-3" style="background:#2A3D72;">댓글 수정</button>
 												<button type="reset" onclick="location.href='${ path }/board/view?no=${ board.no }'" class="cancel_btn btn btn-dark mt-3" style="background:#808080;">취소</button>
 											</c:if>

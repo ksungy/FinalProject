@@ -72,7 +72,6 @@ public class BoardServieImpl implements BoardService {
 	}
 
 	
-
 	// ▼ 게시글 검색
 	@Override
 	public List<Board> boardSearch(Map<String, String> searchMap, PageInfo pageInfo) {
@@ -174,6 +173,12 @@ public class BoardServieImpl implements BoardService {
 		
 		return mapper.selectBoardAttachByNo(no);
 		
+	}
+
+	@Override
+	public Reply findReplyByNo(int no) {
+		
+		return mapper.selectReplyByNo(no);
 	}
 
 

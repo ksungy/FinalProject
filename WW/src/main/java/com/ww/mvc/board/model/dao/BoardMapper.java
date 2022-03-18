@@ -47,6 +47,9 @@ public interface BoardMapper {
 
 	BoardAttach selectBoardAttachByNo(int no);
 
+	Reply selectReplyByNo(int no);
+
+
 
 	
 

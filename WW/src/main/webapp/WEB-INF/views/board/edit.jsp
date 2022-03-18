@@ -41,24 +41,19 @@
 					WhereWare
 				</span>
 				
-				<label class="label-input100">Your Name *</label>
-				<div class="wrap-input100 rs1 validate-input">
-					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명" value="<c:out value="${ loginMember.id }"/>" readonly>
+				<label class="label-input100">이름</label>
+				<div class="wrap-input100 validate-input">
+					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명" value="<c:out value="${ board.writer }"/>" readonly>
 					<span class="focus-input100"></span>
 				</div>
-		
-				<div class="wrap-input100 rs1 validate-input">
-					<input class="input100" type="text" name="deptTitle" placeholder="부서명" value="<c:out value="${ loginMember.deptCode }"/>" readonly>
-					<span class="focus-input100"></span>
-				</div>
-
-				<label class="label-input100">Title *</label>
+				
+				<label class="label-input100">글 제목(100자)</label>
 				<div class="wrap-input100 validate-input">
 					<input id="title" class="input100" type="text" name="title" placeholder="제목을 입력하세요." value="<c:out value="${ board.title }"/>">
 					<span class="focus-input100"></span>
 				</div>
 
-				<label class="label-input100">Content(4000자) *</label>
+				<label class="label-input100">글 내용(4000자)</label>
 				<div class="wrap-input100 validate-input">
 					<textarea id="boardContent" name="content">${ board.content }</textarea>
 					<script>

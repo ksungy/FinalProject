@@ -42,11 +42,7 @@ public interface BoardService {
 
 	BoardAttach findBoardAttachByNo(int no);
 
-
-	
-
-	
-	
+	Reply findReplyByNo(int no);
 
 
 }

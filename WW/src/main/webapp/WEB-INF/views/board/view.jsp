@@ -33,7 +33,7 @@
 					class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
 					aria-labelledby="dropdownMenuLink">
 					<div class="dropdown-header">게시글 옵션</div>
-					 <c:if test="${ !empty loginMember && (loginMember.id == board.writer) }">
+					 <c:if test="${ !empty loginMember && (loginMember.no == board.empNo) }">
 					<a class="dropdown-item" href="/mvc/board/edit?no=${ board.no }">게시글 수정</a>
 					<a class="dropdown-item" onclick="boardDelete()" >게시글 삭제</a>
 					</c:if>
@@ -115,7 +115,7 @@
 								<c:forEach var="reply" items="${ board.replies }">
 								<li class="left clearfix">
 									<div class="header">
-										<c:if test="${ !empty loginMember && (loginMember.id == reply.writer) }">
+										<c:if test="${ !empty loginMember && (loginMember.no == board.empNo) }">
 										<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
 										<button class="btn float-right btn-default btn-xs" id="replyUpdate" onclick="location.href='${ path }/board/replyEdit?no=${ board.no }'">수정</button>
 										</c:if>
@@ -144,9 +144,7 @@
 							<input type="hidden" name="no" value="${ board.no }" /> 
 							<div class="form-inline mb-2">
 								<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
-								<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId" name="writer" value="<c:out value="${ loginMember.id }"/>" readonly>
-								<label for="replyPassword" class="ml-4"><i class="fa fa-unlock-alt fa-2x"></i></label>
-								<input type="password" class="form-control ml-2" placeholder="비밀번호 입력" id="replyPassword">
+								<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId" name="writer" value="<c:out value="${ loginMember.name }"/>" readonly>
 							</div>
 							<textarea class="form-control" id="exampleFormControlTextarea1" name="content" rows="3"></textarea>
 							<button type="button" onclick="checkReplyConfirm()" class="btn btn-dark mt-3" style="background:#2A3D72;">댓글 작성</button>
