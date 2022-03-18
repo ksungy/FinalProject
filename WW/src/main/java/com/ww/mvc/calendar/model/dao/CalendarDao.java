@@ -9,18 +9,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import com.ww.mvc.calendar.model.vo.Calendar;
+import com.ww.mvc.member.model.vo.Member;
 
 @Repository("calendarDao")
 public class CalendarDao {
 	@Autowired
 	private SqlSession sqlSession;
 	
-	public List<Calendar> getCalendar(Calendar calen) throws Exception {
+	public List<Calendar> getCalendar(Member loginMember) throws Exception {
 		List<Calendar> calendar = null;
 		
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
-		map.put("empNo", calen.getEmpNo());
+		map.put("empNo", loginMember.getNo());
 		
 		calendar = sqlSession.selectList("Calendar.calendarList", map);
 		
@@ -44,16 +45,14 @@ public class CalendarDao {
 		
 	}
 
-	public List<Calendar> delCalendar(Calendar calen) {
+	public List<Calendar> delCalendar(int calendarNo) {
+		System.out.println(calendarNo);
 		List<Calendar> calendar = null;
 		
-		Map<Object, Object> map = new HashMap<Object, Object>();
-
-		map.put("calendarTitle", calen.getCalendarTitle());
-		
-		calendar = sqlSession.selectList("Calendar.calendarDelete", map);
+		calendar = sqlSession.selectList("Calendar.calendarDelete", calendarNo);
 		
 		return calendar;
 	}
-	
+
+
 }

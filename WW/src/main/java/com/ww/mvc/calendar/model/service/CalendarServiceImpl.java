@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.ww.mvc.calendar.model.dao.CalendarDao;
 import com.ww.mvc.calendar.model.vo.Calendar;
+import com.ww.mvc.member.model.vo.Member;
 
 @Service("calendarService")
 public class CalendarServiceImpl implements CalendarService {
@@ -15,8 +16,8 @@ public class CalendarServiceImpl implements CalendarService {
 	private CalendarDao calendardao;
 	
 	@Override
-	public List<Calendar> getCalendar(Calendar calen) throws Exception {
-		return calendardao.getCalendar(calen);
+	public List<Calendar> getCalendar(Member loginMember) throws Exception {
+		return calendardao.getCalendar(loginMember);
 	}
 	
 	@Override
@@ -25,7 +26,9 @@ public class CalendarServiceImpl implements CalendarService {
 	}
 
 	@Override
-	public List<Calendar> delCalendar(Calendar calen) throws Exception {
-		return calendardao.delCalendar(calen);
+	public List<Calendar> delCalendar(int calendarNo) throws Exception {
+		return calendardao.delCalendar(calendarNo);
 	}
+
+
 }

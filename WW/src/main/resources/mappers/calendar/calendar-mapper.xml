@@ -15,7 +15,7 @@
   </resultMap>
 	
 	<select id="calendarList" resultMap="calendarRM" parameterType="map">
-		SELECT * FROM CALENDAR
+		SELECT * FROM CALENDAR WHERE EMP_NO = #{empNo}
 	</select>
 	
 	<insert id="calendarInsert" parameterType="map">
@@ -23,7 +23,7 @@
 	</insert>
 	
 	<delete id="calendarDelete" parameterType="map">
-		DELETE FROM CALENDAR WHERE CALENDAR_TITLE = #{calendarNo}
+		DELETE FROM CALENDAR WHERE CALENDAR_NO = #{calendarNo}
 	</delete>
 	
 </mapper>

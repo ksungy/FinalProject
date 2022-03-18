@@ -28,9 +28,9 @@ public class CalendarController {
 		String viewpage = "calendar/calendar";
 		List<Calendar> calendar = null;
 		try {
-			calendar = service.getCalendar(calen);
+			calendar = service.getCalendar(loginMember);
 			
-			System.out.println(calendar);
+			System.out.println(loginMember);
 			
 			request.setAttribute("calendarList", calendar);
 		} catch (Exception e) {
@@ -62,12 +62,12 @@ public class CalendarController {
 		return model;
 	}
 	
-	@RequestMapping(value = "/calendardelete", method = RequestMethod.POST)
-	public Model delCalendarList(@RequestParam("calendarTitle") String calendarTitle, Model model, Calendar calen, HttpServletRequest request) {
+	@RequestMapping(value = "/calendardelete", method = RequestMethod.GET)
+	public Model delCalendarList(Model model, Calendar calen, HttpServletRequest request) {
 		List<Calendar> calendar = null;
 		try {
-			System.out.println("성공");
-			calendar = service.delCalendar(calen);
+
+			calendar = service.delCalendar(calen.getCalendarNo());
 			
 			
 			

@@ -85,7 +85,13 @@ document.addEventListener('DOMContentLoaded', function() {
 				console.log("#등록된 일정 클릭#"); 
 				console.log(arg.event); 
 				if (confirm('일정을 삭제하시겠습니까?')) {
-					
+					$.ajax({
+						url : "http://localhost:8088/mvc/calendardelete",
+						type : 'get',
+						data : {
+						},
+						
+					});
 					arg.event.remove()
 					} 
 				}, 
