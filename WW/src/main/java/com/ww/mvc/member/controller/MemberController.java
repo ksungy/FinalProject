@@ -65,7 +65,8 @@ public class MemberController {
 			model.addObject("msg", "로그인에 성공하셨습니다.");
 			
 			model.addObject("loginMember", loginMember);			
-			model.setViewName("cmt/dashBoard");
+			model.addObject("location", "/cmt/dashboard");
+			model.setViewName("common/msg");
 
 			log.info("{}, {}", id, password);
 			log.info(loginMember.toString());

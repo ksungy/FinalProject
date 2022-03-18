@@ -74,18 +74,18 @@
                     	<c:choose>
       						<c:when test="${ loginMember.renamedProfilename == null }">
                         	<img class="rounded-circle" src="${path}/resources/upload/profileUpload/default_profile.jpg"
-                        	style="width: 200px; height:200px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
+                        	style="width: 100%; height:100%; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
                         </c:when>
                         <c:otherwise>
 		        			<img class="rounded-circle" alt="x" src="${path}/upload/profileUpload/${loginMember.renamedProfilename}"
-		        			style="width: 200px; height:200px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
+		        			style="width: 100%; height:100%; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
             			</c:otherwise>
             			</c:choose>
                     </a>
                 </li>
 					
 					<c:if test="${ !empty loginMember }">
-                    <div class="py-2 rounded" style="background-color: rgb(200, 204, 255) ;width: 90%; margin: auto;">
+                    <div class="py-2 rounded" style="background-color: rgb(200, 204, 255) ;width: 90%;">
                         <a class="profile-nav">${ loginMember.name }</a>
                     </div>
 					</c:if>
@@ -191,20 +191,6 @@
                         <a class="collapse-item" href="/mvc/cmt/monthly">월별 근태</a>
                     </div>
                 </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-address-book"></i>
-                    <span>사원 검색</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
             </li>
 
             <!-- Divider -->
