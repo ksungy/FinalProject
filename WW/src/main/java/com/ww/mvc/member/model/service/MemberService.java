@@ -1,5 +1,7 @@
 package com.ww.mvc.member.model.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.ww.mvc.member.model.vo.Member;
@@ -14,6 +16,15 @@ public interface MemberService {
 	Member login(String id, String password);
 
 	Boolean isDuplicateID(String userId);
+
+	String findId(Member member);
+
+	int deleteMember(int no);
+
+	int updatePwd(Member member);
 	
+	List<Member> selectMemberAllForApproval(String userId);
+
+	List<Member> selectSearchedMemberForApproval(String searchData, String userId);
 
 }

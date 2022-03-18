@@ -1,5 +1,7 @@
 package com.ww.mvc.member.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -35,6 +37,12 @@ public class MemberServiceImpl implements MemberService {
 				passwordEncoder.matches(password, member.getPassword()) ? member : null;
 	}
 	
+	@Override
+	public String findId(Member member) {
+		
+		return mapper.findId(member);
+	}
+	
 	// 회원가입 및 업데이트
 	@Override
 	@Transactional
@@ -52,9 +60,41 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
+	@Transactional
+	public int deleteMember(int no) {
+		
+		return mapper.deleteMember(no);
+	}
+	
+	@Override
 	public Boolean isDuplicateID(String userId) {
 		
 		return this.findMemberById(userId) != null;
+	}
+
+
+	@Override
+	@Transactional
+	public int updatePwd(Member member) {
+		int result = 0;
+		
+		member.setPassword(passwordEncoder.encode(member.getPassword()));
+		
+		result = mapper.updatePwd(member);
+		
+		return result;
+	}
+
+	@Override
+	public List<Member> selectMemberAllForApproval(String userId) {
+		
+		return mapper.selectMemberForApproval(userId);
+	}
+
+	@Override
+	public List<Member> selectSearchedMemberForApproval(String searchData, String userId) {
+		
+		return mapper.selectSearchedMemberForApproval(searchData, userId);
 	}
 
 

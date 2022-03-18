@@ -9,21 +9,44 @@
 <%@include file="../common/header.jsp"%>
 
 <link rel="stylesheet" href="${ path }/resources/css/mypageModify.css">
-<link
-      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-      rel="stylesheet">
 
-	<section id="container">
-        <form action="${path}/member/mypgeModify" id="myPage" method="post">
-            <table>
+	<c:set var="adressArr" value="${ loginMember.address }"></c:set>
+	<c:set var="arr" value="${fn:split(adressArr,',')}"/>
+	
+	<!-- 사이드 -->
+	<nav>
+	<div class="EPay-index_section">
+	    <h2 ><a style="margin-left:20px; font-family: 'InfinitySans-RegularA1';">마이페이지</a></h2>
+	    <li class="memDA EPay-form">
+	        <a href="${path}/member/mypageModify" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 수정</a>
+	    </li>
+	    <li class="memDA EPay-list">
+	        <a href="${path}/member/updatePwd" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">비밀번호 수정</a>
+	    </li>
+	    <li class="memDA EPay-box">
+	        <a href="${path}/member/deleteMember" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 탈퇴</a>
+	    </li>
+	</div>
+	</nav>
+
+	<section>
+    <div id="container">
+	<form method="post" action="${path}/member/mypageModify" enctype="multipart/form-data" name="mapageModify">
+            <table style="border: 1px soild black; "> <!-- border="1px soild black;" -->
+                <tr>
+                    <th colspan="3"><h1 style="color: rgb(61, 83, 143);">회원 정보 수정</h1></th>
+                </tr>
+
+                <!-- 이미지 파일 수정 영역 -->
                 <tr>
 					<td>
-						<label for="modify_img">프로필 사진</label>
+						<label for="modify_img" class="updateInfo">프로필 사진</label>
 					</td>
-					<th style="height: 100px;">	
+                    
+					<th colspan="3">	
 						<c:choose>
 				      	    <c:when test="${ loginMember.renamedProfilename == null }">
-				            	<div id="image_container">
+				            	<div id="image_container" style="margin-left: 20px;">
 					            	<div id="myImgDiv">
 					            		<img alt="x" src="${path}/resources/upload/profileUpload/default_profile.jpg" class="firstImg"
 					            			style="width: 100px; height:100px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
@@ -32,9 +55,9 @@
 				            </c:when>
 				            
 				            <c:otherwise>
-					            <div id="image_container">
+					            <div id="image_container" style="margin-left: 20px;">
 					            	<div id="myImgDiv2">
-								        <img class="UserModifyImg" src="${path}/resources/upload/profileUpload/${loginMember.originalProfilename}"  class="firstImg"
+								        <img class="UserModifyImg" src="${path}/resources/upload/profileUpload/${loginMember.renamedProfilename}"  class="firstImg"
 								    		style="width: 100px; height:100px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
 					            	</div>
 	    						</div>
@@ -43,123 +66,98 @@
 					</th>
 				</tr>
 				<tr>
-				    <td></td>
-				    <td id="imgTd" >
-					    <c:choose>
+					<td></td>
+				    <td id="imgTd" colspan="3">
+				      		<c:choose>
 				      		<c:when test="${ loginMember.renamedProfilename == null }">
-							    <input type="file" id="image" accept="image/*" name="user_img"  onchange="setThumbnail(event);"/> 
+							    <input type="file" id="image" accept="image/*" name="upload_profile" onchange=""/> 
 					    	</c:when>
 					    	 <c:otherwise>
-					    	 	<input type="file" id="image" accept="image/*" name="user_img"  onchange="setThumbnail2(event);"/> 
+					    	 	<input type="file" id="image" accept="image/*" name="upload_profile" onchange=""/> 
 					    	 </c:otherwise>
 					    </c:choose>
+
 					</td>
 				</tr>
-
-            <div>
-                <tr class="content">
-                    <td class="labelArea">
-                        <label for="userName">사원명</label>
-                    </td>
+                
+                    <!-- 기본정보 수정 페이지 -->
+                <tr>
                     <td>
-                        <div class="input_area">
-                            <input type="text" id="userName" value="${loginMember.name}" class="int_box">
-                        </div>
+                        <div class="updateInfo" >사원명</div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td><input type="text" id="userName" class="Input" name="name" value="${loginMember.name}" /></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <div class="updateInfo" >아이디</div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input type="text" name="id" id="userId" class="Input_2" value="${loginMember.id}"/>
+                        <input type="button" id="id_chkBtn" value="중복 체크">
                     </td>
                 </tr>
-            </div>    
 
-            <tr">
-                <td class="labelArea">
-                    <label for="userId">아이디</label>
-                </td>
-                <td>
-                    <input type="button" id="id_check" value="아이디 중복 체크">
-                    <div class="span_area">
-                        <input type="text" id="userId" value="${loginMember.id}" class="int_box_other">
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <div class="updateInfo">전화번호</div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input type="text" name="phone" id="userPhone" class="Input" value="${loginMember.phone}"/>
+                    </td>
+                </tr>
 
-            <tr>
-                <td class="labelArea">
-                    <label for="">비밀번호</label>
-                </td>
-                <td>
-                    <div class="input_area">
-                        <input type="password" id="userPwd" class="int_box" placeholder="Password">
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <div class="updateInfo" id="">이메일</div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input type="text" name="email" id="userEmail" class="Input" value="${loginMember.email}"/>
+                    </td>
+                </tr>
 
-            <tr>
-                <td class="labelArea">
-                    <label for="">비밀번호 확인</label>
-                </td>
-                <td>
-                    <div class="input_area">
-                        <input type="password" id="userPwdCk" class="int_box" placeholder="Re Password">
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <td>
+                        <div class="updateInfo">주소</div>
+                    </td>
+                    <td>&nbsp;</td>
+                    <td>
+                        <input type="text" name="address" id="userAddress" class="Input_2" value="${arr[0]}"/>
+                        <input type="button" id="searchAdd" value="주소찾기" onclick="sample6_execDaumPostcode()">
+                        <br>
+                        <input type="text" name="address" id="address1" class="Input" value="${arr[1]}"/>
+                        <br>
+                        <input type="text" name="address" id="address2" class="Input" value="${arr[2]}"/>
+                    </td>
+                </tr>
 
-            <tr>
-                <td class="labelArea">
-                    <label for="">전화번호</label>
-                </td>
-                <td>
-                    <div class="input_area">
-                        <input type="text" id="userPhone" name="phone" value="${loginMember.phone}" class="int_box">
-                    </div>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="labelArea">
-                    <label for="">이메일</label>
-                </td>
-                <td>
-                    <div class="input_area">
-                        <input type="text" id="userEmail" name="email" value="${loginMember.email}" class="int_box">
-                    </div>
-                </td>
-            </tr>
-
-            <tr>
-                <td class="labelArea">
-                    <label for="">주소</label>
-                </td>
-                <td>
-                    <button id="searchAdd">주소 찾기</button>
-                    <div class="span_area">
-                        <input type="text" id="userAddress" name="address" value="value="${arr[0]}" class="int_box_other">
-                    </div>
-                    <div class="input_area">
-                        <input type="text" id="address1" name="address" value="${arr[1]}" class="int_box">
-                    </div>
-                    <div class="input_area">
-                        <input type="text" id="address2" name="address" value="${arr[2]}" class="int_box">
-                    </div>
-                </td>
-            </tr>
-        </table>
-        
-        <div class="btn_area">
-            <button type="submit" id="modifyBtn">회원 정보 수정</button>
-            <button type="reset" id="reWriteBtn">다시쓰기</button>
+                <tr>
+                    <th colspan="3"><br><br>
+                        <div class="btn_area">
+                        <input type="button" id="notupdateBtn" onclick="location.href='${path}/cmt/dashBoard'" value="홈으로">
+                        <input type="submit" id="goUpdateBtn" onclick="location.href='${path}/member/mypageModify'" value="회원정보수정">
+                        </div>
+                    </th>
+                </tr>
+            </table>
+    	</form>	
         </div>
-    </form>
-	</section>
+     	</section>
 	
 		<!-- 스크립트 부분 -->
 	<script src="${ path }/resources/js/jquery-3.6.0.js"></script>
-	<script src="${ path }/resources/js/enroll.js"></script>
 	<script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css"> 
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>
 	 
-	 <script>
+	<script>
 	// 아이디 중복 확인
 	$(document).ready(() => {
-		$("#id_check").on("click", () => {
+		$("#id_chkBtn").on("click", () => {
 			let userId = $("#userId").val().trim();
 			
 			$.ajax({
@@ -221,7 +219,7 @@ function setThumbnail2(event) {
 }
 </script>
 
-		<!-- 카카오주소 찾기? 왜 안먹냐..... -->
+<!-- 카카오주소 찾기? 왜 안먹냐..... -->
 	<script>
 	function sample6_execDaumPostcode() {
 	    new daum.Postcode({

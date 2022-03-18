@@ -22,7 +22,8 @@
        		   ENROLL_YN, 
        		   ORIGINAL_PROFILENAME, 
        		   RENAMED_PROFILENAME, 
-       		   EMP_ADDRESS 	   
+       		   EMP_ADDRESS,
+       		   STATUS
 		FROM EMPLOYEE
 	</sql>
 	
@@ -47,6 +48,7 @@
 		<result property="enrollStatus" column="ENROLL_YN"/>
 		<result property="originalProfilename" column="ORIGINAL_PROFILENAME"/>
 		<result property="renamedProfilename" column="RENAMED_PROFILENAME"/>
+		<result property="status" column="STATUS"/>
 	</resultMap>
 
 	<select id="selectCount" resultType="_int">
@@ -75,30 +77,77 @@
 			EMP_EMAIL,  
 			EMP_PHONE, 
 			EMP_BIRTH, 
-			EMP_ADDRESS
+			EMP_ADDRESS, 
+			ORIGINAL_PROFILENAME, 
+			RENAMED_PROFILENAME, 
+			STATUS
 		) VALUES (
 			SEQ_EMP_NO.NEXTVAL, 		
-			#{id},
-			#{password},
-			#{name},
-			#{email},
-			#{phone},
-			#{birth},
-			#{address}	
+			#{id}, 
+			#{password}, 
+			#{name}, 
+			#{email}, 
+			#{phone}, 
+			#{birth}, 
+			#{address},
+			#{originalProfilename},
+			#{renamedProfilename},
+			DEFAULT	
 		)
 	</insert>
 	
 	<!-- 회원정보 업데이트 -->
 	<update id="updateMember" parameterType="Member">
-		UPDATE MEMBER 
+		UPDATE EMPLOYEE 
 		SET 
+			<if test="originalProfilename != null">
+		    ORIGINAL_PROFILENAME= #{originalProfilename},
+		    </if>
+		    <if test="renamedProfilename != null">
+		    RENAMED_PROFILENAME = #{renamedProfilename},
+		    </if>
+			EMP_ID = #{id},
 			EMP_NAME = #{name},
 			EMP_PHONE = #{phone},
 			EMP_EMAIL = #{email},
-			EMP_BIRTH = #{birth},
 			EMP_ADDRESS = #{address}
-		WHERE NO = #{no}
+		WHERE EMP_NO = #{no}
 	</update>
 	
+	<!-- 아이디 찾기 -->
+	<select id="findId" parameterType="Member" resultType="String">
+		SELECT EMP_ID
+		FROM EMPLOYEE 
+		WHERE STATUS ='Y' AND  
+				EMP_NAME= #{name} AND 
+	         	EMP_EMAIL= #{email}
+	</select>
+	
+	<!-- 비밀번호 찾기 -->
+	<select id="findPwd" parameterType="Member" resultType="String" >
+		SELECT EMP_PWD 	
+		FROM EMPLOYEE 
+		WHERE STATUS ='Y' AND  
+				EMP_NAME= #{name} AND
+				EMP_ID= #{id} AND
+	         	EMP_EMAIL= #{email} AND
+	         	 EMP_PWD =#{password}
+	</select>
+	
+	<!-- 비밀번호 변경 -->
+	<update id="updatePwd" >
+		UPDATE EMPLOYEE 
+		SET EMP_PWD = #{password} 
+		WHERE EMP_ID = #{id}
+	</update>
+	
+	<!-- 회원 탈퇴 -->
+	<delete id="deleteMember" parameterType="_int">
+		UPDATE EMPLOYEE
+		SET
+			STATUS = 'N'
+		WHERE 
+			EMP_NO = #{no}	
+	</delete>
 	
 </mapper>

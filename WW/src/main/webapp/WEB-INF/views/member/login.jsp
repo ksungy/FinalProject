@@ -41,7 +41,7 @@
                 </div>
 
                 <div>
-                    <input type="checkbox" name="id_save" id="id_check" value="saveOk"> save ID
+                    <input type="checkbox" name="id_save" id="id_check" value="saveOk"> SAVE ID
                 </div>
                 
                 <div>
@@ -49,7 +49,7 @@
                 </div>
                 
                 <p id="findPwdAndSignUp">
-                    <a onclick="location.href='${path}/member/findIDorPwd'" id="findIDorPwd">아이디 / 비밀번호 </a>
+                    <a onclick="location.href='${path}/member/findIdOrPwd'" id="findIDorPwd">아이디 / 비밀번호 </a>
 
                     <a href="${path}/member/joinTerms" id="enrollBtn">회원가입</a>
                 </p>
@@ -57,6 +57,7 @@
             </div>
         </div>
     
+    <script src="${ path }/resources/js/jquery-3.6.0.js"></script>
     <!-- 로그인 js -->
     <script>
         $(document).ready(function() {

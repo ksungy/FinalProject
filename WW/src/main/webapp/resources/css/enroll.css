@@ -1,5 +1,16 @@
 @charset "UTF-8";
 
+@font-face {
+	    font-family: 'InfinitySans-RegularA1';
+	    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-RegularA1.woff') format('woff');
+	    font-weight: normal;
+	    font-style: normal;
+	}
+	
+* {
+	font-family: 'InfinitySans-RegularA1';
+	}	
+
 html {
     height: 100%;
 }
@@ -12,8 +23,9 @@ body {
 
 #logo {
     font-weight: bolder;
-    color: #2A3D72;
-    width: 300px;
+    font-size: 35px;
+    color: rgb(61, 83, 143);
+    width: 400px;
     height: 44px;
     /* cursor: pointer; */
     text-align: center;
@@ -145,11 +157,10 @@ select {
     border: 0;
     cursor: pointer;
     color: #fff;
-    background-color: #2A3D72;
+    background-color: rgb(61, 83, 143);
     border-radius: 10px;
-    font-size: 20px;
+    font-size: 30px;
     font-weight: 400;
-    font-family: Dotum,'돋움',Helvetica,sans-serif;
 }
 
 #addressBtn, #idCheckBtn {
@@ -161,11 +172,11 @@ select {
     padding: 10px;
     cursor: pointer;
     color: #fff;
-    background-color: #2A3D72;
+    background-color: rgb(61, 83, 143);
     width: 60px;
     height: 51px;
     font-weight: 530;
-    /* font-family: Dotum,'돋움',Helvetica,sans-serif; */
+    font-size: 18px;
 }
 
 /* 이용약관 체크박스 */

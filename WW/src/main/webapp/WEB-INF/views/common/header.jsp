@@ -25,8 +25,6 @@
     <!-- Custom styles for this template-->
     <link href="${ path }/resources/css/sb-admin-2.min.css" rel="stylesheet">
 
-
-
     <style>
         .profile-nav{
             white-space: nowrap;
@@ -73,12 +71,27 @@
                     <!-- Nav Item - User Information -->
                 <li class="nav-item no-arrow">
                     <a class="nav-link" href="${path}/member/mypageModify" >
-                        <img class="rounded-circle" src="${path}/resources/img/undraw_profile.svg">
+                    	<c:choose>
+      						<c:when test="${ loginMember.renamedProfilename == null }">
+                        	<img class="rounded-circle" src="${path}/resources/upload/profileUpload/default_profile.jpg"
+                        	style="width: 200px; height:200px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
+                        </c:when>
+                        <c:otherwise>
+		        			<img class="rounded-circle" alt="x" src="${path}/upload/profileUpload/${loginMember.renamedProfilename}"
+		        			style="width: 200px; height:200px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
+            			</c:otherwise>
+            			</c:choose>
                     </a>
-
                 </li>
+					
+					<c:if test="${ !empty loginMember }">
+                    <div class="py-2 rounded" style="background-color: rgb(200, 204, 255) ;width: 90%; margin: auto;">
+                        <a class="profile-nav">${ loginMember.name }</a>
+                    </div>
+					</c:if>
             </li>
-
+            
+            
             <!-- Divider 매뉴 구분 줄-->
             <hr class="sidebar-divider">
 

@@ -10,10 +10,42 @@
 <head>
 <meta charset="UTF-8">
 	<link rel="stylesheet" href="${ path }/resources/css/enroll.css">
-	<link
-      href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
-      rel="stylesheet">
 	
+	<!-- 파일 업로드 css -->
+	<style type="text/css">
+			@font-face {
+	    	font-family: 'InfinitySans-RegularA1';
+	    	src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-04@2.1/InfinitySans-RegularA1.woff') format('woff');
+	    	font-weight: normal;
+	    	font-style: normal;
+			}
+	
+			#profile_img_upload{
+			    width: 0.1px;
+				height: 0.1px;
+				opacity: 0;
+				overflow: hidden;
+				position: absolute;
+				z-index: -1;
+			}
+			
+			#profile_img_upload + label {
+			    border: 1px solid #d9e1e8;
+			    background-color: #fff;
+			    color: #2b90d9;
+			    border-radius: 2rem;
+			    padding: 8px 17px 8px 17px;
+			    font-weight: 500;
+			    font-size: 15px;
+			    box-shadow: 1px 2px 3px 0px #f2f2f2;
+			    outline: none;
+			}
+			
+			#profile_img_upload:focus + label,
+			#profile_img_upload + label:hover {
+			    cursor: pointer;
+			}
+	</style>
 <title>enroll</title>
 </head>
 
@@ -24,8 +56,13 @@
                 <h2 id="logo">Sign Up To WhereWare</h2>
             </div>
             
+            <!-- 이미지 파일 넘겨줄거임 enctype="multipart/form-data" -->
             <!-- 회원가입 폼 -->
-            <form name="memberEnrollFrm" action="${ path }/member/enroll" method="post" >
+            <form name="memberEnrollFrm" action="${ path }/member/enroll" enctype="multipart/form-data" method="post" >
+                
+                <!-- 이미지 업로드 -->
+                <input type="file" name="upload_profile" id="originalProfilename" style="padding: 6px 35px; font-size: 13px;" accept=".gif, .jpg, .png">
+                               
                 <div class="form-group">
                     <h3>
                         <label for="userId">아이디</label>
@@ -86,15 +123,15 @@
                     <label for="userEddress">주소</label>
                 </h3>
                 <span class="box_int">
-                    <input type="text" id="userAddress" name="address" />
+                    <input type="text" id="userAddress" placeholder="우편번호" name="address" />
                 </span>
                 <span class="error_eddress"></span>
-                <button type="button" id="addressBtn" class="modify_input"  onclick="sample6_execDaumPostcode();">찾기</button>
+                <button type="button" id="addressBtn" class="modify_input" onclick="sample6_execDaumPostcode();">찾기</button>
                 <span class="box int_address">
-                    <input type="text" id="address1" class="modify_input" name="address"/>
+                    <input type="text" id="address1" placeholder="주소"  class="modify_input" name="address"/>
                 </span>
                 <span class="box int_address">
-                    <input type="text" id="address2" class="modify_input" name="address"/>
+                    <input type="text" id="address2" placeholder="상세주소"  class="modify_input" name="address"/>
                 </span>
                 <span class="error_email"></span>
 			</div>
@@ -165,8 +202,10 @@
 	<script src="${ path }/resources/js/jquery-3.6.0.js"></script>
 	<script src="${ path }/resources/js/enroll.js"></script>
 	<script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 	 
-	 <script>
+	<script>
 	// 아이디 중복 확인
 	$(document).ready(() => {
 		$("#idCheckBtn").on("click", () => {
@@ -246,6 +285,41 @@
 	        }
 	    }).open();
 	}
+	
+	
+	$("input[id=originalProfilename]").change(function(){
+		 
+		if($(this).val() != ""){
+			// 확장자 체크
+			var ext = $(this).val().split(".").pop().toLowerCase();
+		
+			if($.inArray(ext, ["gif","jpg","jpeg","png"]) == -1){
+				/* alert("gif, jpg, jpeg, png 파일만 업로드 해주세요."); */
+				Swal.fire({
+					  icon: 'error',
+					  title: '이미지 확장자 틀림!',
+					  text: 'gif, jpg, jpeg, png 파일만 업로드 해주세요.'
+					})
+			    $(this).val("");
+			    return;
+			}
+	          
+			// 용량 체크
+			for (var i=0; i<this.files.length; i++) {
+				var fileSize = this.files[i].size;
+				var fSMB = (fileSize / (1024 * 1024)).toFixed(2);
+				var maxSize = 1024 * 1024 * 5;
+				var mSMB = (maxSize / (1024 * 1024));
+				
+				if(fileSize > maxSize){
+					alert(this.files[i].name + "(이)가 용량 5MB을 초과했습니다.\n\n<font color='red'>" + fSMB + "MB</font> / " + mSMB + "MB");
+					
+					$(this).val("");    
+				}
+			}
+ 		}
+	});
+</script>
 	</script>
 	
 </body>
