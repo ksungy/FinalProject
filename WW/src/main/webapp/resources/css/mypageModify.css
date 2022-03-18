@@ -3,11 +3,13 @@
     /* 사이드바 스타일! */
     .EPay-index_section {
 		margin-left: 20px;
+		float: left;
+    	width: 200px;
+    	height: 850px;
 	}
 	
     .memDA {
 		margin-left: 40px;
-		margin-top: 10px;
 	}
 	
 	li {
@@ -36,11 +38,13 @@
         letter-spacing: -2px; 
         height: 35px;
         margin-bottom: 50px;
+        text-align: center;
     }
     
     section {
     	display: flex;
 		justify-content: center;
+		margin-top: 30px;
     }
 
     #container {

@@ -74,8 +74,8 @@
                 <li class="nav-item no-arrow">
                     <a class="nav-link" href="${path}/member/mypageModify" >
                     	<c:choose>
-      						<c:when test="${ loginMember.originalProfilename == null }">
-                        	<img class="rounded-circle" src="${path}/resources/img/undraw_profile.svg"
+      						<c:when test="${ loginMember.renamedProfilename == null }">
+                        	<img class="rounded-circle" src="${path}/resources/upload/profileUpload/default_profile.jpg"
                         	style="width: 200px; height:200px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
                         </c:when>
                         <c:otherwise>

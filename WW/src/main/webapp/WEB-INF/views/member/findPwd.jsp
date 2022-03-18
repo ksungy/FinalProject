@@ -10,7 +10,7 @@
 <meta charset="UTF-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <script src="${path}/js/jquery-3.5.1.js"></script>
+     <script src="${path}/resources/js/jquery-3.5.1.js"></script>
 	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
     <title>Document</title>
     <link rel="stylesheet" href="${path}/resources/css/findPwd.css">
@@ -22,7 +22,7 @@
         </div>
         <div class="container">
             <form class="form" action="${path}/member/findPwd" method="post">
-                <input type="text" id="userId" name="id" placeholder="User ID ">
+                <input type="text" id="id" name="id" placeholder="User ID ">
                 <input type="email"id="email" name="email"placeholder="E-mail">
 
                 <button type="button" id="login-button">Find</button>
@@ -45,7 +45,7 @@
 			type : "POST",
 		    dataType: "text",
 			data : {
-				userId : $("#userId").val(),
+				userId : $("#id").val(),
 				email : $("#email").val()
 			},
 			success : function(result) {				

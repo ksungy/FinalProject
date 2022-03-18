@@ -1,5 +1,7 @@
 package com.ww.mvc.member.model.dao;
 
+import java.util.List;
+
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Repository;
@@ -23,10 +25,14 @@ public interface MemberMapper {
 	String findId(Member member);
 
 	// 회원 정보 삭제
-	int deleteMember(String userId);
+	int deleteMember(int no);
 	
 	// 비밀번호 변경
 	int updatePwd(Member member);
+
+	List<Member> selectMemberForApproval(String userId);
+
+	List<Member> selectSearchedMemberForApproval(String searchData, String userId);
 
 
 

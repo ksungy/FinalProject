@@ -111,15 +111,15 @@
 </style>
 
 	<div class="EPay-index_section">
-	    <h2 style="margin-left:19px;"><a style="color:black; font-family: 'InfinitySans-RegularA1';">마이페이지</a></h2>
+	    <h2 style="margin-left:19px;"><a style="font-family: 'InfinitySans-RegularA1';">마이페이지</a></h2>
 	    <li class="memDA EPay-form">
-	        <a href="${path}/member/mypageModify" style="color:black; font-family: 'InfinitySans-RegularA1';">회원 수정</a>
+	        <a href="${path}/member/mypageModify" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 수정</a>
 	    </li>
 	    <li class="memDA EPay-list">
-	        <a href="${path}/member/updatePwd" style="color:black; font-family: 'InfinitySans-RegularA1';">비밀번호 수정</a>
+	        <a href="${path}/member/updatePwd" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">비밀번호 수정</a>
 	    </li>
 	    <li class="memDA EPay-box">
-	        <a href="${path}/member/deleteMember" style="color:black; font-family: 'InfinitySans-RegularA1';">회원 탈퇴</a>
+	        <a href="${path}/member/deleteMember" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 탈퇴</a>
 	    </li>
 	</div>
 	
@@ -180,7 +180,7 @@
 		</table>
 	</div>
 	
-	
+	<script src="${path}/resources/js/jquery-3.5.1.js"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css"> 
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>
 	<!-- delete 할거임? -->
@@ -188,7 +188,7 @@
 	function agreeAndDeleteMember() { 
 	    var chkbox = document.getElementsByName('agree'); 
 	    var chk = false; 
-	    var pageLink = '${path}/member/deleteMember?id=${ loginMember.id }';
+	    var pageLink = '${path}/member/deleteMember?no=${ loginMember.no }';
 	    
 	    for(var i=0 ; i < chkbox.length ; i++) { 
 	        if(chkbox[i].checked) { 

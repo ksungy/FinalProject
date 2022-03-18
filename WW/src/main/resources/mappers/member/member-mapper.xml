@@ -22,7 +22,7 @@
        		   ENROLL_YN, 
        		   ORIGINAL_PROFILENAME, 
        		   RENAMED_PROFILENAME, 
-       		   EMP_ADDRESS
+       		   EMP_ADDRESS,
        		   STATUS
 		FROM EMPLOYEE
 	</sql>
@@ -101,26 +101,26 @@
 		UPDATE EMPLOYEE 
 		SET 
 			<if test="originalProfilename != null">
-		    ORIGINAL_PROFILENAME=#{originalProfilename},
+		    ORIGINAL_PROFILENAME= #{originalProfilename},
 		    </if>
 		    <if test="renamedProfilename != null">
-		    RENAMED_PROFILENAME=#{renamedProfilename},
+		    RENAMED_PROFILENAME = #{renamedProfilename},
 		    </if>
 			EMP_ID = #{id},
 			EMP_NAME = #{name},
 			EMP_PHONE = #{phone},
 			EMP_EMAIL = #{email},
 			EMP_ADDRESS = #{address}
-		WHERE NO = #{no}
+		WHERE EMP_NO = #{no}
 	</update>
 	
 	<!-- 아이디 찾기 -->
-	<select id="findId" parameterType="Member" resultType="String" >
-		SELECT EMP_ID 	
+	<select id="findId" parameterType="Member" resultType="String">
+		SELECT EMP_ID
 		FROM EMPLOYEE 
 		WHERE STATUS ='Y' AND  
-				EMP_NAME= #{name} AND
-	         	EMP_EMAIL= #{email} AND
+				EMP_NAME= #{name} AND 
+	         	EMP_EMAIL= #{email}
 	</select>
 	
 	<!-- 비밀번호 찾기 -->
@@ -142,12 +142,12 @@
 	</update>
 	
 	<!-- 회원 탈퇴 -->
-	<delete id="deleteMember" parameterType="string">
-		UPDATE EMPLOYEE 
+	<delete id="deleteMember" parameterType="_int">
+		UPDATE EMPLOYEE
 		SET
-		    STATUS = 'N'
+			STATUS = 'N'
 		WHERE 
-		    EMP_ID = #{id}		
+			EMP_NO = #{no}	
 	</delete>
 	
 </mapper>

@@ -28,10 +28,10 @@
 	}
 	
 	.withDrawal {
-		/*margin-top: 10%;*/
 		display: flex;
 		justify-content: center;
 		/* height: 800px; */
+		
 	}
 	
 	/* #haeder { color: #5b18ff; font-family: 'InfinitySans-RegularA1'; font-size: 22px; } */
@@ -128,15 +128,15 @@
 
 
 <div class="EPay-index_section">
-    <h2 style="margin-left:19px;"><a style="color:black; font-family: 'InfinitySans-RegularA1';">마이페이지</a></h2>
+    <h2 style="margin-left:19px;"><a style="font-family: 'InfinitySans-RegularA1';">마이페이지</a></h2>
     <li class="memDA EPay-form">
-        <a href="${path}/member/mypageModify" style="color:black; font-family: 'InfinitySans-RegularA1';">회원 수정</a>
+        <a href="${path}/member/mypageModify" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 수정</a>
     </li>
     <li class="memDA EPay-list">
-        <a href="${path}/member/updatePwd" style="color:black; font-family: 'InfinitySans-RegularA1';">비밀번호 수정</a>
+        <a href="${path}/member/updatePwd" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">비밀번호 수정</a>
     </li>
     <li class="memDA EPay-box">
-        <a href="${path}/member/deleteMember" style="color:black; font-family: 'InfinitySans-RegularA1';">회원 탈퇴</a>
+        <a href="${path}/member/deleteMember" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 탈퇴</a>
     </li>
 </div>
 

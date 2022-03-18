@@ -62,10 +62,10 @@ public class MemberController {
 		
 		if (loginMember != null) {
 			// 로그인 성공
-//			model.addObject("msg", "로그인에 성공하셨습니다.");
+			model.addObject("msg", "로그인에 성공하셨습니다.");
 			
 			model.addObject("loginMember", loginMember);			
-			model.setViewName("redirect:/");
+			model.setViewName("cmt/dashBoard");
 
 			log.info("{}, {}", id, password);
 			log.info(loginMember.toString());
@@ -167,7 +167,7 @@ public class MemberController {
 			ModelAndView model,
 			@SessionAttribute(name = "loginMember") Member loginMember,
 			@ModelAttribute Member member,
-			@RequestParam("originalProfilename") MultipartFile reloadImgFile,
+			@RequestParam("upload_profile") MultipartFile reloadImgFile,
 			HttpServletRequest request) {
 		int result = 0;
 		
@@ -192,6 +192,7 @@ public class MemberController {
 		result = service.save(member);
 		
 		if(result > 0) {
+			System.out.println(loginMember.getId().equals(member.getId()) + ",  result : " + result);
 			model.addObject("loginMember", service.findMemberById(loginMember.getId()));
 			model.addObject("msg", "회원정보 수정을 완료했습니다.");
 			model.addObject("location", "/member/mypageModify");
@@ -215,27 +216,23 @@ public class MemberController {
 	
 	// 회원 삭제
 		@PostMapping("/deleteMember")
-		public ModelAndView deleteMember(ModelAndView model,
-				@SessionAttribute(name="loginMember", required = false) Member loginMember,
-				@RequestParam("id")String id) {
+		public ModelAndView deleteMember(
+				ModelAndView model,
+				@SessionAttribute(name="loginMember", required = false) Member loginMember) {
 			
 			int result = 0;
 			
-			if(loginMember.getId().equals(id)) {
-				result = service.deleteMember(id);
+			result = service.deleteMember(loginMember.getNo());
 				
-				if(result > 0) {
-					model.addObject("msg", "정상적으로 탈퇴되었습니다.");
-					model.addObject("location", "/logout");				
-				} else {
-					model.addObject("msg", "회원 탈퇴를 실패하였습니다.");
-					model.addObject("location", "/member/mapageModify");
-				}
+			if(result > 0){
+				model.addObject("msg", "정상적으로 탈퇴되었습니다.");
+				model.addObject("location", "/member/logout");				
 			} else {
-				model.addObject("msg", "잘못된 접근입니다.");
-				model.addObject("location", "/");
+				model.addObject("msg", "회원 탈퇴를 실패하였습니다.");
+				model.addObject("location", "/member/mapageModify");
 			}
-			
+
+		
 			model.setViewName("common/msg");
 			
 			return model;

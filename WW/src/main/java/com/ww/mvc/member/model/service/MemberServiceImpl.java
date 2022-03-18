@@ -1,5 +1,7 @@
 package com.ww.mvc.member.model.service;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
@@ -59,9 +61,9 @@ public class MemberServiceImpl implements MemberService {
 
 	@Override
 	@Transactional
-	public int deleteMember(String userId) {
+	public int deleteMember(int no) {
 		
-		return mapper.deleteMember(userId);
+		return mapper.deleteMember(no);
 	}
 	
 	@Override
@@ -81,6 +83,18 @@ public class MemberServiceImpl implements MemberService {
 		result = mapper.updatePwd(member);
 		
 		return result;
+	}
+
+	@Override
+	public List<Member> selectMemberAllForApproval(String userId) {
+		
+		return mapper.selectMemberForApproval(userId);
+	}
+
+	@Override
+	public List<Member> selectSearchedMemberForApproval(String searchData, String userId) {
+		
+		return mapper.selectSearchedMemberForApproval(searchData, userId);
 	}
 
 

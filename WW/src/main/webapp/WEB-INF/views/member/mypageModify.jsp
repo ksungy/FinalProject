@@ -9,27 +9,29 @@
 <%@include file="../common/header.jsp"%>
 
 <link rel="stylesheet" href="${ path }/resources/css/mypageModify.css">
- 
+
 	<c:set var="adressArr" value="${ loginMember.address }"></c:set>
 	<c:set var="arr" value="${fn:split(adressArr,',')}"/>
 	
 	<!-- 사이드 -->
+	<nav>
 	<div class="EPay-index_section">
-	    <h2 style="margin-left:19px;"><a style="color:black; font-family: 'InfinitySans-RegularA1';">마이페이지</a></h2>
+	    <h2 ><a style="margin-left:20px; font-family: 'InfinitySans-RegularA1';">마이페이지</a></h2>
 	    <li class="memDA EPay-form">
-	        <a href="${path}/member/mypageModify" style="color:black; font-family: 'InfinitySans-RegularA1';">회원 수정</a>
+	        <a href="${path}/member/mypageModify" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 수정</a>
 	    </li>
 	    <li class="memDA EPay-list">
-	        <a href="${path}/member/updatePwd" style="color:black; font-family: 'InfinitySans-RegularA1';">비밀번호 수정</a>
+	        <a href="${path}/member/updatePwd" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">비밀번호 수정</a>
 	    </li>
 	    <li class="memDA EPay-box">
-	        <a href="${path}/member/deleteMember" style="color:black; font-family: 'InfinitySans-RegularA1';">회원 탈퇴</a>
+	        <a href="${path}/member/deleteMember" style="color:rgb(61, 83, 143); font-family: 'InfinitySans-RegularA1';">회원 탈퇴</a>
 	    </li>
 	</div>
+	</nav>
 
 	<section>
-	<form method="post" action="${path}/member/mapageModify" enctype="multipart/form-data" name="mapageModify">
-        <div id="container">
+    <div id="container">
+	<form method="post" action="${path}/member/mypageModify" enctype="multipart/form-data" name="mapageModify">
             <table style="border: 1px soild black; "> <!-- border="1px soild black;" -->
                 <tr>
                     <th colspan="3"><h1 style="color: rgb(61, 83, 143);">회원 정보 수정</h1></th>
@@ -43,8 +45,8 @@
                     
 					<th colspan="3">	
 						<c:choose>
-				      	    <c:when test="${ loginMember.originalProfilename == null }">
-				            	<div id="image_container">
+				      	    <c:when test="${ loginMember.renamedProfilename == null }">
+				            	<div id="image_container" style="margin-left: 20px;">
 					            	<div id="myImgDiv">
 					            		<img alt="x" src="${path}/resources/upload/profileUpload/default_profile.jpg" class="firstImg"
 					            			style="width: 100px; height:100px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
@@ -53,9 +55,9 @@
 				            </c:when>
 				            
 				            <c:otherwise>
-					            <div id="image_container">
+					            <div id="image_container" style="margin-left: 20px;">
 					            	<div id="myImgDiv2">
-								        <img class="UserModifyImg" src="${path}/resources/upload/profileUpload/${loginMember.originalProfilename}"  class="firstImg"
+								        <img class="UserModifyImg" src="${path}/resources/upload/profileUpload/${loginMember.renamedProfilename}"  class="firstImg"
 								    		style="width: 100px; height:100px; border-radius: 100px; object-fit: cover;" accept=".gif, .jpg, .png">
 					            	</div>
 	    						</div>
@@ -66,14 +68,15 @@
 				<tr>
 					<td></td>
 				    <td id="imgTd" colspan="3">
-					    <c:choose>
-				      		<c:when test="${ loginMember.originalProfilename == null }">
-							    <input type="file" id="image" accept="image/*" name="upload_profile"  onchange="setThumbnail(event);"/> 
+				      		<c:choose>
+				      		<c:when test="${ loginMember.renamedProfilename == null }">
+							    <input type="file" id="image" accept="image/*" name="upload_profile" onchange=""/> 
 					    	</c:when>
 					    	 <c:otherwise>
-					    	 	<input type="file" id="image" accept="image/*" name="upload_profile"  onchange="setThumbnail2(event);"/> 
+					    	 	<input type="file" id="image" accept="image/*" name="upload_profile" onchange=""/> 
 					    	 </c:otherwise>
 					    </c:choose>
+
 					</td>
 				</tr>
                 
@@ -135,19 +138,18 @@
                 <tr>
                     <th colspan="3"><br><br>
                         <div class="btn_area">
-                        <input type="button" id="notupdateBtn" onclick="location.href='${path}/home'" value="홈으로">
-                        <input type="button" id="goUpdateBtn" onclick="location.href='${path}/member/mypageModify'" value="회원정보수정">
+                        <input type="button" id="notupdateBtn" onclick="location.href='${path}/cmt/dashBoard'" value="홈으로">
+                        <input type="submit" id="goUpdateBtn" onclick="location.href='${path}/member/mypageModify'" value="회원정보수정">
                         </div>
                     </th>
                 </tr>
             </table>
+    	</form>	
         </div>
-    </form>	
-    </section>
+     	</section>
 	
 		<!-- 스크립트 부분 -->
 	<script src="${ path }/resources/js/jquery-3.6.0.js"></script>
-	<script src="${ path }/resources/js/enroll.js"></script>
 	<script src="http://t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css"> 
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>

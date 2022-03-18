@@ -1,5 +1,7 @@
 package com.ww.mvc.member.model.service;
 
+import java.util.List;
+
 import org.springframework.stereotype.Component;
 
 import com.ww.mvc.member.model.vo.Member;
@@ -17,9 +19,12 @@ public interface MemberService {
 
 	String findId(Member member);
 
-	int deleteMember(String userId);
+	int deleteMember(int no);
 
 	int updatePwd(Member member);
 	
+	List<Member> selectMemberAllForApproval(String userId);
+
+	List<Member> selectSearchedMemberForApproval(String searchData, String userId);
 
 }
