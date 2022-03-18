@@ -23,4 +23,5 @@
 		SELECT COUNT(*) FROM DOCUMENT
 	</select>
 	
+
 </mapper>

@@ -71,7 +71,7 @@ public class BoardServieImpl implements BoardService {
 		return result;
 	}
 
-
+	
 	// ▼ 게시글 검색
 	@Override
 	public List<Board> boardSearch(Map<String, String> searchMap, PageInfo pageInfo) {
@@ -141,6 +141,7 @@ public class BoardServieImpl implements BoardService {
 		map.put("no", reply.getNo());
 		
 		return mapper.updateReply(map);
+		
 	}
 	
 	
@@ -151,10 +152,34 @@ public class BoardServieImpl implements BoardService {
 		return mapper.getReplyCount(no);
 	}
 
-
-
+	
+	// ▼ 첨부파일 리스트 조회
+	@Override
+	public List<BoardAttach> getBoardAttachList(int no) {
+		
+		return mapper.findByBoardNo(no);
+	}
 
 	
+	// ▼ 첨부파일 삭제
+	@Override
+	public int deleteFile(int no) {
+		
+		return mapper.deleteFile(no);
+	}
+
+	@Override
+	public BoardAttach findBoardAttachByNo(int no) {
+		
+		return mapper.selectBoardAttachByNo(no);
+		
+	}
+
+	@Override
+	public Reply findReplyByNo(int no) {
+		
+		return mapper.selectReplyByNo(no);
+	}
 
 
 

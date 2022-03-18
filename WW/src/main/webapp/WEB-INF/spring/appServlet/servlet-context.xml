@@ -37,7 +37,9 @@
 	<interceptors>
 		<interceptor>
 			<mapping path="/member/**/"/>
+
 			<mapping path="/cmt/**/"/>
+
 		 	<mapping path="/board/**/"/>
 		 	
 		 	<exclude-mapping path="/member/login"/>
