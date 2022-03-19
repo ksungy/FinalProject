@@ -85,7 +85,7 @@
                 </li>
                
                <c:if test="${ !empty loginMember }">
-                    <div class="py-2 rounded" style="background-color: rgb(200, 204, 255) ;width: 90%;">
+                    <div class="py-2 rounded" style="background-color: rgb(200, 204, 255) ;width: 90%; margin-left: 5%;">
                         <a class="profile-nav">${ loginMember.name }</a>
                     </div>
                </c:if>
@@ -191,20 +191,6 @@
                         <a class="collapse-item" href="/mvc/cmt/monthly">월별 근태</a>
                     </div>
                 </div>
-            </li>
-
-            <!-- Nav Item - Charts -->
-            <li class="nav-item">
-                <a class="nav-link" href="charts.html">
-                    <i class="fas fa-fw fa-address-book"></i>
-                    <span>사원 검색</span></a>
-            </li>
-
-            <!-- Nav Item - Tables -->
-            <li class="nav-item">
-                <a class="nav-link" href="tables.html">
-                    <i class="fas fa-fw fa-table"></i>
-                    <span>Tables</span></a>
             </li>
 
             <!-- Divider -->

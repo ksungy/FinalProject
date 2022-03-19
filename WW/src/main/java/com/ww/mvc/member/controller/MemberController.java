@@ -142,7 +142,7 @@ public class MemberController {
 		
 		if (result > 0) {
 			model.addObject("msg", "회원가입이 정상적으로 완료되었습니다.");
-			model.addObject("location", "/");
+			model.addObject("location", "/member/login");
 		} else {
 			model.addObject("msg", "회원가입을 실패하였습니다.");
 			model.addObject("location", "/member/enroll");
@@ -168,7 +168,7 @@ public class MemberController {
 			ModelAndView model,
 			@SessionAttribute(name = "loginMember") Member loginMember,
 			@ModelAttribute Member member,
-			@RequestParam("originalProfilename") MultipartFile reloadImgFile,
+			@RequestParam("upload_profile") MultipartFile reloadImgFile,
 			HttpServletRequest request) {
 		int result = 0;
 		
