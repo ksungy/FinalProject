@@ -57,7 +57,7 @@
 	<!-- Page Heading -->
 	<div class="h3 mb-4 text-gray-800 "> 문서 검색 </div>
 
-	<form method="get" action="${ path }/document/search">
+	<form method="get" action="${ path }/document/list">
 		<table style="width: 100%; margin-bottom: 20px;">
 			<tr>
 				<td>
@@ -86,15 +86,15 @@
 						<div class="input-group">
 						    <input type="text" class="form-control bg-white border-0 " name="search" placeholder="검색">
 						    <div class="input-group-append">
-						        <button class="btn btn-primary" type="button">
-						            <i class="fas fa-search fa-sm"></i>
-						        </button>
+						        <button class="btn btn-primary" type="submit">
+                                	<i class="fas fa-search fa-sm"></i>
+                                </button>
 						    </div>
 						</div>
 					</div>
 				</td>
-	     </tr>
-	</table>
+		     </tr>
+		</table>
 	</form>
 
 
@@ -121,12 +121,12 @@
 									
 									<c:if test="${ !empty documentList }">
 										<c:forEach var="document" items="${ documentList }">
-		                                    <tr onclick="location.href='www.naver.com'" >
+		                                    <tr onclick="location.href='${ path }/document/view?no=${document.doc_id}'" >
 		                                        <td><c:out value="${ document.rownum }"/></td>
 		                                        <td><c:out value="${ document.doc_titile }"/></td>
 		                                        <td><c:out value="${ document.emp_id }"/></td>
 		                                        <td><c:out value="${ document.link_id }"/></td>
-		                                        <td><c:out value="${ document.doc_date }"/></td>
+		                                        <td> <fmt:formatDate type="date" value="${ document.doc_date }" pattern="yy-MM-dd(E)  HH:mm"/></td>
 		                                        <td><c:out value="${ document.attach_origin }"/></td>
 		                                        <td><c:out value="${ document.doc_status }"/></td>
 		                                    </tr>
@@ -142,14 +142,14 @@
                                 <tr>
                                 	<!-- 처음 페이지로 -->
                                     <td 
-                                    onclick="location.href='${ path }/document/list?page=1&pages=${ pageInfo.listLimit }'"
+                                    onclick="location.href='${ path }/document/list?page=${ pageInfo.prevPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'"
                                     style="border-top-left-radius: 10px; border-bottom-left-radius: 10px;
                                     box-shadow: 0px 1px 1px rgb(202, 202, 202),0px -1px 1px rgb(202, 202, 202), -1px 0px 1px rgb(202, 202, 202)  ;"
                                     class="listButton"
                                     > &lt; </td>
 
 									<!-- 이전 페이지로 -->
-                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.prevPage }&pages=${ pageInfo.listLimit }'"> &lt; </td>
+                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.prevPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'"> &lt; </td>
 									
 									<!--  10개 페이지 목록 -->
 									<c:forEach begin="${ pageInfo.startPage }" end="${ pageInfo.endPage }" varStatus="status">
@@ -158,16 +158,16 @@
 									</c:if>
                                     
                                     <c:if test="${ status.current != pageInfo.currentPage }">
-                                    <td class= "listButton" onclick="location.href='${ path }/document/list?page=${ status.current }&pages=${ pageInfo.listLimit }'">${ status.current }</td>
+                                    <td class= "listButton" onclick="location.href='${ path }/document/list?page=${ status.current }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'">${ status.current }</td>
                                     </c:if>
                                     </c:forEach>
                                     
                                     <!-- 다음 페이지로 -->
-                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.nextPage }&pages=${ pageInfo.listLimit }'">&gt;</td>
+                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.nextPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'">&gt;</td>
 									
 									<!-- 마지막 페이지로 -->
                                     <td 
-                                    onclick="location.href='${ path }/board/list?page=${ pageInfo.maxPage }&pages=${ pageInfo.listLimit }'"
+                                    onclick="location.href='${ path }/board/list?page=${ pageInfo.maxPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'"
                                     style="border-top-right-radius: 10px; border-bottom-right-radius: 10px ;
                                     box-shadow: 0px 1px 1px rgb(202, 202, 202),0px -1px 1px rgb(202, 202, 202), 1px 0px 1px rgb(202, 202, 202);"
                                     class="listButton">&gt;&gt;</td>
