@@ -30,10 +30,5 @@ public interface MemberMapper {
 	// 비밀번호 변경
 	int updatePwd(Member member);
 
-	List<Member> selectMemberForApproval(String userId);
-
-	List<Member> selectSearchedMemberForApproval(String searchData, String userId);
-
-
-
+	Member findMemberByNo(int no);
 }

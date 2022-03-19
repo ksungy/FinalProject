@@ -25,6 +25,7 @@
        		   EMP_ADDRESS,
        		   STATUS
 		FROM EMPLOYEE
+		WHERE STATUS = 'Y'
 	</sql>
 	
 	<resultMap type="Member" id="MemberResultMap">
@@ -57,13 +58,19 @@
 	
 	<select id="selectAll">
 		<include refid="selectMemberSql"/>
-		WHERE END_YN = 'N'
+		AND END_YN = 'N'
+	</select>
+	
+	<!-- member no로 찾기 -->
+	<select id="findMemberByNo" parameterType="_int" resultMap="MemberResultMap">
+		<include refid="selectMemberSql"/>
+		AND EMP_NO = #{no}	
 	</select>
 	
 	<!-- 아이디로 찾기! -->
 	<select id="findMemberById" parameterType="string" resultMap="MemberResultMap">
 		<include refid="selectMemberSql"/>
-		WHERE EMP_ID = #{id}	
+		AND EMP_ID = #{id}	
 	</select>
 	
 	<!-- 회원 가입 INSERT -->
@@ -115,10 +122,10 @@
 	</update>
 	
 	<!-- 아이디 찾기 -->
-	<select id="findId" parameterType="Member" resultType="String">
+	<select id="findId" parameterType="Member" resultType="list">
 		SELECT EMP_ID
 		FROM EMPLOYEE 
-		WHERE STATUS ='Y' AND  
+		WHERE STATUS ='Y' AND 
 				EMP_NAME= #{name} AND 
 	         	EMP_EMAIL= #{email}
 	</select>
@@ -135,19 +142,17 @@
 	</select>
 	
 	<!-- 비밀번호 변경 -->
-	<update id="updatePwd" >
+	<update id="updatePwd">
 		UPDATE EMPLOYEE 
 		SET EMP_PWD = #{password} 
 		WHERE EMP_ID = #{id}
 	</update>
 	
 	<!-- 회원 탈퇴 -->
-	<delete id="deleteMember" parameterType="_int">
+	<delete id="deleteMember" parameterType="Member">
 		UPDATE EMPLOYEE
-		SET
-			STATUS = 'N'
-		WHERE 
-			EMP_NO = #{no}	
+		SET STATUS = 'N'
+		WHERE EMP_NO = #{no}	
 	</delete>
 	
 </mapper>

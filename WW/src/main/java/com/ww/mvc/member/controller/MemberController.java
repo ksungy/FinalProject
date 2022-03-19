@@ -41,11 +41,9 @@ public class MemberController {
 	@Qualifier("memberService")
 	private MemberService service;
 	
-	// 로그인 페이지 이동
+	// 로그인 페이지 이동및 탈퇴회원 조회!
 	@GetMapping("/login")
 	public String login() {
-		
-		log.info("로그인 페이지 요청");
 		
 		return "member/login";
 	};
@@ -65,14 +63,16 @@ public class MemberController {
 			model.addObject("msg", "로그인에 성공하셨습니다.");
 			
 			model.addObject("loginMember", loginMember);			
-			model.setViewName("cmt/dashBoard");
-
+			model.addObject("location", "/cmt/dashboard");
+			model.setViewName("common/msg");
+			
 			log.info("{}, {}", id, password);
 			log.info(loginMember.toString());
+			
 		} else {
 			// 로그인 실패
 			model.addObject("msg", "아이디나 비밀번호가 일치하지 않습니다.");
-			
+						
 			model.addObject("location", "/member/login");
 			model.setViewName("common/msg");
 		}
@@ -207,35 +207,45 @@ public class MemberController {
 		return model;
 	}
 	
+	// 회원탈퇴 페이지 이동
 	@GetMapping("/deleteMember")
 	public String deleteMember() {
-		log.info("회원 탈퇴 약관동의 페이지 요청");
 		
 		return "member/deleteMember";
 	}
 	
 	// 회원 삭제
-		@PostMapping("/deleteMember")
-		public ModelAndView deleteMember(
+	@RequestMapping(value="/member/deleteMember")
+	public ModelAndView deleteMember(
 				ModelAndView model,
-				@SessionAttribute(name="loginMember", required = false) Member loginMember) {
+				@SessionAttribute(name="loginMember") Member loginMember,
+				@RequestParam("no") int no) {
 			
+			Member member = service.findMemberByNo(no);
+			System.out.println(no);
+		
 			int result = 0;
 			
-			result = service.deleteMember(loginMember.getNo());
+			if(loginMember.getNo() == member.getNo()) {
 				
-			if(result > 0){
-				model.addObject("msg", "정상적으로 탈퇴되었습니다.");
-				model.addObject("location", "/member/logout");				
+				result = service.deleteMember(no);
+				
+				if(result > 0) {
+					model.addObject("msg", "정상적으로 탈퇴되었습니다.");
+					model.addObject("location", "/member/logout");				
+				} else {
+					model.addObject("msg", "회원 탈퇴를 실패하였습니다.");
+					model.addObject("location", "/member/mypageModify");
+				}
 			} else {
-				model.addObject("msg", "회원 탈퇴를 실패하였습니다.");
-				model.addObject("location", "/member/mapageModify");
+				model.addObject("msg", "잘못된 접근입니다.");
+				model.addObject("location", "/");
 			}
-
-		
+			
 			model.setViewName("common/msg");
 			
 			return model;
+			
 		}
 	
 	// 비밀번호 변경 페이지 이동

@@ -23,8 +23,6 @@ public interface MemberService {
 
 	int updatePwd(Member member);
 	
-	List<Member> selectMemberAllForApproval(String userId);
-
-	List<Member> selectSearchedMemberForApproval(String searchData, String userId);
+	Member findMemberByNo(int no);
 
 }

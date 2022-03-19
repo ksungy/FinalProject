@@ -172,7 +172,7 @@
 			<tr>
 				<th>
 					<div id="byeBtnArea">					
-						<input type="button" id="notByeBtn" onclick="location.href='${path}/member/login'" value="홈으로">
+						<input type="button" id="notByeBtn" onclick="location.href='${path}/member/mypageModify'" value="홈으로">
 						<input type="button" id="byeBtn" onclick="agreeAndDeleteMember();" value="탈퇴하기">
 					</div>
 				</th>
@@ -180,7 +180,7 @@
 		</table>
 	</div>
 	
-	<script src="${path}/resources/js/jquery-3.5.1.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.0.min.js"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css"> 
 	<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>
 	<!-- delete 할거임? -->
@@ -188,7 +188,7 @@
 	function agreeAndDeleteMember() { 
 	    var chkbox = document.getElementsByName('agree'); 
 	    var chk = false; 
-	    var pageLink = '${path}/member/deleteMember?no=${ loginMember.no }';
+	    var pageLink = 'member/deleteMember?no=${ loginMember.no }';
 	    
 	    for(var i=0 ; i < chkbox.length ; i++) { 
 	        if(chkbox[i].checked) { 
@@ -200,7 +200,7 @@
 	    
 	    if(chk) { 
 	    	
-	        return location.href = pageLink; 
+	        return window.location.href = pageLink;
 	    } else { 
 	        /* alert("약관에 동의하지 않으면 탈퇴할 수 없습니다."); */
 	        Swal.fire({

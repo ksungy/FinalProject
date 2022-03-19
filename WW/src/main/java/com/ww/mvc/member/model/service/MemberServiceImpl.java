@@ -21,6 +21,12 @@ public class MemberServiceImpl implements MemberService {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@Override
+	public Member findMemberByNo(int no) {
+		
+		return mapper.findMemberByNo(no);
+	}
+	
+	@Override
 	public Member findMemberById(String id) {
 	
 		return mapper.findMemberById(id);
@@ -84,19 +90,6 @@ public class MemberServiceImpl implements MemberService {
 		
 		return result;
 	}
-
-	@Override
-	public List<Member> selectMemberAllForApproval(String userId) {
-		
-		return mapper.selectMemberForApproval(userId);
-	}
-
-	@Override
-	public List<Member> selectSearchedMemberForApproval(String searchData, String userId) {
-		
-		return mapper.selectSearchedMemberForApproval(searchData, userId);
-	}
-
 
 
 }

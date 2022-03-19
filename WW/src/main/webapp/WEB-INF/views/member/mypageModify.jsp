@@ -138,7 +138,7 @@
                 <tr>
                     <th colspan="3"><br><br>
                         <div class="btn_area">
-                        <input type="button" id="notupdateBtn" onclick="location.href='${path}/cmt/dashBoard'" value="홈으로">
+                        <input type="button" id="notupdateBtn" onclick="location.href='${path}/cmt/dashboard'" value="홈으로">
                         <input type="submit" id="goUpdateBtn" onclick="location.href='${path}/member/mypageModify'" value="회원정보수정">
                         </div>
                     </th>
