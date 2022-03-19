@@ -21,6 +21,7 @@
 		<result property="cmt_end" column="CMT_END" />
 		<result property="cmt_rs" column="CMT_RS" />
 		<result property="cmt_month" column="CMT_MONTH" />
+		<result property="cmt_time" column="CMT_TIME" />
 	</resultMap>
 	
 	<resultMap type="Rest" id="WorkBreak1">
@@ -48,7 +49,7 @@
 	<!-- 당일 근무내역 조회 -->
 	<select id="getTodayAttendance" parameterType="_int" resultMap="TodayAttendance">
 		<![CDATA[ 
-		select CMT_NO, EMP_NO, to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT, to_char(CMT_END, 'hh24:mi:ss') CMT_END
+		select CMT_NO, EMP_NO, to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT, to_char(CMT_END, 'hh24:mi:ss') CMT_END, CMT_MONTH, CMT_TIME
 		, (
 			select replace((to_char(sum(beh), '09')||':'||to_char(sum(bem),'09')||':'||to_char(sum(bes), '09')),' ', '')
 	        	from (select extract(HOUR FROM diff) AS beh
@@ -62,6 +63,26 @@
 		) as CMT_RS
 			from CMT_AT 
 			where EMP_NO = #{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+	  	]]>		
+	</select>
+	
+	<!-- 월별 근무내역 조회 -->
+	<select id="getMonthAttendance" parameterType="_int" resultMap="TodayAttendance">
+		<![CDATA[ 
+		select CMT_NO, EMP_NO, to_char(CMT_SRT, 'hh24:mi:ss') CMT_SRT, to_char(CMT_END, 'hh24:mi:ss') CMT_END, CMT_MONTH, CMT_TIME
+		, (
+			select replace((to_char(sum(beh), '09')||':'||to_char(sum(bem),'09')||':'||to_char(sum(bes), '09')),' ', '')
+	        	from (select extract(HOUR FROM diff) AS beh
+	       		,extract(MINUTE FROM diff) AS bem
+	        	,extract(SECOND FROM diff) AS bes
+	            	from (SELECT (be-bs) as diff 
+	            		from (select to_timestamp(to_char(RS_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') bs
+	                		, to_timestamp(to_char(RS_END, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') be 
+	                    		from CMT_RS
+	                    		where EMP_NO =#{emp_no} and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD')))))
+		) as CMT_RS
+			from CMT_AT 
+			where EMP_NO = #{emp_no} and CMT_MONTH = #{month}
 	  	]]>		
 	</select>
 	
@@ -183,11 +204,18 @@
 	
 	<update id="updateCheckout" parameterType="_int">
 		<![CDATA[
-    Update CMT_AT 
-			set CMT_END = SYSDATE,
-				CMT_MONTH = SUBSTR(CMT_NO, 4, 2)
-			where EMP_NO = #{emp_no}
-            and CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
+		UPDATE CMT_AT
+		SET CMT_END = SYSDATE,
+		    CMT_MONTH = SUBSTR(CMT_NO, 5, 2),
+		    CMT_TIME = 
+		    (SELECT CONCAT(CONCAT(TO_CHAR(EXTRACT(HOUR FROM DIFF), '09'), ':'), TO_CHAR(EXTRACT(MINUTE FROM DIFF), '09'))
+		     FROM (SELECT (ATTE-ATTS) AS DIFF
+		           FROM(SELECT ROWNUM,
+		                       TO_TIMESTAMP(TO_CHAR(CMT_SRT, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') ATTS,
+		                       TO_TIMESTAMP(TO_CHAR(SYSDATE, 'YYYYMMDDHH24MISS'), 'YYYYMMDDHH24MISS') ATTE
+		                FROM CMT_AT
+		                WHERE EMP_NO = '4' AND CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD')))))
+		WHERE EMP_NO = #{emp_no} AND CMT_NO = to_number(to_char(SYSDATE, 'YYYYMMDD'))
 		]]>
 	</update>
 	
@@ -292,7 +320,9 @@
 		 	select CMT_NO,
 			   to_char(CMT_SRT, 'HH24:MI') CMT_SRT, 
 			   to_char(CMT_END, 'HH24:MI') CMT_END,
-				CMT_RS
+				CMT_RS,
+				CMT_MONTH,
+				CMT_TIME
 		 	from CMT_AT 
 		 	where EMP_NO = #{emp_no} 
 		 	order by CMT_NO desc
@@ -314,12 +344,29 @@
 		SELECT CMT_NO,
 		EMP_NO,
 		to_char(CMT_SRT, 'HH24:MI') CMT_SRT,
-		to_char(CMT_END, 'HH24:MI') CMT_END
+		to_char(CMT_END, 'HH24:MI') CMT_END,
+		CMT_MONTH,
+		CMT_TIME
 		FROM CMT_AT
 		WHERE EMP_NO = #{emp_no} AND CMT_MONTH = #{month}
 		ORDER BY CMT_NO
-	</select>	
-		<!-- 월별 근태 내역 조회 -->
+	</select>
+	
+	<!-- 월별 총 시간 가져오기 -->
+	<select id="getMonthlyTotal" parameterType="map" resultType="map">
+		<![CDATA[ 
+		SELECT
+		TRUNC((SUM(HOUR+MIN)/60), 0) as TH,
+		MOD(SUM(HOUR+MIN),60) AS TM
+		FROM(SELECT 
+		(SUBSTR(CMT_TIME,2,2)*60) AS HOUR,SUBSTR(CMT_TIME,6,2) AS MIN
+		FROM CMT_AT
+		WHERE EMP_NO = #{emp_no} and cmt_month = #{month})
+	  	]]>
+	</select>
+	
+
+	<!-- 월별 근태 내역 조회 -->
 	<select id="getMonthlyListAjax" parameterType="map" resultMap="TodayAttendance">
 		<![CDATA[ 		
 		SELECT CMT_NO,
