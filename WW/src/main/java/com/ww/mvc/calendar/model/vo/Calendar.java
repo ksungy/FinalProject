@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Calendar {
+	private int empNo;
 	private int calendarNo;
 	private String calendarTitle;
 	private String calendarMemo;

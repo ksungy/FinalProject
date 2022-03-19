@@ -5,6 +5,8 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -15,12 +17,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.SessionAttribute;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.ww.mvc.board.model.service.BoardService;
 import com.ww.mvc.board.model.vo.Board;
@@ -82,12 +91,18 @@ public class BoardController {
 		
 		int replyCount = service.getReplyCount(no);
 		
+		List<BoardAttach> boardAttachlist = service.getBoardAttachList(no);
+		
 		board.setReplyCount(replyCount);
 		board.setHits(boardHits);
+		
+		log.info(board.toString());
+		
 		
 		model.addObject("boardHits", boardHits);
 		model.addObject("replyCount", replyCount);
 		model.addObject("board", board);
+		model.addObject("boardAttachlist", boardAttachlist);
 		model.setViewName("board/view");
 
 		return model;
@@ -207,7 +222,7 @@ public class BoardController {
 			
 			for (MultipartFile multipartFile : upfile) {
 				
-				log.info("fileName" + multipartFile.getOriginalFilename());
+				log.info("upfile" + multipartFile.getOriginalFilename());
 				
 				String location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
 				String renamedFileName = FileProcess.save(multipartFile, location);
@@ -220,6 +235,7 @@ public class BoardController {
 					boardAttach.setFileSize(multipartFile.getSize());
 					boardAttach.setBoardNo(board.getNo());
 					boardAttach.setEmpNo(loginMember.getNo());
+					boardAttach.setFileNo(boardAttach.getFileNo());
 
 				}
 				
@@ -241,10 +257,40 @@ public class BoardController {
 			model.addObject("location", "/board/write");
 		}
 
-		
 		model.setViewName("common/msg");
 
 		return model;
+	}
+	
+	
+	// ▼ 첨부파일 다운로드
+	@GetMapping("/fileDown")
+	public ResponseEntity<Resource> fileDown(
+			@RequestHeader(name="user-agent") String userAgent, @RequestParam("oname") String oname, @RequestParam("rname") String rname) {
+		
+		String downName = null;
+		Resource resource = null;
+		
+		resource = resourceLoader.getResource("resources/upload/board/" + rname);
+		
+		try {
+			if(userAgent.indexOf("MSIE") != -1 || userAgent.indexOf("Trident") != -1) {
+				downName = URLEncoder.encode(oname, "UTF-8").replaceAll("\\", "%20");
+						
+			} else {
+				downName = new String(oname.getBytes("UTF-8"), "ISO-8859-1");
+			}
+			
+			return ResponseEntity.ok().header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+									  .header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + downName + "\"")
+									  .body(resource);
+		
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+			
+		}
 	}
 	
 	
@@ -254,7 +300,10 @@ public class BoardController {
 		
 		Board board = service.findBoardByNo(no);
 		
+		List<BoardAttach> boardAttachlist = service.getBoardAttachList(no);
+		
 		if(loginMember.getNo() == board.getEmpNo()) {
+			model.addObject("boardAttachlist", boardAttachlist);
 			model.addObject("board", board);
 			model.setViewName("board/edit");
 		} else {
@@ -267,33 +316,40 @@ public class BoardController {
 	}
 
 	@PostMapping("/edit")
-	public ModelAndView update(@SessionAttribute(name = "loginMember", required = false) Member loginMember,
-			Board board, ModelAndView model, @RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
+	public ModelAndView update(ModelAndView model, @SessionAttribute(name = "loginMember", required = false) Member loginMember,
+			Board board, @ModelAttribute BoardAttach boardAttach, HttpServletRequest request,
+			@RequestPart(value = "upfile", required = false) List<MultipartFile> upfile) throws Exception {
 		
 		int result = 0;
 		
 		if(upfile != null && !upfile.isEmpty()) {
-			
+
 			List<BoardAttach> attachList = new ArrayList<>();
-			
+
 			for (MultipartFile multipartFile : upfile) {
-				
+
 				String location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
-				String renamedFileName = FileProcess.save(multipartFile, location);
+				String renamedFileName = null;
+			
+				if(boardAttach.getRenamedFileName() != null) {
+					
+					// 기존에 업로드된 첨부파일을 삭제
+					FileProcess.delete(boardAttach.getRenamedFileName(), request);
+	
+				}			
+					
+				log.info(boardAttach.getRenamedFileName());
 				
-				BoardAttach boardAttach = new BoardAttach();
-				
+				renamedFileName = FileProcess.save(multipartFile, location);
+
 				if(renamedFileName != null) {
+					
 					boardAttach.setOriginalFileName(multipartFile.getOriginalFilename());
 					boardAttach.setRenamedFileName(renamedFileName);
 					boardAttach.setFileSize(multipartFile.getSize());
 					boardAttach.setBoardNo(board.getNo());
 					boardAttach.setEmpNo(loginMember.getNo());
 					boardAttach.setFileNo(boardAttach.getFileNo());
-
-				} else {
-						//기존에 저장된 파일 삭제
-						FileProcess.delete(boardAttach.getRenamedFileName());
 					
 				}
 				
@@ -311,16 +367,47 @@ public class BoardController {
 		log.info(board.toString());
 
 		if (result > 0) {
-			model.addObject("msg", "게시글이 정상적으로 등록되었습니다.");
+			model.addObject("msg", "게시글이 정상적으로 수정되었습니다.");
 			model.addObject("location", "/board/view?no=" + board.getNo());
 		} else {
-			model.addObject("msg", "게시글 등록이 실패하였습니다.");
+			model.addObject("msg", "게시글 수정이 실패하였습니다.");
 			model.addObject("location", "/board/write");
 		}
 
-		
 		model.setViewName("common/msg");
 
+		return model;
+	}
+	
+	// ▼ 파일 삭제
+	@GetMapping("/fileDelete")
+	public ModelAndView deleteFile(ModelAndView model, @RequestParam("no") int no, 
+			@SessionAttribute(name = "loginMember", required = false) Member loginMember) {
+		
+		int result = 0;
+		
+		BoardAttach boardAttach = service.findBoardAttachByNo(no);
+		
+		if (boardAttach != null) {
+			result = service.deleteFile(no);
+		
+			if(result > 0) {
+				model.addObject("msg", "파일 삭제 완료!");	
+				model.addObject("location", "/board/edit?no=" + boardAttach.getBoardNo());
+			} else {
+				model.addObject("msg", "파일 삭제 실패!");
+				model.addObject("location", "/board/edit?no=" + boardAttach.getBoardNo());
+			}
+			
+		} else {
+			
+			model.addObject("msg", "잘못된 요청입니다.");
+			model.addObject("location", "/board/list");
+			
+		}
+		
+		model.setViewName("/common/msg");
+		
 		return model;
 	}
 	
@@ -334,6 +421,7 @@ public class BoardController {
 		int result = 0;
 		
 		if(loginMember.getNo() == board.getEmpNo()) {
+			
 			result = service.delete(board.getNo());
 			
 			if(result > 0) {
@@ -363,7 +451,7 @@ public class BoardController {
 		
 		reply.setBoardNo(board.getNo());
 		reply.setEmpNo(member.getNo());
-		reply.setWriter(member.getId());
+		reply.setWriter(member.getName());
 		
 		int boardNo = reply.getBoardNo();
 
@@ -386,30 +474,55 @@ public class BoardController {
 	
 	
 	// ▼ 댓글 수정
-	@RequestMapping("/replyUpdate")
-	public String updateReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply){
+	@GetMapping("/replyEdit")
+	public ModelAndView replyEdit(@SessionAttribute("loginMember") Member loginMember, ModelAndView model, @RequestParam("no") int no) {
+		
+		Board board = service.findBoardByNo(no);
+		
+		if(loginMember.getNo() == board.getEmpNo()) {
+			model.addObject("board", board);
+			model.setViewName("board/replyEdit");
+		} else {
+			model.addObject("msg", "접근 권한이 없습니다.");
+			model.addObject("location", "/board/list");
+			model.setViewName("common/msg");
+		} 
+		
+		return model;
+	}
+	
+	
+	@PostMapping("/replyUpdate")
+	public ModelAndView updateReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply,
+			@RequestParam("boardNo") int no, @RequestParam("content") String content) {
 		int result = 0;
-		int boardNo = reply.getBoardNo();
+		
+		board = service.findBoardByNo(no);
 		
 		reply.setNo(reply.getNo());
-		reply.setBoardNo(board.getNo());
+		reply.setBoardNo(no);
 		reply.setEmpNo(member.getNo());
-		reply.setWriter(member.getId());		
-		reply.setContent(reply.getContent());
+		reply.setContent(content);
 		
 		result = service.updateReply(reply);
 		
+		log.info(reply.toString());
+		
 		if(result > 0) {
-			System.out.println("오케이");
+			model.addObject("msg", "댓글 수정 완료!");
+			model.addObject("location", "/board/view?no=" + no);
 		} else {
-			System.out.println("놉");
+			model.addObject("msg", "댓글 수정 실패!");
+			model.addObject("location", "/board/view?no=" + no);	
+			
 		}
 		
-		return "/board/view?no=" + boardNo;
+		model.setViewName("/common/msg");
+		
+		return model;
 		
 	}
-
-
+	
 
 	// ▼ 댓글 삭제
 	@GetMapping("/replyDelete")
@@ -417,23 +530,33 @@ public class BoardController {
 		
 		int result = 0;
 		
-		result = service.deleteReply(no);
+		Reply reply = service.findReplyByNo(no);
 		
-		if(result > 0) {
-			model.addObject("msg", "댓글 삭제 완료!");
-			model.addObject("location", "/board/list");
-		} else {
-			model.addObject("msg", "댓글 삭제 실패!");
-			model.addObject("location", "/board/list");
+		int boardNo = reply.getBoardNo();
+
+		if(reply != null) {
+			
+			result = service.deleteReply(no);
+			
+			if(result > 0) {
+				model.addObject("msg", "댓글 삭제 완료!");
+				model.addObject("location", "/board/view?no=" + boardNo);
+			} else {
+				model.addObject("msg", "댓글 삭제 실패!");
+				model.addObject("location", "/board/list");
+			}
+			
 		}
 		
 		model.setViewName("/common/msg");
 		
 		return model;
+	
+
 	}
 	
 	
-	
+
 	
 
 }

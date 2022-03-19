@@ -32,30 +32,28 @@
 		<div class="wrap-contact100">
 			<form action="${ path }/board/edit" method="post" enctype="multipart/form-data" class="contact100-form validate-form" id="writeForm">
 				<input type="hidden" name="no" value="${ board.no }">
+				<input type="hidden" name="fileNo" value="${ boardAttach.fileNo }">
+				<c:forEach var="boardAttach" items="${ boardAttachlist }">
 				<input type="hidden" name="originalFileName" value="${ boardAttach.originalFileName }">
 				<input type="hidden" name="renamedFileName" value="${ boardAttach.renamedFileName }">
+				</c:forEach>
 				<span class="contact100-form-title">
 					WhereWare
 				</span>
 				
-				<label class="label-input100">Your Name *</label>
-				<div class="wrap-input100 rs1 validate-input">
-					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명" value="<c:out value="${ loginMember.id }"/>" readonly>
+				<label class="label-input100">이름</label>
+				<div class="wrap-input100 validate-input">
+					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명" value="<c:out value="${ board.writer }"/>" readonly>
 					<span class="focus-input100"></span>
 				</div>
-		
-				<div class="wrap-input100 rs1 validate-input">
-					<input class="input100" type="text" name="deptTitle" placeholder="부서명" value="<c:out value="${ loginMember.deptCode }"/>" readonly>
-					<span class="focus-input100"></span>
-				</div>
-
-				<label class="label-input100">Title *</label>
+				
+				<label class="label-input100">글 제목(100자)</label>
 				<div class="wrap-input100 validate-input">
 					<input id="title" class="input100" type="text" name="title" placeholder="제목을 입력하세요." value="<c:out value="${ board.title }"/>">
 					<span class="focus-input100"></span>
 				</div>
 
-				<label class="label-input100">Content(4000자) *</label>
+				<label class="label-input100">글 내용(4000자)</label>
 				<div class="wrap-input100 validate-input">
 					<textarea id="boardContent" name="content">${ board.content }</textarea>
 					<script>
@@ -67,20 +65,26 @@
 					</script>
 				<span class="focus-input100"></span>
 				</div>
-				
-				<label class="label-input100">첨부파일</label>
-					<c:if test="${ !empty boardAttach.originalFileName }">
-						<c:out value="${ boardAttach.originalFileName }"></c:out>
-					</c:if>
-					<div class="form-group" id="file-list">
-						<a href="#this" onclick="addFile()">파일 추가</a>	
+
+				<label class="label-input100">첨부파일		<span style="font-size:10px; color: gray;">※첨부파일은 최대 10개까지 등록이 가능합니다.</span></label>
+					
+				<div class="form-group" id="file-list">
+					<c:forEach var="boardAttach" items="${ boardAttachlist }">
+						<div class="file-input">
+							<span>
+								${ boardAttach.originalFileName }
+							</span>
+							<a href="${ path }/board/fileDelete?no=${ boardAttach.fileNo }" name="file-delete">삭제</a>	
+						</div>
+					</c:forEach>
+					<br>
+					<a href="#this" onclick="addFile()">파일 추가</a>	
 					<div class="file-group">
 						<input id="upfile" type="file" name="upfile" multiple="multiple"><a href='#this' name="file-delete">삭제</a>
 					</div>
 					<span class="focus-input100"></span>
-					</div>
-
-				 
+				</div>
+				
 				<div class="container-contact100-form-btn">
 					<button type="reset" onclick="location.href='${ pageContext.request.contextPath }/board/list'" class="contact100-form-btn">
 						취소
@@ -144,7 +148,7 @@
 			})
 	}
 
-	
 </script>
+
  
 <%@include file="../common/footer.jsp"%>

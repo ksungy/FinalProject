@@ -41,9 +41,11 @@ public class MemberController {
 	@Qualifier("memberService")
 	private MemberService service;
 	
-	// 로그인 페이지 이동및 탈퇴회원 조회!
+	// 로그인 페이지 이동
 	@GetMapping("/login")
 	public String login() {
+		
+		log.info("로그인 페이지 요청");
 		
 		return "member/login";
 	};
@@ -63,16 +65,15 @@ public class MemberController {
 			model.addObject("msg", "로그인에 성공하셨습니다.");
 			
 			model.addObject("loginMember", loginMember);			
-			model.addObject("location", "/cmt/dashboard");
-			model.setViewName("common/msg");
-			
+	         model.addObject("location", "/cmt/dashboard");
+	         model.setViewName("common/msg");
+
 			log.info("{}, {}", id, password);
 			log.info(loginMember.toString());
-			
 		} else {
 			// 로그인 실패
 			model.addObject("msg", "아이디나 비밀번호가 일치하지 않습니다.");
-						
+			
 			model.addObject("location", "/member/login");
 			model.setViewName("common/msg");
 		}
@@ -167,7 +168,7 @@ public class MemberController {
 			ModelAndView model,
 			@SessionAttribute(name = "loginMember") Member loginMember,
 			@ModelAttribute Member member,
-			@RequestParam("upload_profile") MultipartFile reloadImgFile,
+			@RequestParam("originalProfilename") MultipartFile reloadImgFile,
 			HttpServletRequest request) {
 		int result = 0;
 		
@@ -192,7 +193,6 @@ public class MemberController {
 		result = service.save(member);
 		
 		if(result > 0) {
-			System.out.println(loginMember.getId().equals(member.getId()) + ",  result : " + result);
 			model.addObject("loginMember", service.findMemberById(loginMember.getId()));
 			model.addObject("msg", "회원정보 수정을 완료했습니다.");
 			model.addObject("location", "/member/mypageModify");
@@ -207,45 +207,42 @@ public class MemberController {
 		return model;
 	}
 	
-	// 회원탈퇴 페이지 이동
 	@GetMapping("/deleteMember")
 	public String deleteMember() {
+		log.info("회원 탈퇴 약관동의 페이지 요청");
 		
 		return "member/deleteMember";
 	}
 	
 	// 회원 삭제
-	@RequestMapping(value="/member/deleteMember")
-	public ModelAndView deleteMember(
-				ModelAndView model,
+		@RequestMapping(value="/member/deleteMember")
+		public ModelAndView deleteMember(ModelAndView model,
 				@SessionAttribute(name="loginMember") Member loginMember,
-				@RequestParam("no") int no) {
+				@RequestParam("no")int no) {
 			
-			Member member = service.findMemberByNo(no);
-			System.out.println(no);
-		
+			 Member member = service.findMemberByNo(no);
 			int result = 0;
 			
-			if(loginMember.getNo() == member.getNo()) {
-				
-				result = service.deleteMember(no);
-				
-				if(result > 0) {
-					model.addObject("msg", "정상적으로 탈퇴되었습니다.");
-					model.addObject("location", "/member/logout");				
-				} else {
-					model.addObject("msg", "회원 탈퇴를 실패하였습니다.");
-					model.addObject("location", "/member/mypageModify");
-				}
-			} else {
-				model.addObject("msg", "잘못된 접근입니다.");
-				model.addObject("location", "/");
-			}
-			
+			            result = service.deleteMember(loginMember.getNo());
+            if(loginMember.getNo() == member.getNo()) {
+                
+                result = service.deleteMember(no);
+                
+                if(result > 0) {
+                    model.addObject("msg", "정상적으로 탈퇴되었습니다.");
+                    model.addObject("location", "/member/logout");                
+                } else {
+                    model.addObject("msg", "회원 탈퇴를 실패하였습니다.");
+                model.addObject("location", "/member/mapageModify");
+                    model.addObject("location", "/member/mypageModify");
+                }
+            } else {
+                model.addObject("msg", "잘못된 접근입니다.");
+                model.addObject("location", "/");
+            }
 			model.setViewName("common/msg");
 			
 			return model;
-			
 		}
 	
 	// 비밀번호 변경 페이지 이동

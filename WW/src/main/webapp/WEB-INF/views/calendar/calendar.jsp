@@ -8,7 +8,6 @@
 <%@page import="com.ww.mvc.calendar.model.vo.Calendar"%>
 
 
-
 <c:set var="path" value="${ pageContext.request.contextPath }"/>
 
 <!DOCTYPE html>
@@ -17,6 +16,8 @@
 <meta charset='utf-8' />
 <link href='${ path }/resources/css/calendar.css' rel='stylesheet' />
 <script src='${ path }/resources/js/calendar.js'></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css"> 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>
 <style>
 
 
@@ -55,15 +56,17 @@ document.addEventListener('DOMContentLoaded', function() {
 				
 			var title = prompt('입력할 일정:');
 			
+			
 			// title 값이 있을때, 화면에 calendar.addEvent() json형식으로 일정을 추가 
 			if (title) {
 				$.ajax({
 					url : "http://localhost:8088/mvc/calendarinsert",
 					type : 'post',
 					data : {
+						empNo : ${loginMember.no},
 						calendarTitle : title,
-						calendarStart : moment(arg.start).format('YYYY-MM-DD'),
-						calendarEnd : moment(arg.end).format('YYYY-MM-DD')
+						calendarStart : moment(arg.start).format('YYYY-MM-DD HH:mm'),
+						calendarEnd : moment(arg.end).format('YYYY-MM-DD HH:mm')
 					},
 					
 				});
@@ -81,7 +84,14 @@ document.addEventListener('DOMContentLoaded', function() {
 				// 있는 일정 클릭시, 
 				console.log("#등록된 일정 클릭#"); 
 				console.log(arg.event); 
-				if (confirm('Are you sure you want to delete this event?')) {
+				if (confirm('일정을 삭제하시겠습니까?')) {
+					$.ajax({
+						url : "http://localhost:8088/mvc/calendardelete",
+						type : 'get',
+						data : {
+						},
+						
+					});
 					arg.event.remove()
 					} 
 				}, 

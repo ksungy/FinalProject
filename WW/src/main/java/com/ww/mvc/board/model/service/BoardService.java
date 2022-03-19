@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.ww.mvc.board.model.vo.Board;
+import com.ww.mvc.board.model.vo.BoardAttach;
 import com.ww.mvc.board.model.vo.Reply;
 import com.ww.mvc.common.util.PageInfo;
 import com.ww.mvc.member.model.vo.Member;
@@ -27,22 +28,21 @@ public interface BoardService {
 
 	int saveReply(Member member, Reply reply);
 
-	int deleteReply(int no);
-
 	int updateReply(Reply reply);
+
+	int deleteReply(int no);
 
 	int getReplyCount(int no);
 
 	int getBoardHits(int no);
 
-	
+	List<BoardAttach> getBoardAttachList(int no);
 
-	
+	int deleteFile(int no);
 
-	
+	BoardAttach findBoardAttachByNo(int no);
 
-	
-	
+	Reply findReplyByNo(int no);
 
 
 }
