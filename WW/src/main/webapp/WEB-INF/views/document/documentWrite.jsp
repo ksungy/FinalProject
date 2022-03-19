@@ -210,7 +210,7 @@
                         <tr>
                             <td class="title" colspan="2">※제목</td>
                             <td></td>
-                            <td colspan="2" >진행상황 : 결제중</td>
+                            <td colspan="2" ></td>
                         </tr>
 
                         <tr>
