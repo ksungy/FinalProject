@@ -20,6 +20,8 @@ public class Cmt {
 	
 	private String cmt_rs;
 	
-	private String cmt_month;
+	private int cmt_month;
+	
+	private String cmt_time;
 	
 }

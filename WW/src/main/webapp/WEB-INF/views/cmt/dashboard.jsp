@@ -138,7 +138,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 											<td>${ cmt.cmt_no }</td>
 											<td>${ cmt.cmt_srt }</td>
 											<td>${ cmt.cmt_end }</td>
-											<td>-</td>
+											<td>${ cmt.cmt_time }</td>
 										</tr>
 									</c:forEach>
 								</c:if>

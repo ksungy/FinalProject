@@ -63,5 +63,8 @@ public interface CmtService {
 
 	Map<String, Object> getAllElapsedWTime(Map<String, Object> mapMS);
 
+	Map<String, Object> getMonthlyTotal(Map<String, Object> mapMS);
+
+	Cmt getMonthAttendance(int no, int cmt_month);
 
 }
