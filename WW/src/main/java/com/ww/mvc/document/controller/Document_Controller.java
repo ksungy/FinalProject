@@ -212,29 +212,29 @@ public class Document_Controller {
 	public ModelAndView documentUpdate( ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int link_no, @RequestParam("doc_id") int doc_id,
 			@RequestParam("attach_origin") String attach_origin, @RequestParam("attach_rename") String attach_rename, @ModelAttribute Document document, @RequestPart("upfile") MultipartFile upfile) throws Exception 
 			 {
-
-
-			if (upfile != null && !upfile.isEmpty()) {
-				String location = null; 
-				String renamedFileName = null;
-				
-				try {
-					location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
-					if (document.getAttach_rename() != null) {
-//						이전에 업로드된 첨부파일 삭제
-						FileProcess.delete(location + "/" + document.getAttach_rename() );
-					}
-					
-					renamedFileName = FileProcess.save(upfile, location);
-					
-					if (renamedFileName != null) {
-						document.setAttach_origin(upfile.getOriginalFilename());
-						document.setAttach_rename(renamedFileName);
-					}
-				} catch (IOException e) {
-					e.printStackTrace();
+/*
+		if (upfile != null && !upfile.isEmpty()) {
+			String location = null; 
+			String renamedFileName = null;
+			
+			try {
+				location = resourceLoader.getResource("resources/upload/document").getFile().getPath();
+				if (document.getAttach_rename() != null) {
+//					이전에 업로드된 첨부파일 삭제
+					FileProcess.delete(location + "/" + document.getAttach_rename() );
 				}
+				
+				renamedFileName = FileProcess.save(upfile, location);
+				
+				if (renamedFileName != null) {
+					document.setAttach_origin(upfile.getOriginalFilename());
+					document.setAttach_rename(renamedFileName);
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
+		}
+*/
 			
 
 			int result = 0;

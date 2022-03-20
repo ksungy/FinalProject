@@ -198,15 +198,8 @@ from (
 
 
 	</select>
-	
 
-<<<<<<< HEAD
-=======
-	
 
-	
-	
-	
 	
 	<insert id="getInsertDocument" parameterType="Document" useGeneratedKeys="true" keyProperty="doc_id" keyColumn="DOC_ID">
 		INSERT INTO DOCUMENT (
@@ -331,6 +324,5 @@ from (
 	</select>
 	
 	
-	
->>>>>>> kimhwabin2
+
 </mapper>
