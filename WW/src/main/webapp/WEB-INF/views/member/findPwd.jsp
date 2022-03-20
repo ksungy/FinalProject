@@ -11,24 +11,44 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <script src="${path}/resources/js/jquery-3.5.1.js"></script>
-	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@9"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.min.css"> 
+	 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.1.9/dist/sweetalert2.all.min.js"></script>
     <title>Document</title>
     <link rel="stylesheet" href="${path}/resources/css/findPwd.css">
+    
+    <style type="text/css">
+    	.content {
+    		background-color: fff;
+    		width: 500px;
+    		height: 450px;
+    		text-align: center;
+    		margin: auto;
+    		margin-top: 200px;
+    		
+    	}
+    </style>
 </head>
 <body>
 	<div class="wrapper">
+		<div class="content">
         <div id="title">
-            <h1><a href="${path}/member/findPwd">Forgot your Password?</a></h1>
+            <h1><a href="${path}/member/findPwd">WHEREWARE</a></h1>
+        </div>
+        <div>
+        	<h5>비밀번호를 잊으셨나요? 
+        		<br>
+        	이메일로 임시 비밀번호를 받으세요!</h5>
         </div>
         <div class="container">
             <form class="form" action="${path}/member/findPwd" method="post">
                 <input type="text" id="id" name="id" placeholder="User ID ">
                 <input type="email"id="email" name="email"placeholder="E-mail">
 
-                <button type="button" id="login-button">Find</button>
+                <button type="submit" id="login-button">비밀번호 발급</button>
             </form>
         </div>
     </div>
+		</div>
     <div class="wrap-loading display-none">
 
   <%--   <div><img src="${path}/images/loadingmark.gif" /></div> --%>
@@ -54,7 +74,7 @@
 					confirmButtonText: '확인',	
 			  	  }).then((result) => {
 			    	//확인을 눌렀을 때 수행할 일
-			    	location.replace("${path}/");	
+			    	location.replace("${path}/member/login");	
 			      })
 			}
 			, beforeSend: function () {
@@ -67,7 +87,7 @@
 			error:function(xhr) {
 				console.log(xhr)
 				swal.fire({
-					text:"이이디가 확실한가요?",
+					text:"아이디가 확실한가요?",
 					confirmButtonText: '확인',	
 			   }).then((result) => {
 			    	//확인을 눌렀을 때 수행할 일

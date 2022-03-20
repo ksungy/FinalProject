@@ -27,6 +27,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.ww.mvc.member.model.vo.Member;
+import com.ww.mvc.member.model.service.UserMailSendService;
 import com.ww.mvc.member.model.service.MemberService;
 
 import lombok.extern.slf4j.Slf4j;
@@ -347,6 +348,23 @@ public class MemberController {
 		
 		return "member/findPwd";
 	}
+	
+	@Autowired
+    private UserMailSendService mailsender;
+	
+	@PostMapping("/findPwd")
+	@ResponseBody
+	public String findPwd(
+			@RequestParam(value="id") String id,
+			@RequestParam(value="email") String email,
+			HttpServletRequest request) {
+		
+		mailsender.mailSendWithPassword(id, email, request);
+		String alert = "메일을 확인해주세요.";
+		
+		return alert;
+	}
+	
 	
 	// 이미지 저장 메소드
 	private String saveFile(

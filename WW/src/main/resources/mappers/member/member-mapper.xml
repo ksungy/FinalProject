@@ -121,8 +121,13 @@
 		WHERE EMP_NO = #{no}
 	</update>
 	
+	<select id="selectMember" parameterType="string" resultMap="MemberResultMap">
+		<include refid="selectMemberSql"></include>
+	 	AND EMP_ID = #{id}
+	</select>
+		
 	<!-- 아이디 찾기 -->
-	<select id="findId" parameterType="Member" resultType="list">
+	<select id="findId" parameterType="Member" resultType="String">
 		SELECT EMP_ID
 		FROM EMPLOYEE 
 		WHERE STATUS ='Y' AND 
@@ -131,7 +136,7 @@
 	</select>
 	
 	<!-- 비밀번호 찾기 -->
-	<select id="findPwd" parameterType="Member" resultType="String" >
+	<select id="findPwd" parameterType="Member" resultType="hashMap" >
 		SELECT EMP_PWD 	
 		FROM EMPLOYEE 
 		WHERE STATUS ='Y' AND  
@@ -146,6 +151,18 @@
 		UPDATE EMPLOYEE 
 		SET EMP_PWD = #{password} 
 		WHERE EMP_ID = #{id}
+	</update>
+	
+	<!-- 임시 비밀번호로 업데이트하는 쿼리 -->
+	<update id="searchPassword" parameterType="Map" >
+	 	UPDATE EMPLOYEE 
+	 	SET
+		    EMP_PWD=#{key}
+		WHERE 
+		    EMP_ID=#{id}
+		AND
+			EMP_EMAIL=#{email}
+
 	</update>
 	
 	<!-- 회원 탈퇴 -->

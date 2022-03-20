@@ -59,7 +59,9 @@
             <!-- 이미지 파일 넘겨줄거임 enctype="multipart/form-data" -->
             <!-- 회원가입 폼 -->
             <form name="memberEnrollFrm" action="${ path }/member/enroll" enctype="multipart/form-data" method="post" >
-                
+                <h3>
+                        <label for="originalProfilename">프로필 사진</label>
+                    </h3>
                 <!-- 이미지 업로드 -->
                 <input type="file" name="upload_profile" id="originalProfilename" style="padding: 6px 35px; font-size: 13px;" accept=".gif, .jpg, .png">
                                

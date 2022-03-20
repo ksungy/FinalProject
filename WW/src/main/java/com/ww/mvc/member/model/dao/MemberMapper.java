@@ -12,6 +12,8 @@ import com.ww.mvc.member.model.vo.Member;
 @Repository
 public interface MemberMapper {
 	
+	Member selectMember(@Param("id") String id);
+	
 	// 회원가입
 	int insertMember(Member member);
 
@@ -31,4 +33,7 @@ public interface MemberMapper {
 	int updatePwd(Member member);
 
 	Member findMemberByNo(int no);
+
+	void searchPassword(@Param("id") String id, @Param("email") String email, @Param("key") String key);
+
 }

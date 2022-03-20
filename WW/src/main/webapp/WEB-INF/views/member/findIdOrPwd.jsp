@@ -16,8 +16,8 @@
         <div class="container">
             <form class="form" action="${path}/member/findIdOrPwd" method="post">
 
-             <button type="button" onclick="location.href='${path}/member/findId'"  id="login-button">Find ID</button>
-     		<button type="button" onclick="location.href='${path}/member/findPwd'"  id="login-button">Find PWD</button>
+             <button type="button" onclick="location.href='${path}/member/findId'"  id="login-button">아이디 찾기</button>
+     		<button type="button" onclick="location.href='${path}/member/findPwd'"  id="login-button">비밀번호 찾기</button>
 
             </form>
         </div>

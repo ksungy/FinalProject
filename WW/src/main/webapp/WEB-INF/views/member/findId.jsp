@@ -18,13 +18,13 @@
 <body>
 	<div class="wrapper">
         <div id="title">
-            <h1>Find your ID</h1>
+            <h1>WHEREWARE</h1>
         </div>
         <div class="container">
             <form class="form" action="${path}/member/findId" method="post">
                 <input type="text" name="name" id="name" placeholder="User Name ">
                 <input type="email"name="email" id="email" placeholder="E-mail">
-                <button type="submit" id="login-button" >Find</button>
+                <button type="submit" id="login-button" >아이디 찾기</button>
             </form>
         </div>
         
