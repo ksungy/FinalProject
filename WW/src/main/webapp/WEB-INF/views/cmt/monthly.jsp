@@ -34,11 +34,9 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 	<div class="card shadow mb-4">
 		<div class="dropdown card-header py-3">
 			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false">조회 월 입력</button>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<a class="dropdown-item" href="#">${ cmt.cmt_month }월</a>
-				<a class="dropdown-item" href="#">1월</a>
-				<a class="dropdown-item" href="#">2월</a>
+				aria-expanded="false" value="none">3월</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" name="month">
+				<a class="dropdown-item" href="#" value="3">3월</a>
 			</div>
 		</div>
 		<div class="card-body">
@@ -56,7 +54,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 					<tfoot>
 						<tr>
 							<th colspan="3">월 근무 총 합계</th>
-							<th>-</th>
+							<th>${totalHours}시간 ${ totalMinutes }분</th>
 						</tr>
 					</tfoot>
 					<tbody>
@@ -71,7 +69,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 									<td>${ cmt.cmt_no }</td>
 									<td>${ cmt.cmt_srt }</td>
 									<td>${ cmt.cmt_end }</td>
-									<td>${ wHours }시간 ${ wMinutes }분</td>
+									<td>${ cmt.cmt_time }</td>
 								</tr>
 							</c:forEach>
 						</c:if>
@@ -102,7 +100,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 			data : {
 				emp_no : "4",
 				page : "1",
-				month : "3"
+				month : ${month}
 			},
 			success : function(data) {
 				console.log(data);

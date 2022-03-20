@@ -37,8 +37,10 @@
 					<a class="dropdown-item" href="/mvc/board/edit?no=${ board.no }">게시글 수정</a>
 					<a class="dropdown-item" onclick="boardDelete()" >게시글 삭제</a>
 					</c:if>
+					<!-- 
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#">게시글 스크랩</a>
+					 -->
 				</div>
 			</div>
 		</div>
@@ -115,7 +117,7 @@
 								<c:forEach var="reply" items="${ board.replies }">
 								<li class="left clearfix">
 									<div class="header">
-										<c:if test="${ !empty loginMember && (loginMember.no == board.empNo) }">
+										<c:if test="${ !empty loginMember && (loginMember.no == reply.empNo) }">
 										<button class="btn float-right btn-default btn-xs" onclick="location.href='${ path }/board/replyDelete?no=${ reply.no }'">삭제</button>
 										<button class="btn float-right btn-default btn-xs" id="replyUpdate" onclick="location.href='${ path }/board/replyEdit?no=${ board.no }'">수정</button>
 										</c:if>
@@ -142,6 +144,7 @@
 				    <li class="list-group-item">
 						<form id="replyForm" name="replyForm" method="get" action="${ path }/board/reply">
 							<input type="hidden" name="no" value="${ board.no }" /> 
+							<input type="hidden" name="writer" value="${ loginMember.name }" />
 							<div class="form-inline mb-2">
 								<label for="replyId"><i class="fa fa-user-circle-o fa-2x"></i></label>
 								<input type="text" class="form-control ml-2" placeholder="사원 ID" id="replyId" name="writer" value="<c:out value="${ loginMember.name }"/>" readonly>

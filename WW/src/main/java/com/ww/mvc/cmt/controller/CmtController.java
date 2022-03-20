@@ -112,7 +112,7 @@ public class CmtController {
 				mv.addObject("list", list);
 				mv.setViewName("cmt/dashboard");
 
-				log.info("list : " + list.toString());
+				log.info("dashboard의 최근 근무 list : " + list.toString());
 			}
 
 		} catch (Exception e) {
@@ -186,9 +186,7 @@ public class CmtController {
 
 		String result = "";
 
-		// 동일 날짜 출근 여부 확인
-		int resultOfExist = service.countAttStart(emp_no);
-
+		// 동일 날짜 출근여부 확인
 		String attStartFormat = service.getAttStart(emp_no);
 
 		if (attStartFormat == null) {
@@ -211,16 +209,24 @@ public class CmtController {
 	// 퇴근 등록
 	@RequestMapping(value = "checkout", method = RequestMethod.POST)
 	@ResponseBody
-	public String checkoutMethod(@RequestParam(value = "emp_no") int emp_no) {
+	public String checkoutMethod(@RequestParam(value = "emp_no") int emp_no) throws IOException {
 
 		String result = "";
-
-		// 퇴근시간 update + 휴식 강제 종료도 함께하기
-		int resultOfCheckout = service.updateCheckout(emp_no);
-
-		// 퇴근시각 읽어오기
-		if (resultOfCheckout > 0) {
-			String attEndFormat = service.getAttEnd(emp_no);
+		
+		// 동일 날짜 퇴근여부 확인
+		String attEndFormat = service.getAttEnd(emp_no);
+		
+		if (attEndFormat == null) {
+			int resultOfCheckout = service.updateCheckout(emp_no); // 퇴근등록
+			if (resultOfCheckout > 0) {
+				attEndFormat = service.getAttEnd(emp_no); // 퇴근시간 읽어오기
+				result = attEndFormat;
+				System.out.println("퇴근 등록 완료");
+			} else {
+				System.out.println("퇴근 등록 실패");
+				result = ""; // 퇴근 update 실패
+			}
+		} else {
 			result = attEndFormat;
 		}
 
@@ -307,14 +313,6 @@ public class CmtController {
 		return elapsedTAfter;
 	}
 
-	// 메인페이지 // 개인 근무관리 메인페이지
-	@RequestMapping(value = "main", method = RequestMethod.GET)
-	public ModelAndView attMainMethod(ModelAndView mv, HttpSession session) {
-		mv.setViewName("cmt/main");
-
-		return mv;
-	}
-
 	// monthly 리스트
 	@GetMapping("/monthly")
 	public ModelAndView list(ModelAndView model, HttpSession session,
@@ -322,7 +320,8 @@ public class CmtController {
 			@RequestParam(defaultValue = "31") int count,
 			@RequestParam(defaultValue = "3") int month) {
 		Member loginMember = (Member) session.getAttribute("loginMember");
-
+		
+		try {
 		PageInfoByMember pageInfoByMember = null;
 		List<Cmt> list = null;
 
@@ -334,9 +333,25 @@ public class CmtController {
 		
 		model.addObject("pageInfoByMember", pageInfoByMember);
 		model.addObject("list", list);
-		System.out.println(list);
+		System.out.println("근태내역" + list);
 		model.setViewName("cmt/monthly");
-
+		
+		Map<String, Object> mapMS = new HashMap<String, Object>();
+		mapMS.put("emp_no", loginMember.getNo());
+		mapMS.put("month", month);
+		
+		Map<String, Object> monthlyTotalTime = new HashMap<String, Object>();
+		monthlyTotalTime = service.getMonthlyTotal(mapMS);
+		String totalHours = String.valueOf(monthlyTotalTime.get("TH"));
+		String totalMinutes = String.valueOf(monthlyTotalTime.get("TM"));
+		model.addObject("totalHours", totalHours);
+		model.addObject("totalMinutes", totalMinutes);
+		
+		
+		} catch (Exception e) {
+	         e.printStackTrace();
+	    }
+		
 		return model;
 	
 	}
@@ -375,4 +390,6 @@ public class CmtController {
 		String r = gson.toJson(mapM);
 		return r;
 	}
+	
+	
 }

@@ -33,12 +33,14 @@
 					class="dropdown-menu dropdown-menu-right shadow animated--fade-in"
 					aria-labelledby="dropdownMenuLink">
 					<div class="dropdown-header">게시글 옵션</div>
-					 <c:if test="${ !empty loginMember && (loginMember.id == board.writer) }">
+					 <c:if test="${ !empty loginMember && (loginMember.name == board.writer) }">
 					<a class="dropdown-item" href="/mvc/board/edit?no=${ board.no }">게시글 수정</a>
 					<a class="dropdown-item" onclick="boardDelete()" >게시글 삭제</a>
 					</c:if>
+					<!-- 
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#">게시글 스크랩</a>
+					 -->
 				</div>
 			</div>
 		</div>
@@ -120,8 +122,10 @@
 									<div>
 										<div class="header">											
 											<strong class="primary-font"><c:out value="${ reply.writer }"/></strong>
-											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>										
+											<small class="pull-right text-muted"><fmt:formatDate type="date" value="${ reply.createDate }" pattern="yyyy-MM-dd(E) a HH:mm:ss"/></small>
+											<c:if test="${ !empty loginMember && (loginMember.no == reply.empNo) }">
 											<textarea class="form-control" id="content" name="content" rows="3"><c:out value="${ reply.content }" /></textarea>
+											</c:if>										
 											
 											<c:if test="${ !empty loginMember && (loginMember.no == reply.empNo) }">
 												<button type="submit" onclick="location.href='${ path }/board/replyUpdate" class="update_btn btn btn-dark mt-3" style="background:#2A3D72;">댓글 수정</button>

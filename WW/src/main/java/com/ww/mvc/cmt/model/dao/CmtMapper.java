@@ -17,7 +17,7 @@ public interface CmtMapper {
 	Cmt getTodayAttendance(int emp_no);
 
 	Map<String, Object> getElapsedWTime(Map<String, Object> mapMS);
-
+	
 	Rest getLatestWB(Map<String, Object> mapMS);
 
 	int countAttStart(int emp_no);
@@ -70,5 +70,9 @@ public interface CmtMapper {
 	
 	Map<String, Object> getAllElapsedWTime(Map<String, Object> mapMS);
 
+	Map<String, Object> getMonthlyTotal(Map<String, Object> mapMS);
 
+	Cmt getMonthAttendance(int emp_no, int cmt_month);
+
+	
 }

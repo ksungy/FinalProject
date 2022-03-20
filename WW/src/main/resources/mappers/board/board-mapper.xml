@@ -272,6 +272,21 @@
 	
 	</update>
 	
+	<select id="selectReplyListByNo" parameterType="_int" resultMap="replyResultMap">
+		SELECT  B.BOARD_NO, 
+				C.COMMENT_NO, 
+				E.EMP_NO, 
+				E.EMP_NAME, 
+				C.COMMENT_WRITER, 
+				C.COMMENT_CONTENT, 
+				C.B_COMMENT_CREATED
+		FROM BOARD_COMMENT C
+		JOIN EMPLOYEE E ON (C.EMP_NO = E.EMP_NO)
+		JOIN BOARD B ON (C.BOARD_NO = B.BOARD_NO)
+		WHERE B.BOARD_NO = #{no}
+		ORDER BY C.B_COMMENT_CREATED DESC
+	</select>
+	
 	<!-- 댓글 삭제를 위한 댓글 단건 조회 -->
 	<select id="selectReplyByNo" parameterType="_int" resultMap="replyResultMap">
 			SELECT  COMMENT_NO,

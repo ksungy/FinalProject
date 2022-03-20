@@ -110,14 +110,14 @@ public class BoardServieImpl implements BoardService {
 	// ▼ 댓글 작성
 	@Override
 	@Transactional
-	public int saveReply(Member member, Reply reply) {
+	public int saveReply(Member loginMember, Reply reply) {
 		
 		Map<Object, Object> map = new HashMap<Object, Object>();
 		
 		map.put("content", reply.getContent());
 		map.put("boardNo", reply.getBoardNo());
-		map.put("empNo", member.getNo());
-		map.put("writer", member.getId());
+		map.put("empNo", loginMember.getNo());
+		map.put("writer", loginMember.getName());
 		
 		return mapper.insertReply(map);
 	}
@@ -139,6 +139,7 @@ public class BoardServieImpl implements BoardService {
 		
 		map.put("content", reply.getContent());
 		map.put("no", reply.getNo());
+		map.put("writer", reply.getWriter());
 		
 		return mapper.updateReply(map);
 		
@@ -179,6 +180,12 @@ public class BoardServieImpl implements BoardService {
 	public Reply findReplyByNo(int no) {
 		
 		return mapper.selectReplyByNo(no);
+	}
+
+	@Override
+	public List<Reply> getReplyList(int no) {
+		
+		return mapper.selectReplyListByNo(no);
 	}
 
 

@@ -27,6 +27,7 @@ public class CmtServiceImpl implements CmtService {
 	public Map<String, Object> getElapsedWTime(Map<String, Object> mapMS) {
 		return mapper.getElapsedWTime(mapMS);
 	}
+	
 
 	@Override
 	public Rest getLatestWB(Map<String, Object> mapMS) {
@@ -186,4 +187,16 @@ public class CmtServiceImpl implements CmtService {
 	public Map<String, Object> getAllElapsedWTime(Map<String, Object> mapMS) {
 		return mapper.getAllElapsedWTime(mapMS);
 	}
+
+	@Override
+	public Cmt getMonthAttendance(int emp_no, int cmt_month) {
+		return mapper.getMonthAttendance(emp_no, cmt_month);
+	}
+
+	@Override
+	public Map<String, Object> getMonthlyTotal(Map<String, Object> mapMS) {
+		return mapper.getMonthlyTotal(mapMS);
+	}
+
+
 }

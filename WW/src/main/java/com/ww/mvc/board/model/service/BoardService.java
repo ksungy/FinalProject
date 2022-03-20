@@ -26,7 +26,7 @@ public interface BoardService {
 
 	int delete(int no);
 
-	int saveReply(Member member, Reply reply);
+	int saveReply(Member loginMember, Reply reply);
 
 	int updateReply(Reply reply);
 
@@ -43,6 +43,8 @@ public interface BoardService {
 	BoardAttach findBoardAttachByNo(int no);
 
 	Reply findReplyByNo(int no);
+
+	List<Reply> getReplyList(int no);
 
 
 }
