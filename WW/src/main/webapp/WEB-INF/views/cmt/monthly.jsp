@@ -34,9 +34,9 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 	<div class="card shadow mb-4">
 		<div class="dropdown card-header py-3">
 			<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true"
-				aria-expanded="false">3월</button>
-			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-				<a class="dropdown-item" href="#">3월</a>
+				aria-expanded="false" value="none">3월</button>
+			<div class="dropdown-menu" aria-labelledby="dropdownMenuButton" name="month">
+				<a class="dropdown-item" href="#" value="3">3월</a>
 			</div>
 		</div>
 		<div class="card-body">
@@ -100,7 +100,7 @@ SimpleDateFormat sf = new SimpleDateFormat("yyyy년 MM월 dd일");
 			data : {
 				emp_no : "4",
 				page : "1",
-				month : "3"
+				month : ${month}
 			},
 			success : function(data) {
 				console.log(data);
