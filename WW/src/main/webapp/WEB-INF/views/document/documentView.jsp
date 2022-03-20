@@ -121,7 +121,7 @@
 
                         <tr>
                             <td class="side" colspan="4" >${documentContent.attach_origin}</td>
-                            <td class="text_center" ><button class="button" onclick="javascript:fileDownload('${ board.originalFileName }', '${board.renamedFileName}')">문서 다운로드</button></td>
+                            <td class="text_center" ><button class="button" onclick="javascript:fileDownload('${ documentContent.attach_origin }', '${documentContent.attach_rename}')">문서 다운로드</button></td>
 
                         </tr>
 
@@ -138,10 +138,32 @@
                         </tr>
 
                         <tr>
-                            <td  colspan="1"><button class="button" onclick="history.back(-1)">뒤로</button></td>
-                            <td  colspan="4"><button class="button">결제진행</button></td>
+                            <td  colspan="1"><button class="button" onclick="history.back(-1)" type="button">뒤로</button></td>
+                            <td  style="text-align: right;" colspan="4">
+                            <c:if test="${ !empty loginMember && (loginMember.no == documentContent.link_no) }">
+                                <button class="button" type="button" onclick="location.href='${ path }/document/status?no=${documentContent.doc_id}&link_num=${documentContent.link_num}&link_type=S3'">결제 완료</button>
+                                <button class="button" type="button" onclick="location.href='${ path }/document/update?no=${documentContent.doc_id}&link_num=${documentContent.link_num}&link_type=S2'">보  고</button>
+                                <button class="button" type="button" onclick="location.href='${ path }/document/status?no=${documentContent.doc_id}&link_num=${documentContent.link_num}&link_type=S4'">부  결</button>
+                            </c:if>
+
+                                
+                            <c:if test="${ !empty loginMember && (loginMember.no == documentContent.emp_no) }">
+                                <button class="button" type="button" onclick="location.href='${ path }/document/update?no=${documentContent.doc_id}&link_num=${documentContent.link_num}&link_type=S2'">수  정</button>
+                                <button class="button" type="button" onclick="location.href='${ path }/document/status?no=${documentContent.doc_id}&link_num=${documentContent.link_num}&link_type=S4'">삭  제</button>
+                            </c:if>
+                            
+                            </td>
                         </tr>
                     </table>
 	</div>
+	
+	<script>
+	function fileDownload(oname, rname) {
+		
+		// encodeURIComponent()
+		//  - 아스키문자(a~z, A~Z, 1~9, ... )는 그대로 전달하고 기타 문자(한글, 특수 문자 등)만 %XX(16진수 2자리)와 같이 변환된다.
+		location.assign("${ pageContext.request.contextPath }/document/fileDown?oname=" + encodeURIComponent(oname) + "&rname=" + encodeURIComponent(rname));
+	}
+	</script>
 
 <%@include file="../common/footer.jsp" %>

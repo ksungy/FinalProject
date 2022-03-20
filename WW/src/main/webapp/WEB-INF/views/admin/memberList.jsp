@@ -55,12 +55,12 @@
 
                     <div class="h3 mb-4 text-gray-800 "> 사원 검색 </div>
 
-
+<form method="get" action="${ path }/member/list">
                     <table style="width: 100%; ; margin-bottom: 20px;">
 
                         <tr>
                             <td>
-                                <select>
+                                <select name="pages">
                                     <option value="10">10개씩</option>
                                     <option value="20">20개씩</option>
                                     <option value="30">30개씩</option>
@@ -69,30 +69,29 @@
                                 </select>
                             </td>
                             <td style="width: 10%;">
-                                <select>
-                                    <option value="">번호</option>
-                                    <option value="">사원번호</option>
-                                    <option value="">부서</option>
-                                    <option value="">직급</option>
-                                    <option value="">전화번호</option>
-                                    <option value="">이메일</option>
+                                <select name="type">
+                                    <option value="name">이름</option>
+                                    <option value="dept">부서</option>
+                                    <option value="jod">직급</option>
+                                    <option value="phone">전화번호</option>
+                                    <option value="email">이메일</option>
                                 </select>
                             </td>
                             <td>
-                                <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="width: 97%;">
+                                <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="width: 97%;">
                                     <div class="input-group">
-                                        <input type="text" class="form-control bg-white border-0 " placeholder="검색">
-                                        <div class="input-group-append">
-                                            <button class="btn btn-primary" type="button">
-                                                <i class="fas fa-search fa-sm"></i>
-                                            </button>
-                                        </div>
+									    <input type="text" class="form-control bg-white border-0 " name="search" placeholder="검색">
+									    <div class="input-group-append">
+									        <button class="btn btn-primary" type="submit">
+			                                	<i class="fas fa-search fa-sm"></i>
+			                                </button>
+									    </div>
                                     </div>
-                                </form>
+                                </div>
                             </td>
                         </tr>
                     </table>
-
+</form>
 
 
 
@@ -105,7 +104,7 @@
                                 <thead style="background-color: #2A3D72; ">
                                     <tr style="height: 50px; color: white;" >
                                         <th style="border-top-left-radius: 15px;">번호</th>
-                                        <th>사원번호</th>
+                                        <th>이름</th>
                                         <th>부서</th>
                                         <th>직급</th>
                                         <th>전화번호</th>
@@ -119,11 +118,11 @@
 										<c:forEach var="member" items="${ memberList }">
 		                                    <tr onclick="location.href='www.naver.com'" >
 		                                        <td><c:out value="${ member.rownum }"/></td>
-		                                        <td><c:out value="${ member.doc_titile }"/></td>
-		                                        <td><c:out value="${ member.emp_id }"/></td>
-		                                        <td><c:out value="${ member.link_id }"/></td>
-		                                        <td><c:out value="${ member.doc_date }"/></td>
-		                                        <td><c:out value="${ member.attach_origin }"/></td>
+		                                        <td><c:out value="${ member.name }"/></td>
+		                                        <td><c:out value="${ member.deptCode }"/></td>
+		                                        <td><c:out value="${ member.jobCode }"/></td>
+		                                        <td><c:out value="${ member.email }"/></td>
+		                                        <td><c:out value="${ member.rownum }"/></td>
 		                                    </tr>
 	                                    </c:forEach>
 	        						</c:if>
@@ -137,14 +136,14 @@
                                 <tr>
                                 	<!-- 처음 페이지로 -->
                                     <td 
-                                    onclick="location.href='${ path }/member/list?page=1&count=${ pageInfo.listLimit }'"
+                                    onclick="location.href='${ path }/document/list?page=${ pageInfo.prevPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'"
                                     style="border-top-left-radius: 10px; border-bottom-left-radius: 10px;
                                     box-shadow: 0px 1px 1px rgb(202, 202, 202),0px -1px 1px rgb(202, 202, 202), -1px 0px 1px rgb(202, 202, 202)  ;"
                                     class="listButton"
                                     > &lt; </td>
 
 									<!-- 이전 페이지로 -->
-                                    <td class="listButton" onclick="location.href='${ path }/member/list?page=${ pageInfo.prevPage }&count=${ pageInfo.listLimit }'"> &lt; </td>
+                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.prevPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'"> &lt; </td>
 									
 									<!--  10개 페이지 목록 -->
 									<c:forEach begin="${ pageInfo.startPage }" end="${ pageInfo.endPage }" varStatus="status">
@@ -153,16 +152,16 @@
 									</c:if>
                                     
                                     <c:if test="${ status.current != pageInfo.currentPage }">
-                                    <td class= "listButton" onclick="location.href='${ path }/member/list?page=${ status.current }&count=${ pageInfo.listLimit }'">${ status.current }</td>
+                                    <td class= "listButton" onclick="location.href='${ path }/document/list?page=${ status.current }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'">${ status.current }</td>
                                     </c:if>
                                     </c:forEach>
                                     
                                     <!-- 다음 페이지로 -->
-                                    <td class="listButton" onclick="location.href='${ path }/member/list?page=${ pageInfo.nextPage }&count=${ pageInfo.listLimit }'">&gt;</td>
+                                    <td class="listButton" onclick="location.href='${ path }/document/list?page=${ pageInfo.nextPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'">&gt;</td>
 									
 									<!-- 마지막 페이지로 -->
                                     <td 
-                                    onclick="location.href='${ path }/member/list?page=${ pageInfo.maxPage }&count=${ pageInfo.listLimit }'"
+                                    onclick="location.href='${ path }/board/list?page=${ pageInfo.maxPage }&pages=${ pageInfo.listLimit }&type=${ searchMap.type }&search=${ searchMap.search }'"
                                     style="border-top-right-radius: 10px; border-bottom-right-radius: 10px ;
                                     box-shadow: 0px 1px 1px rgb(202, 202, 202),0px -1px 1px rgb(202, 202, 202), 1px 0px 1px rgb(202, 202, 202);"
                                     class="listButton">&gt;&gt;</td>
@@ -172,6 +171,5 @@
 
                         </div>
     
-
 </div>
 <%@include file="../common/footer.jsp" %>

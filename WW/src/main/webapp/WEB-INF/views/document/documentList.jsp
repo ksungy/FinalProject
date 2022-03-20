@@ -62,7 +62,7 @@
 			<tr>
 				<td>
 					<select name="pages">
-						<option value="10" selected>10개씩</option>
+						<option value="10">10개씩</option>
 						<option value="20">20개씩</option>
 						<option value="30">30개씩</option>
 						<option value="40">40개씩</option>
@@ -73,7 +73,7 @@
 		        <td style="width: 10%;">
 		        	<select name="type">
 		                <option >---</option>
-		                <option value="title" selected>제목</option>
+		                <option value="title">제목</option>
 		                <option value="sender">발신자</option>
 		                <option value="recipient">수신자</option>
 		                <option value="date">작성일</option>
@@ -90,6 +90,9 @@
                                 	<i class="fas fa-search fa-sm"></i>
                                 </button>
 						    </div>
+						    <c:if test="${ !empty loginMember}">
+						    	<button type="button" style="margin-left: 20px;" onclick="location.href='${ path }/document/write'">문서작성</button>
+						    </c:if>
 						</div>
 					</div>
 				</td>

@@ -24,7 +24,7 @@ public interface DocumentService {
 
 	List<Member> getMemberMinList();
 
-	void linksave(Document document);
+	int delete(int doc_id, String link_type, int link_num);
 
 	
 	

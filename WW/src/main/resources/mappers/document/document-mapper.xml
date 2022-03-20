@@ -141,6 +141,24 @@
 	
 	
 	<select id="getDocumentContent" parameterType="map" resultMap="documentListResultMap">
+	
+	SELECT  ROWNUM,
+        DOC_ID,
+        EMP_NAME,
+        EMP_JOB_NAME,
+        EMP_NO,
+        LINK_TYPE,
+        LINK_NAME,
+        LINK_JOB_NAME,
+        LINK_NUM,
+        LINK_NO,
+        LINK_DATE,
+        ATTACH_RENAME,
+        ATTACH_ORIGIN,
+        DOC_CONTENT,
+        DOC_TITLE,
+        DOC_STATUS 
+from (
             SELECT L.DOC_ID,
                     E1.EMP_NAME,
                     J1.JOB_NAME AS EMP_JOB_NAME,
@@ -148,7 +166,8 @@
                     L.LINK_TYPE,
                     E2.EMP_NAME AS LINK_NAME,
                     J2.JOB_NAME AS LINK_JOB_NAME,
-                    L.LINK_ID AS LINK_NO,
+                    L.LINK_NUM,
+                    L.LINK_NO,
                     L.LINK_DATE,
                     A.ATTACH_RENAME,
                     A.ATTACH_ORIGIN,
@@ -170,14 +189,22 @@
                             FROM DOC_ATTACH  GROUP BY DOC_ID
                         ) A1 ON(A1.ATTACH_NUM = A.ATTACH_NUM)
 				) A ON( A.DOC_ID = L.DOC_ID )
-            JOIN DOC_STATUS S ON (S.DOC_STATUS_CODE = L.LINK_TYPE)
-                
+            JOIN DOC_STATUS S ON (S.DOC_STATUS_CODE = L.LINK_TYPE)            
          WHERE
             L.DOC_ID LIKE #{doc_no}
+        order by LINK_NO DESC
+) WHERE ROWNUM = 1
+
+
 
 	</select>
 	
 
+	
+
+	
+	
+	
 	
 	<insert id="getInsertDocument" parameterType="Document" useGeneratedKeys="true" keyProperty="doc_id" keyColumn="DOC_ID">
 		INSERT INTO DOCUMENT (
@@ -216,7 +243,7 @@
 			#{doc_id},
 			#{attach_origin},
 			#{attach_rename},
-			DEFAULT,
+			#{link_type},
 			DEFAULT
 			)
 			
@@ -243,12 +270,18 @@
 			)
 			
 	</insert>
+	
+	
+	
+	<!-- 문서 삭제 -->
+	<delete id="documentStatus" parameterType="Document">
+		UPDATE DOCUMENT SET DOC_STATUS = #{doc_status}, DOC_COMPLET_DATE = SYSDATE WHERE DOC_ID = #{doc_id}
+	</delete>
 
-	
-	
+	<delete id="documentLink" parameterType="Document">
+		UPDATE REPORT_LINK SET LINK_TYPE = #{link_type} WHERE LINK_NUM = #{link_num}
+	</delete>
 
-	
-	
 	
 	
 	
@@ -271,7 +304,7 @@
 		        JOIN JOB J ON(J.JOB_CODE = E.JOB_CODE)
 		        JOIN DEPARtMENT D ON(D.DEPT_ID = E.DEPT_CODE)
 		        
-		        WHERE END_YN = 'Y'
+		        WHERE E.ENROLL_YN = 'Y'
 		        ORDER BY E.EMP_NO DESC
 			)
 	</select>

@@ -182,12 +182,14 @@
                       
 <!-- Begin Page Content -->
 <div class="container-fluid">
-<form action="${ pageContext.request.contextPath }/document/write" method="post"
+<form action="${ pageContext.request.contextPath }/document/update" method="post"
 				enctype="multipart/form-data">
+				
+	 <input type="hidden" name="doc_id" value="${documentContent.doc_id}">
+	 <input type="hidden" name="attach_origin" value="${documentContent.attach_origin}">
+	 <input type="hidden" name="attach_rename" value="${documentContent.attach_rename}">
 		<!-- Page Heading -->
 	<div class="h3 mb-4 text-gray-800 "> 문서 등록 </div>
-
-                    
 
 
                     <table id="wriedTadle">
@@ -210,11 +212,11 @@
                         <tr>
                             <td class="title" colspan="2">※제목</td>
                             <td></td>
-                            <td colspan="2" >진행상황 : 결제중</td>
+                            <td colspan="2" >진행상황 : ${documentContent.doc_status}</td>
                         </tr>
 
                         <tr>
-                            <td  class="side content_border" colspan="5" ><input style="width:550px;border:none;"  id="title" type="text" name="title" placeholder="제목을 입력하세요."></td>
+                            <td  class="side content_border" colspan="5" ><input style="width:550px;border:none;"  id="title" type="text" name="Doc_titile" placeholder="제목을 입력하세요." value="${documentContent.doc_titile}"></td>
                         </tr>
 
                         <tr>
@@ -222,7 +224,16 @@
                         </tr>
 
                         <tr>
-                            <td class="side" colspan="4" ><input type="file" name="upfile"></td>
+                            <td class="side" colspan="3" >					
+                           	기존 첨부파일 : <br>
+                           		<c:if test="${ !empty documentContent.attach_origin }">
+									<c:out value="${ documentContent.attach_origin }"></c:out>
+								</c:if>
+                           	</td>
+                           	<td class="side" colspan="2">
+                           	첨부파일 변경 : <br>
+                            <input type="file" name="upfile" value="/resources/upload/document/">
+							</td>
                             <td class="text_center" ></td>
                         </tr>
 
@@ -231,7 +242,7 @@
                         </tr>
 
                         <tr>
-                            <td colspan="5" class="documentTextContent content_border"> <input style="width:550px;border:none;"  id="content" type="text" name="content" placeholder="내용을 입력하세요."> </td>
+                            <td colspan="5" > <textarea cols="70" rows="15" id="content" type="text" name="doc_content" placeholder="내용을 입력하세요.">${documentContent.doc_content}</textarea></td>
                         </tr>
 
                         <tr>
@@ -239,7 +250,7 @@
                         </tr>
 
                         <tr>
-                            <td  colspan="1"><button type="button" class="button">취소</button></td>
+                            <td  colspan="1"><button type="button" class="button" onclick="history.back(-1)" >취소</button></td>
                             <td  colspan="4"><button type="button" class="button" id="chatBot">완  료</button></td>
 
                         </tr>
@@ -308,7 +319,7 @@
 
 
 	</div>
-        <button class="modal_close_btn">취소</button>
+        <button class="modal_close_btn" type="button" >취소</button>
         <br><br>
     </div>
 

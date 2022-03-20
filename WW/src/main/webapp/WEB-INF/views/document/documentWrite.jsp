@@ -231,7 +231,7 @@
                         </tr>
 
                         <tr>
-                            <td colspan="5" class="documentTextContent content_border"> <input style="width:550px; height:500px; border:none;"  id="content" type="text" name="doc_content" placeholder="내용을 입력하세요."> </td>
+                        	<td colspan="5" > <textarea cols="70" rows="15" id="content" type="text" name="doc_content" placeholder="내용을 입력하세요."></textarea></td>
                         </tr>
 
                         <tr>
@@ -239,7 +239,7 @@
                         </tr>
 
                         <tr>
-                            <td  colspan="1"><button type="button" class="button">취소</button></td>
+                            <td  colspan="1"><button type="button" class="button" onclick="history.back(-1)" >취소</button></td>
                             <td  colspan="4"><button type="button" class="button" id="chatBot">완  료</button></td>
 
                         </tr>

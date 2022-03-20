@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.session.RowBounds;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import com.ww.mvc.board.model.vo.BoardAttach;
 import com.ww.mvc.common.util.PageInfo;
@@ -68,14 +69,15 @@ public class DocumentServiceImpl implements DocumentService {
 	
 	// 문서 작성
 	@Override
+	@Transactional
 	public int save(Document document) {
 		int result = 0;
-		int result1 = 0;
-		int result2 = 0;
 		
 		if(document.getDoc_id()!= 0) {
 			//update
-//			result = mapper.getUpdateDocument(document);
+			log.info(document.toString());
+			result = mapper.InsertLinkDocument(document);
+			mapper.InsertAttachDocument(document);
 			
 		} else {
 			// insert
@@ -91,19 +93,22 @@ public class DocumentServiceImpl implements DocumentService {
 		return result;
 	}
 	
-
-	@Override
-	public void linksave(Document document) {
-
-		
-	}
-	
-	
-
+	//회원 정보 불러오기
 	@Override
 	public List<Member> getMemberMinList() {
 
 		return mapper.getMemberMinList();
+	}
+
+	@Override
+	@Transactional
+	public int delete(int doc_id, String link_type, int link_num) {
+		
+		if( link_type.equals("S4")) {
+			mapper.documentStatus(doc_id,"N");
+		} 
+
+		return mapper.documentLink(link_num,link_type);
 	}
 
 

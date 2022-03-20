@@ -45,6 +45,6 @@ public class Document {
 	private String emp_job_name;
 	private String like_name;
 	private String link_job_name;
-	private String link_no;
+	private int link_no;
 
 }

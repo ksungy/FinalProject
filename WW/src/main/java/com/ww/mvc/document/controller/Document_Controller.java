@@ -1,6 +1,8 @@
 package com.ww.mvc.document.controller;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.Provider.Service;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -12,11 +14,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
@@ -64,10 +72,11 @@ public class Document_Controller {
 //		
 //		return model;
 //	}
+	
 
 	// ▼ 문서 리스트
 	@GetMapping("/document/list")
-	public ModelAndView boardSearch(ModelAndView model,
+	public ModelAndView documentList(ModelAndView model,
 			@RequestParam(defaultValue = "1") int page,
 			@RequestParam(defaultValue = "10") int pages,
 			@RequestParam(defaultValue = "title") String type,
@@ -111,7 +120,7 @@ public class Document_Controller {
 	
 	// ▼ 문서 작성 (등록)
 	@PostMapping("/document/write")
-	public ModelAndView documentWrite( ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") String link_no,
+	public ModelAndView documentWrite( ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int link_no,
 			@ModelAttribute Document document, @RequestPart("upfile") MultipartFile upfile) throws Exception 
 			 {
 
@@ -132,32 +141,165 @@ public class Document_Controller {
 				document.setAttach_rename(renamedFileName);
 			}
 			
-		} 
-		
-
-		
+			
 			int result = 0;
 			
 			document.setEmp_no(loginMember.getNo());
 			document.setLink_no(link_no);
+			document.setLink_type("S1");
 			result = service.save(document);
 
 			if (result != 0) {
 				
-				model.addObject("msg","게시글이 정상적으로 등록되었습니다.");
+				model.addObject("msg","문서처리가 정상적으로 등록되었습니다.");
 				model.addObject("location","/document/view?no="+document.getDoc_id());
 				
 			} else {
-				model.addObject("msg","게시글 등록을 실패하였습니다.");
+				model.addObject("msg","문서처리가 실패 되었습니다.");
 				model.addObject("location","/document/list");
 				
 			}
 			
-			model.setViewName("/common/msg");
+		}  
+		
+		else {
+			model.addObject("msg","문서처리가 실패 되었습니다.");
+			model.addObject("location","/document/list");
+			
+		}
+		
+		model.setViewName("/common/msg");
 
 		return model;
 	}
 	
+	
+	// ▼ 문서 수정 (호출)
+	@GetMapping ("/document/update")
+	public ModelAndView update (ModelAndView model, @SessionAttribute ("loginMember") Member loginMember,
+			@RequestParam ("no") int doc_no) {
+
+		Document documentContent = service.getDocumentContent(doc_no);
+		// 관리자, 수신인, 발신인, 수신인과 같은부서 직급이 높은사람
+		
+		log.info(documentContent.toString());
+		
+		
+		if ( documentContent.getLink_no() == loginMember.getNo() || documentContent.getEmp_no() == loginMember.getNo()) {
+			
+			
+			List<Member> getMemberMinList = service.getMemberMinList();
+			
+			log.info(getMemberMinList.toString());
+			
+			model.addObject("MemberMinList", getMemberMinList);
+			model.addObject("documentContent",documentContent);
+			model.setViewName("document/documentUpdate");
+		} else {
+			model.addObject("msg", "문서를 불러오는데 실패하였습니다.");
+			model.addObject("location", "document/documentList");
+			model.setViewName("common/msg");
+		}
+
+
+		return model;
+	}
+	
+	
+	
+	// ▼ 문서 수성 (등록)
+	@PostMapping("/document/update")
+	public ModelAndView documentUpdate( ModelAndView model, @SessionAttribute("loginMember") Member loginMember, @RequestParam("no") int link_no, @RequestParam("doc_id") int doc_id,
+			@RequestParam("attach_origin") String attach_origin, @RequestParam("attach_rename") String attach_rename, @ModelAttribute Document document, @RequestPart("upfile") MultipartFile upfile) throws Exception 
+			 {
+
+
+			if (upfile != null && !upfile.isEmpty()) {
+				String location = null; 
+				String renamedFileName = null;
+				
+				try {
+					location = resourceLoader.getResource("resources/upload/board").getFile().getPath();
+					if (document.getAttach_rename() != null) {
+//						이전에 업로드된 첨부파일 삭제
+						FileProcess.delete(location + "/" + document.getAttach_rename() );
+					}
+					
+					renamedFileName = FileProcess.save(upfile, location);
+					
+					if (renamedFileName != null) {
+						document.setAttach_origin(upfile.getOriginalFilename());
+						document.setAttach_rename(renamedFileName);
+					}
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+			
+
+			int result = 0;
+			
+			document.setAttach_origin(attach_origin);
+			document.setAttach_rename(null);
+			document.setEmp_no(loginMember.getNo());
+			document.setLink_no(link_no);
+			document.setDoc_id(doc_id);
+			document.setLink_type("S2");
+			log.info(document.toString());
+			result = service.save(document);
+			log.info(document.toString());
+			
+			if (result != 0) {
+				
+				model.addObject("msg","문서처리가 정상적으로 수정되었습니다.");
+				model.addObject("location","/document/view?no="+document.getDoc_id());
+				
+			} else {
+				model.addObject("msg","문서처리가 실패 되었습니다.");
+				model.addObject("location","/document/list");
+				
+			}
+		
+		model.setViewName("/common/msg");
+
+		return model;
+	}
+	
+	
+
+	
+	
+	// ▼ 문서 삭제
+	@GetMapping("/document/status")
+	public ModelAndView delete(ModelAndView model, @SessionAttribute("loginMember") Member loginMember,
+			@RequestParam("no") int no, @RequestParam("link_type") String link_type, @RequestParam("link_num") int link_num) {
+		
+		Document documentContent = service.getDocumentContent(no);
+		
+		int result = 0;
+		
+		if(	documentContent.getLink_no() == loginMember.getNo() || documentContent.getEmp_no() == loginMember.getNo()) {
+			
+			log.info("status : "+ link_type);
+			result = service.delete(documentContent.getDoc_id(),link_type,link_num);
+			
+			if(result > 0) {
+				model.addObject("msg", "문서처리가 정상적으로 되었습니다.");
+				model.addObject("location", "/document/list");
+			} else {
+				model.addObject("msg", "문서처리가 실패 되었습니다.");
+				model.addObject("location", "/document/view?no=" + documentContent.getDoc_id());
+			}
+			
+		} else {
+			model.addObject("msg", "잘못된 접근입니다.");
+			model.addObject("location", "/document/list");
+		}
+		
+		model.setViewName("common/msg");
+		
+		return model;
+	}
 	
 	
 	
@@ -176,7 +318,7 @@ public class Document_Controller {
 			model.addObject("documentContent",documentContent);
 			model.setViewName("document/documentView");
 		} else {
-			model.addObject("msg", "문서를 불러오는데 실패하였습니다.(문서첨부 여부 확인)");
+			model.addObject("msg", "문서를 불러오는데 실패하였습니다.");
 			model.addObject("location", "document/documentList");
 			model.setViewName("common/msg");
 		}
@@ -185,7 +327,33 @@ public class Document_Controller {
 	}
 	
 
-	
-	
+	//파일 다운로드
+	@GetMapping("/document/fileDown")
+	public ResponseEntity<Resource> fileDown(
+			@RequestHeader (name = "user-agent") String userAgent,
+			@RequestParam ("oname") String oname, @RequestParam ("rname") String rname) {
+		String downName = null;
+		Resource resource  = null;
+		
+		try {
+			resource = resourceLoader.getResource("/resources/upload/document/" + rname);
+		
+			if(userAgent.indexOf("MSIE") != -1 || userAgent.indexOf("Trident") != -1) {
+					downName = URLEncoder.encode(oname, "UTF-8").replaceAll("\\+", "%20");
+			} else {
+				downName = new String(oname.getBytes("UTF-8"), "ISO-8859-1");			
+			}
+		
+			return ResponseEntity.ok()
+								.header(HttpHeaders.CONTENT_TYPE, MediaType.APPLICATION_OCTET_STREAM_VALUE)
+								.header(HttpHeaders.CONTENT_DISPOSITION, "attachment;filename=\"" + downName + "\"")
+								.body(resource);
+		
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+			
+			return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+		}
+	}
 	
 }
