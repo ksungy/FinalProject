@@ -75,7 +75,6 @@
         JOIN JOB J ON (J.JOB_CODE = E.JOB_CODE)
         JOIN DEPARTMENT D ON(D.DEPT_ID = E.DEPT_CODE)
 		WHERE E.ENROLL_YN  = 'Y'
-			<set>
 				<if test="type=='name' and search != null and search != '' ">
 					AND E.EMP_NAME LIKE '%'||#{search}||'%'
 				</if>
@@ -91,7 +90,6 @@
 				<if test="type=='email' and search != null and search != '' ">
 					AND E.EMP_EMAIL LIKE '%'||#{search}||'%'
 				</if>
-			</set>
 			)
 		</select>
 		
@@ -111,7 +109,6 @@
         JOIN JOB J ON (J.JOB_CODE = E.JOB_CODE)
         JOIN DEPARTMENT D ON(D.DEPT_ID = E.DEPT_CODE)
 		WHERE E.ENROLL_YN  = 'Y'
-			<set>
 				<if test="type=='name' and search != null and search != '' ">
 					AND E.EMP_NAME LIKE '%'||#{search}||'%'
 				</if>
@@ -127,8 +124,6 @@
 				<if test="type=='email' and search != null and search != '' ">
 					AND E.EMP_EMAIL LIKE '%'||#{search}||'%'
 				</if>
-			</set>
-        		
 			ORDER BY E.EMP_NO DESC
 		)
 	</select>

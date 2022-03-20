@@ -72,7 +72,6 @@
 									
 		        <td style="width: 10%;">
 		        	<select name="type">
-		                <option >---</option>
 		                <option value="title">제목</option>
 		                <option value="sender">발신자</option>
 		                <option value="recipient">수신자</option>

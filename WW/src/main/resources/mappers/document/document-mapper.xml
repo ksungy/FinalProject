@@ -85,7 +85,6 @@
 				
 			<include refid="documentListSql" />
 			
-			<trim prefix="WHERE" prefixOverrides="AND|OR">
 				<if test="type=='title' and search != null and search != '' ">
 					AND D.DOC_TITLE LIKE '%'||#{search}||'%'
 				</if>
@@ -104,7 +103,6 @@
 				<if test="type=='status' and search != null and search != '' ">
 					AND D.DOC_STATUS LIKE '%'||#{search}||'%'
 				</if>
-			</trim>
 			)
 		</select>
 	
@@ -114,7 +112,6 @@
         
         <include refid="documentListSql" />
         
-        	<trim prefix="WHERE" prefixOverrides="AND|OR">
 				<if test="type=='title' and search != null and search != '' ">
 					AND D.DOC_TITLE LIKE '%'||#{search}||'%'
 				</if>
@@ -133,7 +130,6 @@
 				<if test="type=='status' and search != null and search != '' ">
 					AND D.DOC_STATUS LIKE '%'||#{search}||'%'
 				</if>
-			</trim>
         		
 			ORDER BY D.DOC_ID DESC
 		)
