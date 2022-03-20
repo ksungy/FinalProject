@@ -49,6 +49,8 @@ public interface BoardMapper {
 
 	Reply selectReplyByNo(int no);
 
+	List<Reply> selectReplyListByNo(int no);
+
 
 
 	

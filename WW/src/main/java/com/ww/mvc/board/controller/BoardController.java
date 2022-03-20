@@ -93,16 +93,20 @@ public class BoardController {
 		
 		List<BoardAttach> boardAttachlist = service.getBoardAttachList(no);
 		
+		List<Reply> replyList = service.getReplyList(no);
+		
 		board.setReplyCount(replyCount);
 		board.setHits(boardHits);
+		board.setReplies(replyList);
 		
-		log.info(board.toString());
+		log.info("상세조회" + board.toString());
+		log.info("상세조회" + replyList.toString());
 		
-		
-		model.addObject("boardHits", boardHits);
 		model.addObject("replyCount", replyCount);
+		model.addObject("boardHits", boardHits);
 		model.addObject("board", board);
 		model.addObject("boardAttachlist", boardAttachlist);
+		model.addObject("replyList", replyList);
 		model.setViewName("board/view");
 
 		return model;
@@ -445,17 +449,21 @@ public class BoardController {
 	
 	// ▼ 댓글 작성
 	@RequestMapping("/reply")
-	public ModelAndView writeReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member member, Reply reply) {
+	public ModelAndView writeReply(ModelAndView model, @ModelAttribute Board board, @SessionAttribute("loginMember") Member loginMember, Reply reply) {
 		
 		int result = 0;
 		
+		log.info("댓글 작성" + loginMember.toString());
+		
 		reply.setBoardNo(board.getNo());
-		reply.setEmpNo(member.getNo());
-		reply.setWriter(member.getName());
+		reply.setEmpNo(loginMember.getNo());
+		reply.setWriter(loginMember.getName());
 		
 		int boardNo = reply.getBoardNo();
 
-		result = service.saveReply(member, reply);
+		result = service.saveReply(loginMember, reply);
+		
+		log.info("댓글 작성" + reply.toString());
 		
 		if(result > 0) {
 			model.addObject("msg", "댓글 등록 완료!");

@@ -36,13 +36,8 @@
 				</span>
 				
 				<label class="label-input100">Your Name *</label>
-				<div class="wrap-input100 rs1 validate-input">
+				<div class="wrap-input100 validate-input">
 					<input id="first-name" class="input100" type="text" name="writer" placeholder="사원명" value="<c:out value="${ loginMember.name }"/>" readonly>
-					<span class="focus-input100"></span>
-				</div>
-		
-				<div class="wrap-input100 rs1 validate-input">
-					<input class="input100" type="text" name="deptTitle" placeholder="부서명" value="<c:out value="${ loginMember.deptCode }"/>" readonly>
 					<span class="focus-input100"></span>
 				</div>
 

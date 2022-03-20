@@ -37,8 +37,10 @@
 					<a class="dropdown-item" href="/mvc/board/edit?no=${ board.no }">게시글 수정</a>
 					<a class="dropdown-item" onclick="boardDelete()" >게시글 삭제</a>
 					</c:if>
+					<!-- 
 					<div class="dropdown-divider"></div>
 					<a class="dropdown-item" href="#">게시글 스크랩</a>
+					 -->
 				</div>
 			</div>
 		</div>
