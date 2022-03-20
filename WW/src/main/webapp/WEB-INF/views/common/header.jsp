@@ -105,7 +105,7 @@
                 <div id="employeeMeun" class="collapse" aria-labelledby="headingPages"
                     data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
-                        <a class="collapse-item" href="">사원 검색</a>
+                        <a class="collapse-item" href="/mvc/member/list">사원 검색</a>
                         <a class="collapse-item" href="">사원 수정</a>
                         <a class="collapse-item" href="">가입 승인</a>
                     </div>
@@ -126,9 +126,9 @@
                     <div id="documentMenu" class="collapse" aria-labelledby="headingPages"
                         data-parent="#accordionSidebar">
                         <div class="bg-white py-2 collapse-inner rounded">
-                            <a class="collapse-item" href="">수신 문서</a>
-                            <a class="collapse-item" href="">발신 문서</a>
-                            <a class="collapse-item" href="">문서 검색</a>
+                            <a class="collapse-item" href="/mvc/document/list">수신 문서</a>
+                            <a class="collapse-item" href="/mvc/document/list">발신 문서</a>
+                            <a class="collapse-item" href="/mvc/document/list">문서 검색</a>
                         </div>
                     </div>
             </li>
