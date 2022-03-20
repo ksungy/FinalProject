@@ -487,6 +487,9 @@ public class BoardController {
 		
 		Board board = service.findBoardByNo(no);
 		
+		log.info(loginMember.toString());
+		log.info(board.toString());
+		
 		if(loginMember.getNo() == board.getEmpNo()) {
 			model.addObject("board", board);
 			model.setViewName("board/replyEdit");

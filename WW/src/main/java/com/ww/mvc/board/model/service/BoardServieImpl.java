@@ -139,6 +139,7 @@ public class BoardServieImpl implements BoardService {
 		
 		map.put("content", reply.getContent());
 		map.put("no", reply.getNo());
+		map.put("writer", reply.getWriter());
 		
 		return mapper.updateReply(map);
 		
