@@ -4,8 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <c:set var="path" value="${ pageContext.request.contextPath }" /><%@ taglib
 	uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn"%>
-<c:set var="path" value="${ pageContext.request.contextPath }" />
 
 <%@include file="../common/header.jsp"%>
 
@@ -53,52 +51,47 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
+                        <!-- Page Heading -->
 
-	<!-- Page Heading -->
-	<div class="h3 mb-4 text-gray-800 "> 문서 검색 </div>
+                    <div class="h3 mb-4 text-gray-800 "> 사원 검색 </div>
 
-	<form method="get" action="${ path }/document/list">
-		<table style="width: 100%; margin-bottom: 20px;">
-			<tr>
-				<td>
-					<select name="pages">
-						<option value="10">10개씩</option>
-						<option value="20">20개씩</option>
-						<option value="30">30개씩</option>
-						<option value="40">40개씩</option>
-						<option value="50">50개씩</option>
-					</select>
-				</td>
-									
-		        <td style="width: 10%;">
-		        	<select name="type">
-		                <option >---</option>
-		                <option value="title">제목</option>
-		                <option value="sender">발신자</option>
-		                <option value="recipient">수신자</option>
-		                <option value="date">작성일</option>
-		                <option value="attach">첨부파일</option>
-		                <option value="status">처리상황</option>
-					</select>
-				</td>
-				<td>
-					<div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="width: 97%;">
-						<div class="input-group">
-						    <input type="text" class="form-control bg-white border-0 " name="search" placeholder="검색">
-						    <div class="input-group-append">
-						        <button class="btn btn-primary" type="submit">
-                                	<i class="fas fa-search fa-sm"></i>
-                                </button>
-						    </div>
-						    <c:if test="${ !empty loginMember}">
-						    	<button type="button" style="margin-left: 20px;" onclick="location.href='${ path }/document/write'">문서작성</button>
-						    </c:if>
-						</div>
-					</div>
-				</td>
-		     </tr>
-		</table>
-	</form>
+<form method="get" action="${ path }/member/list">
+                    <table style="width: 100%; ; margin-bottom: 20px;">
+
+                        <tr>
+                            <td>
+                                <select name="pages">
+                                    <option value="10">10개씩</option>
+                                    <option value="20">20개씩</option>
+                                    <option value="30">30개씩</option>
+                                    <option value="40">40개씩</option>
+                                    <option value="50">50개씩</option>
+                                </select>
+                            </td>
+                            <td style="width: 10%;">
+                                <select name="type">
+                                    <option value="name">이름</option>
+                                    <option value="dept">부서</option>
+                                    <option value="jod">직급</option>
+                                    <option value="phone">전화번호</option>
+                                    <option value="email">이메일</option>
+                                </select>
+                            </td>
+                            <td>
+                                <div class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" style="width: 97%;">
+                                    <div class="input-group">
+									    <input type="text" class="form-control bg-white border-0 " name="search" placeholder="검색">
+									    <div class="input-group-append">
+									        <button class="btn btn-primary" type="submit">
+			                                	<i class="fas fa-search fa-sm"></i>
+			                                </button>
+									    </div>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+</form>
 
 
 
@@ -111,27 +104,25 @@
                                 <thead style="background-color: #2A3D72; ">
                                     <tr style="height: 50px; color: white;" >
                                         <th style="border-top-left-radius: 15px;">번호</th>
-                                        <th>제목</th>
-                                        <th>발신자</th>
-                                        <th>수신자</th>
-                                        <th>작성일</th>
-                                        <th>첨부파일</th>
-                                        <th style="border-top-right-radius: 15px;">처리상황</th>
+                                        <th>이름</th>
+                                        <th>부서</th>
+                                        <th>직급</th>
+                                        <th>전화번호</th>
+                                        <th style="border-top-right-radius: 15px;">이메일</th>
                                     </tr>
                                 </thead>
     
                                 <tbody class="board-list-body">
 									
-									<c:if test="${ !empty documentList }">
-										<c:forEach var="document" items="${ documentList }">
-		                                    <tr onclick="location.href='${ path }/document/view?no=${document.doc_id}'" >
-		                                        <td><c:out value="${ document.rownum }"/></td>
-		                                        <td><c:out value="${ document.doc_titile }"/></td>
-		                                        <td><c:out value="${ document.emp_id }"/></td>
-		                                        <td><c:out value="${ document.link_id }"/></td>
-		                                        <td> <fmt:formatDate type="date" value="${ document.doc_date }" pattern="yy-MM-dd(E)  HH:mm"/></td>
-		                                        <td><c:out value="${ document.attach_origin }"/></td>
-		                                        <td><c:out value="${ document.doc_status }"/></td>
+									<c:if test="${ !empty memberList }">
+										<c:forEach var="member" items="${ memberList }">
+		                                    <tr onclick="location.href='www.naver.com'" >
+		                                        <td><c:out value="${ member.rownum }"/></td>
+		                                        <td><c:out value="${ member.name }"/></td>
+		                                        <td><c:out value="${ member.deptCode }"/></td>
+		                                        <td><c:out value="${ member.jobCode }"/></td>
+		                                        <td><c:out value="${ member.email }"/></td>
+		                                        <td><c:out value="${ member.rownum }"/></td>
 		                                    </tr>
 	                                    </c:forEach>
 	        						</c:if>
@@ -139,7 +130,7 @@
                                 </tbody>
     
                             </table>
-
+                            
 
                             <table  style="margin: 15px; text-align: center; margin-left: auto;">
                                 <tr>
@@ -179,6 +170,6 @@
                             </table>
 
                         </div>
-
+    
 </div>
 <%@include file="../common/footer.jsp" %>
